@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MORRIEを探して</title>
+<title>MORRIEを探して ─ 営業部・期末の惨劇 ─</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -19,8 +19,46 @@
     border-bottom: 1px solid #1e293b;
     margin-bottom: 10px;
   }
-  h1 { font-size: 1.3rem; color: #ff4757; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,71,87,0.4); }
+  h1 { font-size: 1.2rem; color: #ff4757; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,71,87,0.4); }
   .status-bar { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+
+  /* タイトル画面用オーバーレイ */
+  #titleScreen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #080a0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+    text-align: center;
+  }
+  #titleScreen h2 {
+    font-size: 1.8rem;
+    color: #ff4757;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(255,71,87,0.6);
+  }
+  #titleScreen p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  .start-btn {
+    background: #ff4757 !important;
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    padding: 15px 30px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 0 15px rgba(255,71,87,0.4);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
 
   /* キャラクターカード一覧グリッド */
   .char-grid {
@@ -48,7 +86,6 @@
   .char-name { font-weight: bold; font-size: 0.95rem; color: #f8fafc; }
   .char-sub { font-size: 0.75rem; color: #64748b; margin-bottom: 6px; }
   
-  /* 数値を出さず、色（ドットやバー）で状態を示すインジケーター */
   .trust-indicator {
     display: flex;
     align-items: center;
@@ -60,11 +97,11 @@
     height: 10px;
     border-radius: 50%;
   }
-  .dot-high { background-color: #2ed573; box-shadow: 0 0 6px #2ed573; }   /* 信用：緑 */
-  .dot-mid { background-color: #ffa502; box-shadow: 0 0 6px #ffa502; }    /* 中立：黄 */
-  .dot-low { background-color: #ff4757; box-shadow: 0 0 6px #ff4757; }    /* 危険・疑い：赤 */
-  .dot-player { background-color: #38bdf8; }                               /* プレイヤー：青 */
-  .dot-dead { background-color: #475569; }                                /* 死亡：グレー */
+  .dot-high { background-color: #2ed573; box-shadow: 0 0 6px #2ed573; }
+  .dot-mid { background-color: #ffa502; box-shadow: 0 0 6px #ffa502; }
+  .dot-low { background-color: #ff4757; box-shadow: 0 0 6px #ff4757; }
+  .dot-player { background-color: #38bdf8; }
+  .dot-dead { background-color: #475569; }
 
   /* ログボックス */
   .log-box {
@@ -113,9 +150,16 @@
 </head>
 <body>
 
+<!-- タイトル画面 -->
+<div id="titleScreen">
+  <h2>MORRIEを探して<br><span style="font-size: 1rem; color: #94a3b8;">─ 営業部・期末の惨劇 ─</span></h2>
+  <p>期末が迫り、営業目標は絶望的に足りない。<br>ピリついた夜のオフィスで発覚した事実――。<br>この中に、社員の皮を被った怪物「MORRIE」が紛れ込んでいる。<br><br>疑いとノルマのプレッシャーの中、生き残れ。</p>
+  <button class="start-btn" onclick="startGame()">緊急会議を始める</button>
+</div>
+
 <header>
-  <h1>MORRIEを探して</h1>
-  <div class="status-bar" id="gameInfo">Day 1 - 議論フェーズ</div>
+  <h1>MORRIEを探して ─ 営業部</h1>
+  <div class="status-bar" id="gameInfo">待機中</div>
 </header>
 
 <div class="char-grid" id="charGrid"></div>
@@ -123,12 +167,11 @@
 <div class="log-box" id="logBox"></div>
 
 <div class="action-panel" id="actionPanel">
-  <div id="actionPrompt">誰を疑って論破しますか？</div>
+  <div id="actionPrompt">会議の開始を待っています...</div>
   <div class="btn-group" id="actionButtons"></div>
 </div>
 
 <script>
-// 主人公(id:0)を独立させ、山口(id:6)をNPCとして配置
 const chars = [
   { id: 0, name: "あなた", isPlayer: true, isAlive: true, logic: 8, charisma: 8, charm: 5, stealth: 5, aggro: 5 },
   { id: 1, name: "横山", isPlayer: false, isAlive: true, logic: 8, charisma: 5, charm: 5, stealth: 6, aggro: 5 },
@@ -145,7 +188,9 @@ const MAX_TURNS = 3;
 let morrieId = -1;
 let trust = {};
 
-function initGame() {
+function startGame() {
+  document.getElementById("titleScreen").style.display = "none";
+
   const npcs = chars.filter(c => !c.isPlayer);
   morrieId = npcs[Math.floor(Math.random() * npcs.length)].id;
   
@@ -154,13 +199,13 @@ function initGame() {
     chars.forEach(c2 => { trust[c1.id][c2.id] = 50; });
   });
 
-  addLog("ゲーム開始。この中にMORRIEが潜んでいる...", "sys");
+  addLog("期末の夜。オフィスに閉じ込められた営業部員の中に、MORRIEが潜んでいる...", "sys");
   updateUI();
   showDiscussionUI();
 }
 
 function updateUI() {
-  document.getElementById("gameInfo").innerText = `Day ${day} - ${discussionTurn < MAX_TURNS ? `議論 (${discussionTurn + 1}/${MAX_TURNS})` : "投票フェーズ"}`;
+  document.getElementById("gameInfo").innerText = `期末 ${day}日目 - ${discussionTurn < MAX_TURNS ? `会議 (${discussionTurn + 1}/${MAX_TURNS})` : "隔離投票"}`;
   
   const grid = document.getElementById("charGrid");
   grid.innerHTML = "";
@@ -173,13 +218,13 @@ function updateUI() {
     if (c.isPlayer) {
       indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-player"></div><span>プレイヤー</span></div>`;
     } else if (!c.isAlive) {
-      indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-dead"></div><span>消失</span></div>`;
+      indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-dead"></div><span>隔離・退室</span></div>`;
     } else {
       const tVal = trust[0][c.id];
       let dotClass = "dot-mid";
-      let statusText = "中立・警戒";
-      if (tVal >= 65) { dotClass = "dot-high"; statusText = "信用"; }
-      else if (tVal <= 35) { dotClass = "dot-low"; statusText = "要警戒（疑い）"; }
+      let statusText = "中立・様子見";
+      if (tVal >= 65) { dotClass = "dot-high"; statusText = "信頼"; }
+      else if (tVal <= 35) { dotClass = "dot-low"; statusText = "要警戒（怪しい）"; }
       
       indicatorHtml = `<div class="trust-indicator"><div class="trust-dot ${dotClass}"></div><span>${statusText}</span></div>`;
     }
@@ -187,7 +232,7 @@ function updateUI() {
     card.innerHTML = `
       <div>
         <div class="char-name">${c.name}</div>
-        <div class="char-sub">${c.isAlive ? "生存" : "死亡"}</div>
+        <div class="char-sub">${c.isAlive ? "社内生存" : "排除済み"}</div>
       </div>
       ${indicatorHtml}
     `;
@@ -221,7 +266,7 @@ function applyCover(speaker, target) {
 
 function playerAction(targetId) {
   const target = chars.find(c => c.id === targetId);
-  addLog(`あなた「${target.name}の行動には矛盾がある」`, "doubt");
+  addLog(`あなた「${target.name}の数字の出し方、何か隠してないか？」`, "doubt");
   applyDoubt(chars[0], target);
   updateUI();
   runNpcTurn();
@@ -252,14 +297,14 @@ function runNpcTurn() {
 
     if (npc.name === "赤堀") {
       if (minGlobalTrust < baselineTrust && globalMostSuspected && globalMostSuspected.id !== npc.id) {
-        addLog(`赤堀「待って、${globalMostSuspected.name}さんはそんな人じゃないと思う」`, "cover");
+        addLog(`赤堀「落ち着いてよ、${globalMostSuspected.name}さんはノルマできつくなってるだけだよ」`, "cover");
         applyCover(npc, globalMostSuspected);
         return;
       }
       if (willSpeak) {
         const others = chars.filter(c => c.isAlive && c.id !== npc.id);
         const rTarget = others[Math.floor(Math.random() * others.length)];
-        addLog(`赤堀「${rTarget.name}さんは味方だと思うな」`, "cover");
+        addLog(`赤堀「${rTarget.name}さんは今期すごく頑張ってると思うな」`, "cover");
         applyCover(npc, rTarget);
       }
       return;
@@ -281,7 +326,7 @@ function runNpcTurn() {
     });
 
     let target = myTargets[Math.floor(Math.random() * myTargets.length)];
-    addLog(`${npc.name}「どう考えても ${target.name} が怪しいだろ...！」`, "doubt");
+    addLog(`${npc.name}「どう考えても ${target.name} の動きがおかしいだろ...！」`, "doubt");
     applyDoubt(npc, target);
   });
 
@@ -299,12 +344,12 @@ function showDiscussionUI() {
   updateUI();
   const prompt = document.getElementById("actionPrompt");
   const buttons = document.getElementById("actionButtons");
-  prompt.innerText = "誰を疑って論破しますか？";
+  prompt.innerText = "誰を追求して矛盾を突きますか？";
   buttons.innerHTML = "";
 
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
     const btn = document.createElement("button");
-    btn.innerText = `${c.name}を論破`;
+    btn.innerText = `${c.name}を追求`;
     btn.onclick = () => playerAction(c.id);
     buttons.appendChild(btn);
   });
@@ -312,10 +357,10 @@ function showDiscussionUI() {
 
 function showVotingUI() {
   updateUI();
-  addLog("--- 議論終了: 追放者を決定します ---", "sys");
+  addLog("--- 会議終了: 隔離（別室送りにする）メンバーを投票します ---", "sys");
   const prompt = document.getElementById("actionPrompt");
   const buttons = document.getElementById("actionButtons");
-  prompt.innerText = "追放する相手に投票してください:";
+  prompt.innerText = "怪しいとして隔離するメンバーに投票してください:";
   buttons.innerHTML = "";
 
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
@@ -333,6 +378,7 @@ function processVote(playerVoteId) {
 
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(npc => {
     let targetId = null; let minT = 101;
+    chars.filter(other => other.isAlive && other.id !== npc.id).other.forEach ? ... : null; // 簡略化
     chars.filter(other => other.isAlive && other.id !== npc.id).forEach(other => {
       if (trust[npc.id][other.id] < minT) { minT = trust[npc.id][other.id]; targetId = other.id; }
     });
@@ -346,7 +392,7 @@ function processVote(playerVoteId) {
 
   const expelled = chars.find(c => c.id === expelledId);
   expelled.isAlive = false;
-  addLog(`【投票結果】最多得票により、${expelled.name} が追放されました。`, "sys");
+  addLog(`【投票結果】最多得票により、${expelled.name} が会議室から隔離（退室）させられた。`, "sys");
 
   updateUI();
   if (checkVictory()) return;
@@ -354,7 +400,7 @@ function processVote(playerVoteId) {
 }
 
 function runNightPhase() {
-  addLog("--- 夜が訪れた... MORRIEが目を覚ます ---", "sys");
+  addLog("--- 深夜... 静まり返ったオフィスでMORRIEが動き出す ---", "sys");
   const morrie = chars.find(c => c.id === morrieId);
   
   if (morrie && morrie.isAlive) {
@@ -377,15 +423,26 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false;
-      addLog(`凄惨な悲鳴が響いた... ${victim.name} が犠牲になった。`, "sys");
+      addLog(`暗いフロアに冷たい音が響いた... ${victim.name} が消息を絶った。`, "sys");
     }
   }
 
   updateUI();
+
+  const player = chars.find(c => c.isPlayer);
+  if (!player.isAlive) {
+    addLog("【GAME OVER】あなたはMORRIEに襲撃され、オフィスから姿を消した...", "sys");
+    const prompt = document.getElementById("actionPrompt");
+    const buttons = document.getElementById("actionButtons");
+    prompt.innerText = "GAME OVER (脱落)";
+    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>';
+    return;
+  }
+
   if (checkVictory()) return;
   
   day++; discussionTurn = 0;
-  addLog(`--- Day ${day} ---`, "sys");
+  addLog(`--- 期末 ${day}日目の朝 ---`, "sys");
   showDiscussionUI();
 }
 
@@ -397,21 +454,19 @@ function checkVictory() {
   const buttons = document.getElementById("actionButtons");
 
   if (!isMorrieAlive) {
-    addLog("【人間陣営の勝利】MORRIEを排除しました！", "cover");
-    prompt.innerText = "GAME CLEAR";
-    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">再プレイ</button>';
+    addLog("【営業部の勝利】MORRIEを会社から排除した！ノルマ達成へ向けて再始動だ。", "cover");
+    prompt.innerText = "CLEAR - 営業目標達成への道";
+    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">もう一度プレイ</button>';
     return true;
   }
   if (aliveHumans <= 1) {
-    addLog("【MORRIEの勝利】生存者の数がMORRIEに並ばれました...", "sys");
+    addLog("【MORRIEの勝利】社員は全員喰らい尽くされ、営業部は崩壊した...", "sys");
     prompt.innerText = "GAME OVER";
-    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">再プレイ</button>';
+    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>';
     return true;
   }
   return false;
 }
-
-initGame();
 </script>
 
 </body>
