@@ -19,7 +19,6 @@
   
   .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; }
 
-  /* 画面共通オーバーレイ */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030303; display: flex; flex-direction: column;
     justify-content: center; align-items: center; z-index: 100; padding: 20px; text-align: center; overflow-y: auto;
@@ -33,7 +32,6 @@
   .cinematic-text.red { color: #cc0000; font-weight: bold; text-shadow: 0 0 12px rgba(204, 0, 0, 0.5); }
   .delay-1 { animation-delay: 0.6s; } .delay-2 { animation-delay: 2.8s; } .delay-3 { animation-delay: 5.5s; } .delay-4 { animation-delay: 8.5s; } .delay-btn { animation-delay: 11s; opacity: 0; animation: fadeInText 1s ease forwards; }
 
-  /* 心音パルスアニメーション（背景の微弱な明滅） */
   @keyframes pulseGlow {
     0% { box-shadow: inset 0 0 40px rgba(100, 0, 0, 0.15); }
     50% { box-shadow: inset 0 0 80px rgba(200, 0, 0, 0.35); }
@@ -75,7 +73,6 @@
   .close-btn { background: #1a0505 !important; border-color: #5a0000 !important; margin-top: 20px; padding: 10px !important; }
   .reset-btn { background: transparent !important; color: #4b5563 !important; font-size: 0.75rem !important; padding: 6px !important; border: none !important; cursor: pointer !important; text-decoration: underline; margin-top: 15px; }
 
-  /* 生存状況グリッドの洗練 */
   .char-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
   .char-card { background: rgba(10,10,10,0.95); border: 1px solid #222; border-radius: 2px; padding: 8px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s; }
   .char-card.dead { opacity: 0.25; background: #000; border-color: #111; filter: grayscale(100%); }
@@ -91,9 +88,6 @@
   .dot-player { background-color: #3b82f6; box-shadow: 0 0 4px #3b82f6; }
   .dot-dead { background-color: #1f2937; }
 
-  /* -------------------------------------
-     究極のノベル風メッセージウィンドウ
-  -------------------------------------- */
   .log-box { 
     background: rgba(5, 5, 5, 0.95); 
     border: 1px solid #4a0000; 
@@ -126,7 +120,6 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
   
-  /* 発言者ごとのダークホラーカラー */
   .speaker-sys { color: #f87171; border-color: #660000; background: rgba(40,0,0,0.4); }
   .speaker-yokoyama { color: #fca5a5; border-color: #500; }
   .speaker-akahori { color: #6ee7b7; border-color: #043; }
@@ -142,7 +135,6 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
   }
 
-  /* アクションパネル */
   .action-panel { background: rgba(10,10,10,0.95); border: 1px solid #222; border-radius: 2px; padding: 12px; }
   #actionPrompt { font-size: 0.85rem; margin-bottom: 8px; color: #9ca3af; letter-spacing: 1.5px; font-weight: bold; }
   .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -164,7 +156,6 @@
   .btn-special { border-left: 3px solid #6b21a8 !important; }
   .btn-skip { background: #050505 !important; border: 1px dashed #444 !important; color: #9ca3af !important; width: 100% !important; flex: none !important; margin-top: 5px !important; }
 
-  /* 極秘ファイル（コレクション） */
   .profile-list { text-align: left; width: 100%; max-width: 400px; margin-top: 15px; height: 60vh; overflow-y: auto; padding-right: 10px; }
   .profile-item { background: #060606; border-left: 3px solid #cc0000; border-top: 1px solid #222; border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; color: #d1d5db; line-height: 1.8; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
   .profile-item::before { content: "極秘"; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: #cc0000; border: 1px solid #cc0000; padding: 2px 5px; transform: rotate(12deg); opacity: 0.6; }
@@ -240,9 +231,9 @@
 <div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
   <div style="max-width: 400px; width: 100%; padding: 20px;">
     <p class="cinematic-text delay-1">── 3月31日、23時45分。</p>
-    <p class="cinematic-text delay-2">大規模な「希望退職」の募集により、営業部の席は半分になった。残された者に突きつけられたのは、到底終わらない絶望的なノルマだ。</p>
-    <p class="cinematic-text red delay-3">さらに夜半、全端末に北野営業部長からの冷酷な一通のメールが届く。<br>『本日の期末をもちまして、当部署から1名分の「希望退職（解雇）」を決定していただきます。合意に至らない場合、全員一律でクビとします』</p>
-    <p class="cinematic-text delay-4">生き残るため、他人の数字の横取りや不正の証拠を暴き合う泥沼の言い争い。<br>だが、互いの揚げ足を取り合ううちに、誰もが気づき始める。<br>……この中にいる『誰か』の記憶が、昨日のものと微妙に食い違っていることに。<br>クローン生体技術で同僚の皮を被った怪物──『MORRIE』は今、誰の顔をしている？</p>
+    <p class="cinematic-text delay-2">期末の売上目標（検収）達成まであと数千万円。試薬の納品遅延、理化学機器のトラブル対応、大学や製薬企業からの容赦ない値引き要求にすり潰され、営業部員たちは極限の疲弊にあった。</p>
+    <p class="cinematic-text red delay-3">そんな夜半、全端末に岩田本部長からの冷酷な一通のメールが届く。<br>『本日の期末をもちまして、当部署から1名分の「希望退職（解雇）」を決定する。目標未達の責任として、今夜ここで1名を生贄に選べ』</p>
+    <p class="cinematic-text delay-4">生き残るため、代理店ルートの奪い合いや、競合他社への相見積もりデータの改ざんを暴き合う泥沼の言い争い。<br>だが、互いの数字を追求し合ううちに、誰もが気づき始める。<br>……この中にいる『誰か』が、昨日まで知っていたはずの試薬のスペックや、顧客の担当者名を全く思い出せなくなっていることに。<br>同僚の皮を被り、完璧に営業スマイルを模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     <div class="btn-container" style="margin: 30px auto 0;">
       <button class="start-btn delay-btn" onclick="startGame()">地獄の会議を始める</button>
     </div>
@@ -271,12 +262,12 @@ if (gameData.playerName) {
 }
 
 const secretProfiles = {
-  1: "【横山】\n対象の遺伝子モデル。経費でキャバクラに通い領収書を偽造した負い目から、他者を信じられず攻撃的。コピー体はしばしば過去の記憶の整合性が崩壊する。",
-  2: "【赤堀】\n対象の生体サンプル（男性）。一見誰にでも調子よく取り入るが、裏では同僚のミスをノートに記録し、リストラの生贄にしようと目論む保身的な二面性を持つ。",
-  3: "【北野（営業部長）】\n対象の遺伝子モデル。冷徹非道なトップダウンで部門を牛耳る営業部長。自らの保身と会社の数字のためなら、部下が何人消えようとも冷笑して見過ごす。",
-  4: "【毛利】\n営業部で一番若い新人社員。熱血でがむしゃらに頑張っているが、あまりのプレッシャーと恐怖から、焦って先輩のデータを盗み見たり数字を誤魔化そうとして疑いを買っている。",
-  5: "【内藤】\n対象の生体サンプル。愛想が悪く常に苛立っている。人間への共感性が低く、同僚が消えても『席が広くなって好都合だ』と冷笑する異常性を持つ。",
-  6: "【山口】\n対象の培養記録。論理の化身。同僚の不正やデータの矛盾を暴くことに快感を覚えるサイコパス。MORRIEの存在に薄々気づきながらも観察を楽しんでいる。"
+  1: "【横山】\n試薬担当のベテラン営業。経費で納入先の研究者とキャバクラに通い、領収書の宛名を偽造して数字をごまかしている。その負い目から他者を信じられず、疑心暗鬼に陥りやすい。",
+  2: "【赤堀】\n理化学機器担当の男性営業。一見誰にでも調子よく取り入るが、裏では同僚のミスや値引きミスの履歴をノートに記録し、リストラの生贄にしようと目論む保身的な二面性を持つ。",
+  3: "【北野】\n冷徹非道なトップダウンで試薬・機器部門を牛耳る営業部長。自らの保身と会社の売上的なプレッシャーを部下に浴びせ続けている。",
+  4: "【毛利】\n営業部で一番若い新人社員。熱血でがむしゃらに大学のラボを回っているが、あまりのプレッシャーと恐怖から、焦って先輩の顧客リストを盗み見たり試薬の型番を間違えて発注している。",
+  5: "【内藤】\n大型分析機器担当の営業。愛想が悪く常に苛立っている。研究者からの無茶なクレーム対応に疲れ果てており、同僚が消えても『席が広くなって好都合だ』と冷笑する異常性を持つ。",
+  6: "【山口】\nマーケティング兼務のスマートな営業。競合他社の製品スペックや値引き率のデータを完璧に暗記しているが、同僚の不正やデータの矛盾を暴くことに快感を覚えるサイコパス。"
 };
 
 const dialogueBank = {
@@ -284,50 +275,65 @@ const dialogueBank = {
     doubt: ["「[TARGET]のヨミ、甘すぎる。何か隠してるんじゃないか？」", "「[TARGET]、お前の昨日の日報、おかしいだろ。説明しろ。」", "「おい[TARGET]、お前が俺の担当先のデータを勝手に引っこ抜いたんだろ！」", "「[TARGET]の数字の伸び方、どう考えても個人の努力じゃ説明がつかないぞ。」", "「お前、先週はそんなこと言ってなかったよな？ [TARGET]、嘘をつくな。」"],
     cover: ["「いや、[TARGET]は地道に回してるよ。俺は信じる。」", "「[TARGET]に怪しい動きはないな。俺が保証する。」", "「お前ら、[TARGET]を追い詰めるのはやめろ。あいつはちゃんと数字を作ってる。」"],
     defend: ["「ふざけるな！証拠もないのに適当なこと言うな！」", "「俺じゃない！俺は毎日終電まで残って正当に数字作ってんだよ！」", "「俺をリストラしたいからって、組織ぐるみで濡れ衣を着せるなよ！」"],
-    agree: ["「ああ、[ACTOR]の言う通りだ。[TARGET]は確かにおかしかった。」", "「[ACTOR]に賛成だ。[TARGET]のデータ改ざんは私も怪しいとにらんでいた。」"],
-    disagree: ["「待て[ACTOR]！[TARGET]を疑うのは早計だろ！」", "「いや、[ACTOR]の推測は間違っている。[TARGET]はただ焦ってるだけだ。」"]
+    agree: ["「ああ、的確だな。[TARGET]は確かにおかしかった。」", "「完全に賛成だ。[TARGET]のデータ改ざんは私も怪しいとにらんでいた。」"],
+    disagree: ["「待て、[TARGET]を疑うのは早計だろ！」", "「いや、その推測は間違っている。[TARGET]はただ焦ってるだけだ。」"]
   },
   "赤堀": {
-    doubt: ["「おい[TARGET]さあ、昨日の発言と今言ってること、完全に矛盾してないか？」", "「あんまり言いたくないけど、[TARGET]、君のパソコンから他の社員の売上データが出てきたって聞いたぞ。」", "「先輩風を吹かせてるけどさ、[TARGET]の昨日の動き、どう見ても不自然だったよな？」", "「リストラされたくないからって、[TARGET]が俺たちの足を引っ張ろうとしてるのは明白だろ。」"],
-    cover: ["「まあまあ、[TARGET]も必死なんだからさ、そう責め立てるなって。」", "「俺は[TARGET]を信じるよ。彼がそんな汚い真似をする男には見えないね。」"],
+    doubt: ["「おい[TARGET]さあ、昨日の発言と今言ってること、完全に矛盾してないか？」", "「あんまり言いたくないけどさ、君のパソコンから他の社員の売上データが出てきたって聞いたぞ。」", "「先輩風を吹かせてるけどさ、[TARGET]の昨日の動き、どう見ても不自然だったよな？」", "「リストラされたくないからって、足を引っ張ろうとしてるのは明白だろ。」"],
+    cover: ["「まあまあ、[TARGET]も必死なんだからさ、そう責め立てるなって。」", "「俺は信じるよ。彼がそんな汚い真似をする男には見えないね。」"],
     defend: ["「ちょっ、待てよ！なんで俺が疑われるんだよ、ふざけんな！」", "「俺をリストラ枠に押し込もうったって、そうはいかないからな！」"],
-    agree: ["「だな。[ACTOR]の言う通り、[TARGET]は最初から怪しいと思ってたんだよ。」"],
-    disagree: ["「いや、それは言い過ぎだろ[ACTOR]。[TARGET]をそこまで責めるのは筋違いだね。」"]
+    agree: ["「だな。最初から怪しいと思ってたんだよ。」"],
+    disagree: ["「いや、それは言い過ぎだろ。[TARGET]をそこまで責めるのは筋違いだね。」"]
   },
   "北野": {
-    doubt: ["「……[TARGET]。君の今期の数字の推移、どうにも辻褄が合わんな。説明したまえ。」", "「我が営業部に無能と不正は不要だ。[TARGET]、君の昨夜の行動ログに不審な点が見つかっている。」", "「私を失望させるなよ、[TARGET]。君がデータを改ざした犯人かね？」", "「北野である私の前で嘘をつこうなどとは思わないことだな、[TARGET]。」"],
+    doubt: ["「……[TARGET]。君の今期の数字の推移、どうにも辻褄が合わんな。説明したまえ。」", "「我が営業部に無能と不正は不要だ。[TARGET]、君の昨夜の行動ログに不審な点が見つかっている。」", "「私を失望させるなよ、[TARGET]。君がデータを改ざした犯人かね？」", "「私の前で嘘をつこうなどとは思わないことだな、[TARGET]。」"],
     cover: ["「[TARGET]のこれまでの実績を考慮すれば、今すぐ解雇とはならんがね……。」"],
-    defend: ["「私を疑うなど、愚か者の発言だな。[TARGET]の席を私と一緒にするな。」"],
-    agree: ["「[ACTOR]の意見には一理ある。[TARGET]を旧サーバー室送りにする検討に入ろう。」"],
-    disagree: ["「静かにしたまえ、[ACTOR]。私の方針に口を挟む権限が君にあるのかね？」"]
+    defend: ["「私を疑うなど、愚か者の発言だな。席を私と一緒にするな。」"],
+    agree: ["「その意見には一理ある。[TARGET]を旧サーバー室送りにする検討に入ろう。」"],
+    disagree: ["「静かにしたまえ。私の方針に口を挟む権限が君にあるのかね？」"]
   },
   "毛利": {
-    doubt: ["「す、先輩方…！俺は不正なんてしてません！必死に数字を作ってるんです！」", "「先輩、そんなに疑わないでくださいよ…俺、まだ入社して半年なんです、クビにしないでくれよ…！」", "「もしかして先輩の中に、わざと俺を犯人に仕立て上げようとしている人がいるんじゃ…っ！」", "「俺は社内のサーバーにハッキングなんてできません！疑うなら北野部長にログを調べてもらってください！」"],
-    cover: ["「[TARGET]さん、俺を信じてくれるんですか…？ ありがとうございます、俺、必死に頑張ります！」", "「先輩、[TARGET]さんはそんな悪い人に見えませんよ…！」"],
-    defend: ["「だから俺じゃないって言ってるじゃないですか…！なんで新人だからってそんなに決めつけるんですか…！」", "「うっ…こんな会社辞めてやりたいけど、でも親に合わせる顔が…！」"],
-    agree: ["「[ACTOR]先輩の言う通りです！[TARGET]さんの昨日の行動、俺も変だと思ってました！」"],
-    disagree: ["「そ、ことは違いますよ[ACTOR]先輩！[TARGET]さんはそんな人じゃ…！」"]
+    doubt: [
+      "「す、先輩方…！俺は不正なんてしてません！必死に数字を作ってるんです！」",
+      "<span>「先輩、そんなに疑わないでくださいよ…俺、まだ入社して半年なんです、クビにしないでくれよ…！」</span>",
+      "<span>「もしかして先輩の中に、わざと俺を犯人に仕立て上げようとしている人がいるんじゃ…っ！」</span>",
+      "<span>「俺は社内のサーバーにハッキングなんてできません！疑うなら岩田本部長にログを調べてもらってください！」</span>"
+    ],
+    cover: [
+      "<span>「先輩、[TARGET]さんはそんな悪い人に見えませんよ…！」</span>",
+      "<span>「俺は[TARGET]さんを信じますよ…！」</span>"
+    ],
+    defend: [
+      "<span>「だから俺じゃないって言ってるじゃないですか…！なんで新人だからってそんなに決めつけるんですか…！」</span>",
+      "<span>「うっ…こんな会社辞めてやりたいけど、でも親に合わせる顔が…！」</span>"
+    ],
+    agree: [
+      "<span>「先輩の言う通りです！[TARGET]さんの昨日の行動、俺も変だと思ってました！」</span>"
+    ],
+    disagree: [
+      "<span>「そ、ことは違いますよ先輩！[TARGET]さんはそんな人じゃ…！」</span>"
+    ]
   },
   "内藤": {
     doubt: ["「チッ…[TARGET]、お前の机のシュレッダーから他人の名刺の山が出てきたぞ。白状しろ。」", "「あーもうイライラするんだよ！[TARGET]の顔、昨日となんかパーツが違って見えねぇか？」", "「おい[TARGET]、お前が俺の昨日の日報データを消した犯人だろ。認めやがれ。」"],
     cover: ["「……別に[TARGET]をかばう義理はねぇが、こいつがデータを改ざんする頭脳はねぇよ。」"],
     defend: ["「は？寝言は寝て言えよ。俺の机に名刺を仕込んだのはお前だろ！」", "「証拠を出せよ証拠を！俺は自分の数字だけでここまで生き残ってんだよ！」"],
-    agree: ["「……[ACTOR]の言う通りだ。さっさと[TARGET]を旧サーバー室送りにしようぜ。」"],
-    disagree: ["「バカか[ACTOR]。[TARGET]を疑うなんて的外れだ。もっと他に隠してる奴がいるだろ。」"]
+    agree: ["「……その通りだ。さっさと[TARGET]を旧サーバー室送りにしようぜ。」"],
+    disagree: ["「バカかお前。[TARGET]を疑うなんて的外れだ。もっと他に隠してる奴がいるだろ。」"]
   },
   "山口": {
     doubt: ["「[TARGET]、お前の昨日の行動ログと、今言った証言には決定的な矛盾がある。説明しろ。」", "「感情論や数字の奪い合いは時間の無駄だ。[TARGET]の生体反応、周囲の人間と波長がズレている。」", "「[TARGET]の構築した売上予測、数式の一部に非人間的な最適化プログラムが組み込まれている。」"],
     cover: ["「合理的に考えて、[TARGET]を不正犯扱いするのは論理的飛躍子だ。証拠が弱すぎる。」"],
     defend: ["「私を疑うとはね……君たちのその低劣な推理力こそ、リストラ対象にふさわしい。」", "「私の行動原理はすべて最適化されている。君たちのような感情的生物と一緒にしないでくれたまえ。」"],
-    agree: ["「[ACTOR]に完全に同意だ。[TARGET]の語る記憶には、模倣特有の致命的な欠落がある。」"],
-    disagree: ["「待て[ACTOR]。その推論は浅い。[TARGET]はただの愚者だが、排除すべき真の異物は別にいる。」"]
+    agree: ["「完全に同意だ。語る記憶には模倣特有の致命的な欠落がある。」"],
+    disagree: ["「待て、その推論は浅い。排除すべき真の異物は別にいる。」"]
   },
   "プレイヤー": {
     doubt: ["「[TARGET]の数字の伸び方、どう考えてもおかしいだろ。データを盗んだのか？」", "「昨夜の[TARGET]の行動、言っていることが昨日の話と全然違うじゃないか！」"],
     cover: ["「[TARGET]さんは今期ちゃんと自分の足で数字を作ってる。濡れ衣を着せるなよ」"],
     defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」"],
-    agree: ["「[ACTOR]の言う通りだ。確かに[TARGET]の動きはどこか人間離れしていて気味が悪い……。」"],
-    disagree: ["「いや[ACTOR]、[TARGET]を不正犯に仕立て上げるのは間違っている！」"]
+    agree: ["「確かに、動きはどこか人間離れしていて気味が悪い……。」"],
+    disagree: ["「いや、不正犯に仕立て上げるのは間違っている！」"]
   }
 };
 
@@ -338,8 +344,10 @@ function getDialogue(speakerName, targetName, actorName, type) {
   const bank = dialogueBank[key] || dialogueBank["プレイヤー"];
   const lines = bank[type] || ["……"];
   let text = lines[Math.floor(Math.random() * lines.length)];
+  
+  // 変数の安全な置換（名前の重複ループバグを完全に防止）
   text = text.replace(/[TARGET]/g, targetName);
-  if(actorName) text = text.replace(/[ACTOR]/g, actorName);
+  
   return text;
 }
 
@@ -476,7 +484,7 @@ function startGame() {
     });
   });
 
-  addNovelLog("システム", `期末の夜。全端末に北野部長から『希望退職（解雇）者を選べ』というメールが届いた。この中に、同僚の皮を被った生体クローン『MORRIE』が潜んでいる...<br>（あなたのジョブ: ${getJobName(gameData.playerJob)}）`, "sys");
+  addNovelLog("システム", `3月31日深夜。岩田本部長から『未達の責任として希望退職（解雇）者1名を選べ』というメールが届いた。この中に、同僚の皮を被った『MORRIE』が潜んでいる...<br>（あなたのジョブ: ${getJobName(gameData.playerJob)}）`, "sys");
   updateUI(); showActionMenu();
 }
 
@@ -557,7 +565,7 @@ function executePlayerAction(type, targetId) {
   
   if (type === "investigate") {
     hasInvestigatedToday = true;
-    let res = target.id === morrieId ? `【調査結果】${target.name}のPCから『代替労働力調整マニュアル』と、全社員の改ざんされた売上データを発見した…こいつがMORRIEだ！` : `【調査結果】${target.name}のPCを調べたが、必死に自分の売上を守ろうとした痕跡しかなかった。`;
+    let res = target.id === morrieId ? `【調査結果】${target.name}のPCから『他社製ピペットの相見積もりデータ』と、改ざんされた試薬の発注伝票を発見した…こいつがMORRIEだ！` : `【調査結果】${target.name}のPCを調べたが、必死に大学ラボの検収を通そうとした痕跡しかなかった。`;
     addNovelLog("システム", res, "investigate");
     processDebate("pass", player, null);
     return;
@@ -565,7 +573,7 @@ function executePlayerAction(type, targetId) {
   
   if (type === "skill") {
     hasUsedSkill = true;
-    addNovelLog(player.name, `【固有スキル】「いい加減にしろ！${target.name}、お前のデータ改ざんの証拠は揃っている！」`, "skill");
+    addNovelLog(player.name, `【固有スキル】「いい加減にしろ！${target.name}、お前の売上データの不正の証拠は揃っている！」`, "skill");
     let damage = (gameData.clearCount >= 3) ? 55 : 40;
     chars.forEach(c => { if (c.isAlive) trust[c.id][target.id] = Math.max(0, trust[c.id][target.id] - damage); });
     triggerShake(); triggerGlitch();
@@ -626,11 +634,11 @@ function processDebate(actionType, actor, target) {
       const trustForTarget = trust[bystander.id][currentTarget.id];
       if (currentAction === "doubt") {
         if (trustForTarget > 55) {
-          addNovelLog(bystander.name, getDialogue(bystander.name, currentTarget.name, currentActor.name, "disagree"), "cover"); 
+          addNovelLog(bystander.name, `「いや、${currentActor.name}は騙されてる！${currentTarget.name}を信じようぜ」`, "cover"); 
           applyCover(bystander, currentTarget);
           thirdPersonA = bystander; reactionHappened = true; break;
         } else if (trustForTarget < 45) {
-          addNovelLog(bystander.name, getDialogue(bystander.name, currentTarget.name, currentActor.name, "agree"), "doubt"); 
+          addNovelLog(bystander.name, `「${currentActor.name}の言う通りだ。[cityName]怪しいぞ」`.replace('[cityName]', currentTarget.name), "doubt"); 
           applyDoubt(bystander, currentTarget);
           thirdPersonA = bystander; reactionHappened = true; break;
         }
@@ -647,18 +655,18 @@ function processDebate(actionType, actor, target) {
       const remainingBystanders = bystanders.filter(c => c.id !== thirdPersonA.id);
       if(remainingBystanders.length > 0) {
         const thirdPersonB = remainingBystanders[Math.floor(Math.random() * remainingBystanders.length)];
-        addNovelLog(thirdPersonB.name, `「ちょっと待て！俺は${thirdPersonA.name}の意見には反対だ。あいつは人間じゃない違和感がある…」`, "defend");
+        addNovelLog(thirdPersonB.name, `「ちょっと待て！俺は${thirdPersonA.name}の意見には反対だ。あいつは昨日から様子がおかしい…」`, "defend");
       }
     }
   }
 
   if (!reactionHappened && currentTarget && !currentTarget.isPlayer) {
-    addNovelLog("システム", "……冷え切った沈黙が流れた。誰もが自分の首を繋ぐことで頭がいっぱいだ。", "sys");
+    addNovelLog("システム", "……冷え切った沈黙が流れた。誰もが自分の検収とノルマのことで頭がいっぱいだ。", "sys");
   }
 
   const yamaguchi = chars.find(c => c.name === "山口");
   if (yamaguchi && yamaguchi.isAlive && Math.random() < 0.3) {
-    addNovelLog("山口", "「君たちのその感情的な言い争いは論理的エラーに満ちているね。」", "passive");
+    addNovelLog("山口", "「君たちのその感情的な価格交渉の言い争いは、営業成績において論理的エラーだね。」", "passive");
   }
 
   discussionTurn++; updateUI();
@@ -669,7 +677,7 @@ function triggerGlitch() { document.body.classList.add("glitch"); setTimeout(() 
 function triggerShake() { document.body.classList.add("shake"); setTimeout(() => { document.body.classList.remove("shake"); }, 500); }
 
 function showVotingUI() {
-  updateUI(); addNovelLog("시스템", "--- 会議終了: 明日の希望退職（旧サーバー室送り）とするメンバーを投票します ---", "sys");
+  updateUI(); addNovelLog("システム", "--- 会議終了: 明日の希望退職（旧サーバー室送り）とするメンバーを投票します ---", "sys");
   document.getElementById("actionPrompt").innerText = "解雇（生贄）とするメンバーに投票してください:"; 
   const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
@@ -708,14 +716,14 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false; triggerGlitch(); triggerShake();
-      addNovelLog("システム", `暗いフロアに、骨が砕けるような生々しい音が響いた... ${victim.name} のデスクには、未承認の培養液と「自己都合退職届」だけが残されていた。`, "sys");
+      addNovelLog("システム", `暗いフロアに、試薬瓶が割れるような鋭い音が響いた... ${victim.name} のデスクには、空の試薬ボトルと「自己都合退職届」だけが残されていた。`, "sys");
     }
   }
 
   updateUI(); const player = chars.find(c => c.isPlayer);
   if (!player.isAlive) {
     triggerGlitch(); triggerShake();
-    addNovelLog("システム", `【GAME OVER】${chars[0].name} はMORRIEの生体サンプルとして捕食され、社員名簿から抹消された...`, "sys");
+    addNovelLog("システム", `【GAME OVER】${chars[0].name} はMORRIEの標的となり、冷たい床の上で意識を失った...`, "sys");
     document.getElementById("actionPrompt").innerText = "GAME OVER (解雇・死亡)"; 
     document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>';
     return;
@@ -723,7 +731,7 @@ function runNightPhase() {
 
   if (checkVictory()) return;
   day++; discussionTurn = 0; hasInvestigatedToday = false;
-  addNovelLog("システム", `--- 期末 ${day}日目の朝：空調が止まったフロアに、新たな絶望のノルマが貼り出された ---`, "sys");
+  addNovelLog("システム", `--- 期末 ${day}日目の朝：納期の迫った大学ラボからのクレーム電話が鳴り響く中、新たな絶望のノルマが貼り出された ---`, "sys");
   showActionMenu();
 }
 
@@ -745,9 +753,9 @@ function checkVictory() {
     const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
     if (aliveCount >= 4) { 
       gameData.trueEndCount++; 
-      endingTitle = "【真END】MORRIEを廃棄処分した。翌朝、北野部長から『次期・希望退職者募集』のメールが届いた。我々の代わりとなる生体サンプルは、まだ会社の地下で培養されている。"; 
+      endingTitle = "【真END】MORRIEを排除した。翌朝、岩田本部長から『次期・希望退職者募集』のメールが届いた。新しい試薬の営業マンは、今日も笑顔で大学へ向かう。"; 
     } else { 
-      endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を生贄にしてしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分のノルマが容赦なく上乗せされた..."; 
+      endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を生贄にしてしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分の重いノルマが上乗せされた..."; 
     }
     
     let unlockedName = unlockRandomProfile();
@@ -759,7 +767,7 @@ function checkVictory() {
     document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" onclick="location.reload()" style="flex:1 1 100%;">次の周回へ進む</button>'; return true;
   }
   if (aliveHumans <= 1) {
-    addNovelLog("システム", "【MORRIEの勝利】社員は全員喰らい尽くされ、空っぽになった営業部だけが残された。北野部長は今日も通常通り出社している。", "sys");
+    addNovelLog("システム", "【MORRIEの勝利】社員は全員消え去り、空っぽになった営業部だけが残された。岩田本部長は今日も通常通り、次の期の予算計画書を作っている。", "sys");
     document.getElementById("actionPrompt").innerText = "GAME OVER"; 
     document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>'; return true;
   }
