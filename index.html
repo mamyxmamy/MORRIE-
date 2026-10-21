@@ -22,8 +22,8 @@
   h1 { font-size: 1.2rem; color: #ff4757; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,71,87,0.4); }
   .status-bar { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
 
-  /* タイトル画面用オーバーレイ */
-  #titleScreen {
+  /* 画面共通オーバーレイ */
+  .screen-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: #080a0f;
@@ -34,26 +34,51 @@
     z-index: 100;
     padding: 20px;
     text-align: center;
+    overflow-y: auto;
   }
-  #titleScreen h2 {
-    font-size: 1.8rem;
+  .screen-overlay h2 {
+    font-size: 2rem;
     color: #ff4757;
     margin-bottom: 10px;
     letter-spacing: 2px;
     text-shadow: 0 0 15px rgba(255,71,87,0.6);
   }
-  #titleScreen p {
+  .subtitle {
+    font-size: 1rem;
     color: #94a3b8;
-    font-size: 0.85rem;
     margin-bottom: 30px;
-    line-height: 1.6;
   }
-  /* 適切なサイズに修正したスタートボタン */
+
+  /* フレーバーテキスト専用ボックス */
+  .flavor-box {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 6px;
+    padding: 16px;
+    max-width: 420px;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+  }
+  .flavor-box p {
+    margin-bottom: 10px;
+  }
+  .flavor-box p:last-child {
+    margin-bottom: 0;
+  }
+  .flavor-title {
+    color: #ff4757;
+    font-weight: bold;
+  }
+
   .start-btn {
     background: #ff4757 !important;
     color: #fff !important;
     font-size: 1rem !important;
-    padding: 12px 28px !important;
+    padding: 12px 32px !important;
     border-radius: 6px !important;
     box-shadow: 0 0 15px rgba(255,71,87,0.4);
     border: none !important;
@@ -63,7 +88,6 @@
     flex: none !important;
   }
 
-  /* キャラクターカード一覧グリッド */
   .char-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -106,7 +130,6 @@
   .dot-player { background-color: #38bdf8; }
   .dot-dead { background-color: #475569; }
 
-  /* ログボックス */
   .log-box {
     background: #030712;
     border: 1px solid #1e293b;
@@ -122,8 +145,9 @@
   .sys { color: #ff4757; } 
   .doubt { color: #ff7f50; } 
   .cover { color: #2ed573; }
+  .skill { color: #a855f7; font-weight: bold; }
+  .investigate { color: #38bdf8; font-style: italic; }
 
-  /* 操作パネル */
   .action-panel {
     background: #111827;
     border: 1px solid #1f2937;
@@ -149,14 +173,27 @@
   }
   button:active { background: #1e40af; }
   button:disabled { background: #374151; color: #6b7280; }
+  .btn-special { background: #9333ea !important; }
+  .btn-investigate { background: #0284c7 !important; }
 </style>
 </head>
 <body>
 
-<!-- タイトル画面 -->
-<div id="titleScreen">
-  <h2>MORRIEを探して<br><span style="font-size: 1rem; color: #94a3b8;">─ 営業部・期末の惨劇 ─</span></h2>
-  <p>期末が迫り、営業目標は絶望的に足りない。<br>ピリついた夜のオフィスで発覚した事実――。<br>この中に、社員の皮を被った怪物「MORRIE」が紛れ込んでいる。<br><br>疑いとノルマのプレッシャーの中、生き残れ。</p>
+<!-- ステップ1：シンプルなタイトル画面 -->
+<div id="titleScreen" class="screen-overlay">
+  <h2>MORRIEを探して</h2>
+  <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
+  <button class="start-btn" onclick="showIntroScreen()">ゲーム開始</button>
+</div>
+
+<!-- ステップ2：フレーバーテキスト説明画面（初期は非表示） -->
+<div id="introScreen" class="screen-overlay" style="display: none;">
+  <h2>プロローグ</h2>
+  <div class="flavor-box">
+    <p><span class="flavor-title">【状況】</span><br>期末が迫り、営業目標は絶望的に足りない。終わらない残業とピリついた数字のプレッシャーの中、社員たちは極限のストレスにさらされていた。</p>
+    <p><span class="flavor-title">【脅威・MORRIE】</span><br>人間に寄生し、その姿や記憶、声帯までを完璧にコピーして組織に紛れ込む怪物。深夜のオフィスで同僚を1人ずつ間引き、組織の崩壊を狙っている。</p>
+    <p><span class="flavor-title">【目的】</span><br>誰もが誰かを疑いたくなるこの最悪の空気の中で、調査や会議（投票）を駆使し、社員のフリをしたMORRIEを暴き出せ。</p>
+  </div>
   <button class="start-btn" onclick="startGame()">緊急会議を始める</button>
 </div>
 
@@ -190,10 +227,18 @@ let discussionTurn = 0;
 const MAX_TURNS = 3;
 let morrieId = -1;
 let trust = {};
+let hasUsedSkill = false;
+let hasInvestigatedToday = false;
 
-function startGame() {
-  // タイトル画面を完全に非表示にする
+// タイトルからプロローグ画面へ
+function showIntroScreen() {
   document.getElementById("titleScreen").style.display = "none";
+  document.getElementById("introScreen").style.display = "flex";
+}
+
+// プロローグからゲーム本編へ
+function startGame() {
+  document.getElementById("introScreen").style.display = "none";
 
   const npcs = chars.filter(c => !c.isPlayer);
   morrieId = npcs[Math.floor(Math.random() * npcs.length)].id;
@@ -205,7 +250,7 @@ function startGame() {
 
   addLog("期末の夜。オフィスに閉じ込められた営業部員の中に、MORRIEが潜んでいる...", "sys");
   updateUI();
-  showDiscussionUI();
+  showActionMenu();
 }
 
 function updateUI() {
@@ -268,12 +313,110 @@ function applyCover(speaker, target) {
   trust[target.id][speaker.id] = Math.min(100, trust[target.id][speaker.id] + heal);
 }
 
-function playerAction(targetId) {
-  const target = chars.find(c => c.id === targetId);
-  addLog(`あなた「${target.name}の数字の出し方、何か隠してないか？」`, "doubt");
-  applyDoubt(chars[0], target);
+function showActionMenu() {
+  updateUI();
+  const prompt = document.getElementById("actionPrompt");
+  const buttons = document.getElementById("actionButtons");
+  prompt.innerText = "自分の行動を選択してください:";
+  buttons.innerHTML = "";
+
+  const btnDoubt = document.createElement("button");
+  btnDoubt.innerText = "人を追求する";
+  btnDoubt.onclick = () => showTargetSelect("doubt");
+  buttons.appendChild(btnDoubt);
+
+  const btnCover = document.createElement("button");
+  btnCover.innerText = "人をかばう";
+  btnCover.onclick = () => showTargetSelect("cover");
+  buttons.appendChild(btnCover);
+
+  const btnPass = document.createElement("button");
+  btnPass.innerText = "様子を見る (パス)";
+  btnPass.onclick = () => playerPassAction();
+  buttons.appendChild(btnPass);
+
+  if (!hasInvestigatedToday) {
+    const btnInv = document.createElement("button");
+    btnInv.className = "btn-investigate";
+    btnInv.innerText = "行動を調査する";
+    btnInv.onclick = () => showTargetSelect("investigate");
+    buttons.appendChild(btnInv);
+  }
+
+  if (!hasUsedSkill) {
+    const btnSkill = document.createElement("button");
+    btnSkill.className = "btn-special";
+    btnSkill.innerText = "固有スキル発動";
+    btnSkill.onclick = () => showTargetSelect("skill");
+    buttons.appendChild(btnSkill);
+  }
+}
+
+function showTargetSelect(actionType) {
+  const prompt = document.getElementById("actionPrompt");
+  const buttons = document.getElementById("actionButtons");
+  
+  if (actionType === "doubt") prompt.innerText = "誰を追求して矛盾を突きますか？";
+  else if (actionType === "cover") prompt.innerText = "誰をかばって味方アピールをしますか？";
+  else if (actionType === "investigate") prompt.innerText = "誰の昨夜の行動をコソッと調査しますか？";
+  else if (actionType === "skill") prompt.innerText = "【固有スキル】誰に対して発動しますか？";
+  
+  buttons.innerHTML = "";
+
+  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
+    const btn = document.createElement("button");
+    btn.innerText = c.name;
+    btn.onclick = () => executePlayerAction(actionType, c.id);
+    buttons.appendChild(btn);
+  });
+
+  const btnBack = document.createElement("button");
+  btnBack.innerText = "戻る";
+  btnBack.style.background = "#4b5563";
+  btnBack.onclick = () => showActionMenu();
+  buttons.appendChild(btnBack);
+}
+
+function playerPassAction() {
+  addLog("あなた「……（今回はあえて発言せず、周囲の議論の空気を静観する）」", "sys");
   updateUI();
   runNpcTurn();
+}
+
+function executePlayerAction(type, targetId) {
+  const target = chars.find(c => c.id === targetId);
+  
+  if (type === "doubt") {
+    addLog(`あなた「${target.name}の数字の出し方、何か隠してないか？」`, "doubt");
+    applyDoubt(chars[0], target);
+    updateUI();
+    runNpcTurn();
+  } else if (type === "cover") {
+    addLog(`あなた「${target.name}さんは今期しっかり数字を作ってるし、怪しくないだろ」`, "cover");
+    applyCover(chars[0], target);
+    updateUI();
+    runNpcTurn();
+  } else if (type === "investigate") {
+    hasInvestigatedToday = true;
+    let resultText = "";
+    if (target.id === morrieId) {
+      resultText = `【調査結果】${target.name}のPCから、非公開の不審なログファイルが見つかった…こいつがMORRIEだ！`;
+    } else {
+      resultText = `【調査結果】${target.name}の昨夜の行動を調べたが、特に怪しい動きは確認できなかった。`;
+    }
+    addLog(resultText, "investigate");
+    updateUI();
+    runNpcTurn();
+  } else if (type === "skill") {
+    hasUsedSkill = true;
+    addLog(`あなた【固有スキル発動】「いい加減にしろ！${target.name}、お前のロジックには決定的な破綻がある！！」`, "skill");
+    let damage = 40;
+    chars.forEach(c => {
+      if (c.isAlive) trust[c.id][target.id] = Math.max(0, trust[c.id][target.id] - damage);
+    });
+    updateUI();
+    runNpcTurn();
+  }
 }
 
 function runNpcTurn() {
@@ -340,23 +483,8 @@ function runNpcTurn() {
   if (discussionTurn >= MAX_TURNS) {
     showVotingUI();
   } else {
-    showDiscussionUI();
+    showActionMenu();
   }
-}
-
-function showDiscussionUI() {
-  updateUI();
-  const prompt = document.getElementById("actionPrompt");
-  const buttons = document.getElementById("actionButtons");
-  prompt.innerText = "誰を追求して矛盾を突きますか？";
-  buttons.innerHTML = "";
-
-  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
-    const btn = document.createElement("button");
-    btn.innerText = `${c.name}を追求`;
-    btn.onclick = () => playerAction(c.id);
-    buttons.appendChild(btn);
-  });
 }
 
 function showVotingUI() {
@@ -426,7 +554,7 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false;
-      addLog(`暗いフロアに冷たい音が響いた... ${victim.name} が消息を絶った。`, "sys");
+      addLog(`暗いフロアに冷たい音が響いた... ${victim.name} のデスクから未決裁の不審なデータが発見され、そのまま消息を絶った。`, "sys");
     }
   }
 
@@ -445,8 +573,9 @@ function runNightPhase() {
   if (checkVictory()) return;
   
   day++; discussionTurn = 0;
+  hasInvestigatedToday = false;
   addLog(`--- 期末 ${day}日目の朝 ---`, "sys");
-  showDiscussionUI();
+  showActionMenu();
 }
 
 function checkVictory() {
@@ -457,8 +586,16 @@ function checkVictory() {
   const buttons = document.getElementById("actionButtons");
 
   if (!isMorrieAlive) {
-    addLog("【営業部の勝利】MORRIEを会社から排除した！ノルマ達成へ向けて再始動だ。", "cover");
-    prompt.innerText = "CLEAR - 営業目標達成への道";
+    const aliveCount = chars.filter(c => c.isAlive).length;
+    let endingTitle = "";
+    if (aliveCount >= 4) {
+      endingTitle = "【真END：営業目標達成＆完全勝利】被害を最小限に抑え、部門全員で期末目標を無事達成した！";
+    } else {
+      endingTitle = "【ノーマルEND：疲弊のクリア】MORRIEは排除したが、多くの犠牲を出し営業部はボロボロになった...";
+    }
+    
+    addLog(endingTitle, "cover");
+    prompt.innerText = "CLEAR - エピローグ到達";
     buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">もう一度プレイ</button>';
     return true;
   }
