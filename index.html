@@ -36,6 +36,9 @@
     padding: 8px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .char-card.dead {
     opacity: 0.35;
@@ -43,11 +46,25 @@
     border-color: #111827;
   }
   .char-name { font-weight: bold; font-size: 0.95rem; color: #f8fafc; }
-  .char-sub { font-size: 0.75rem; color: #64748b; }
-  .char-trust { font-size: 0.8rem; margin-top: 4px; font-weight: bold; }
-  .trust-high { color: #2ed573; }   /* 信用 */
-  .trust-mid { color: #ffa502; }    /* 中立・警戒 */
-  .trust-low { color: #ff4757; }    /* 危険・疑い */
+  .char-sub { font-size: 0.75rem; color: #64748b; margin-bottom: 6px; }
+  
+  /* 数値を出さず、色（ドットやバー）で状態を示すインジケーター */
+  .trust-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+  }
+  .trust-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .dot-high { background-color: #2ed573; box-shadow: 0 0 6px #2ed573; }   /* 信用：緑 */
+  .dot-mid { background-color: #ffa502; box-shadow: 0 0 6px #ffa502; }    /* 中立：黄 */
+  .dot-low { background-color: #ff4757; box-shadow: 0 0 6px #ff4757; }    /* 危険・疑い：赤 */
+  .dot-player { background-color: #38bdf8; }                               /* プレイヤー：青 */
+  .dot-dead { background-color: #475569; }                                /* 死亡：グレー */
 
   /* ログボックス */
   .log-box {
@@ -111,13 +128,15 @@
 </div>
 
 <script>
+// 主人公(id:0)を独立させ、山口(id:6)をNPCとして配置
 const chars = [
-  { id: 0, name: "山口", isPlayer: true, isAlive: true, logic: 9, charisma: 8, charm: 3, stealth: 2, aggro: 9 },
+  { id: 0, name: "あなた", isPlayer: true, isAlive: true, logic: 8, charisma: 8, charm: 5, stealth: 5, aggro: 5 },
   { id: 1, name: "横山", isPlayer: false, isAlive: true, logic: 8, charisma: 5, charm: 5, stealth: 6, aggro: 5 },
   { id: 2, name: "赤堀", isPlayer: false, isAlive: true, logic: 6, charisma: 6, charm: 8, stealth: 8, aggro: 2 },
   { id: 3, name: "北野", isPlayer: false, isAlive: true, logic: 3, charisma: 2, charm: 5, stealth: 10, aggro: 1 },
   { id: 4, name: "毛利", isPlayer: false, isAlive: true, logic: 2, charisma: 9, charm: 7, stealth: 4, aggro: 8 },
-  { id: 5, name: "内藤", isPlayer: false, isAlive: true, logic: 5, charisma: 3, charm: 1, stealth: 5, aggro: 7 }
+  { id: 5, name: "内藤", isPlayer: false, isAlive: true, logic: 5, charisma: 3, charm: 1, stealth: 5, aggro: 7 },
+  { id: 6, name: "山口", isPlayer: false, isAlive: true, logic: 9, charisma: 8, charm: 3, stealth: 2, aggro: 9 }
 ];
 
 let day = 1;
@@ -150,24 +169,27 @@ function updateUI() {
     const card = document.createElement("div");
     card.className = `char-card ${!c.isAlive ? "dead" : ""}`;
     
-    let trustHtml = "";
-    if (!c.isPlayer && c.isAlive) {
-      const tVal = trust[0][c.id];
-      let tClass = "trust-mid";
-      let tText = "警戒 (中立)";
-      if (tVal >= 65) { tClass = "trust-high"; tText = "信用"; }
-      else if (tVal <= 35) { tClass = "trust-low"; tText = "不信・疑い"; }
-      trustHtml = `<div class="char-trust ${tClass}">${tText} (${tVal})</div>`;
-    } else if (c.isPlayer) {
-      trustHtml = `<div class="char-trust" style="color:#38bdf8;">PLAYER</div>`;
+    let indicatorHtml = "";
+    if (c.isPlayer) {
+      indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-player"></div><span>プレイヤー</span></div>`;
+    } else if (!c.isAlive) {
+      indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-dead"></div><span>消失</span></div>`;
     } else {
-      trustHtml = `<div class="char-trust" style="color:#64748b;">消失</div>`;
+      const tVal = trust[0][c.id];
+      let dotClass = "dot-mid";
+      let statusText = "中立・警戒";
+      if (tVal >= 65) { dotClass = "dot-high"; statusText = "信用"; }
+      else if (tVal <= 35) { dotClass = "dot-low"; statusText = "要警戒（疑い）"; }
+      
+      indicatorHtml = `<div class="trust-indicator"><div class="trust-dot ${dotClass}"></div><span>${statusText}</span></div>`;
     }
 
     card.innerHTML = `
-      <div class="char-name">${c.name} ${c.isPlayer ? "(あなた)" : ""}</div>
-      <div class="char-sub">${c.isAlive ? "生存" : "死亡"}</div>
-      ${trustHtml}
+      <div>
+        <div class="char-name">${c.name}</div>
+        <div class="char-sub">${c.isAlive ? "生存" : "死亡"}</div>
+      </div>
+      ${indicatorHtml}
     `;
     grid.appendChild(card);
   });
@@ -199,7 +221,7 @@ function applyCover(speaker, target) {
 
 function playerAction(targetId) {
   const target = chars.find(c => c.id === targetId);
-  addLog(`山口(あなた)「${target.name}の行動には矛盾がある」`, "doubt");
+  addLog(`あなた「${target.name}の行動には矛盾がある」`, "doubt");
   applyDoubt(chars[0], target);
   updateUI();
   runNpcTurn();
@@ -259,7 +281,7 @@ function runNpcTurn() {
     });
 
     let target = myTargets[Math.floor(Math.random() * myTargets.length)];
-    addLog(`${npc.name}「どう考えても ${target.name} が怪しい...！」`, "doubt");
+    addLog(`${npc.name}「どう考えても ${target.name} が怪しいだろ...！」`, "doubt");
     applyDoubt(npc, target);
   });
 
@@ -336,7 +358,7 @@ function runNightPhase() {
   const morrie = chars.find(c => c.id === morrieId);
   
   if (morrie && morrie.isAlive) {
-    const targets = chars.filter(c => c.isAlive && c.id !== morrieId);
+    const targets = chars.filter(c => c.isAlive && c.id !== morrieId && (!c.isPlayer || day > 1));
     let victim = null;
 
     if (morrie.stealth >= 8) {
@@ -348,7 +370,9 @@ function runNightPhase() {
       targets.sort((a, b) => (b.logic + b.charisma) - (a.logic + a.charisma));
       victim = targets[0];
     } else {
-      victim = targets[Math.floor(Math.random() * targets.length)];
+      if (targets.length > 0) {
+        victim = targets[Math.floor(Math.random() * targets.length)];
+      }
     }
 
     if (victim) {
