@@ -37,16 +37,53 @@
     overflow-y: auto;
   }
   .screen-overlay h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #ff4757;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     letter-spacing: 2px;
     text-shadow: 0 0 15px rgba(255,71,87,0.6);
   }
   .subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #94a3b8;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
+  }
+
+  /* タイトル画面のキャリア実績ボード */
+  .career-board {
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 14px;
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  }
+  .career-board h3 {
+    color: #38bdf8;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 4px;
+  }
+  .career-item {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .career-item span { color: #f8fafc; font-weight: bold; }
+  .bonus-desc {
+    font-size: 0.75rem;
+    color: #a5b4fc;
+    margin-top: 8px;
+    background: #1e1b4b;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #312e81;
   }
 
   /* フレーバーテキスト専用ボックス */
@@ -54,17 +91,17 @@
     background: #111827;
     border: 1px solid #1f2937;
     border-radius: 6px;
-    padding: 16px;
+    padding: 14px;
     max-width: 420px;
     width: 100%;
     text-align: left;
-    margin-bottom: 25px;
-    font-size: 0.85rem;
-    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    line-height: 1.5;
     color: #cbd5e1;
   }
   .flavor-box p {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .flavor-box p:last-child {
     margin-bottom: 0;
@@ -72,6 +109,15 @@
   .flavor-title {
     color: #ff4757;
     font-weight: bold;
+  }
+
+  .btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 300px;
+    align-items: center;
   }
 
   .start-btn {
@@ -84,9 +130,19 @@
     border: none !important;
     cursor: pointer !important;
     font-weight: bold !important;
-    width: auto !important;
-    flex: none !important;
+    width: 100% !important;
   }
+
+  .reset-btn {
+    background: transparent !important;
+    color: #64748b !important;
+    font-size: 0.75rem !important;
+    padding: 6px !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-decoration: underline;
+  }
+  .reset-btn:hover { color: #94a3b8 !important; }
 
   .char-grid {
     display: grid;
@@ -179,14 +235,28 @@
 </head>
 <body>
 
-<!-- ステップ1：シンプルなタイトル画面 -->
+<!-- ステップ1：タイトル画面（キャリア実績ボード常設） -->
 <div id="titleScreen" class="screen-overlay">
   <h2>MORRIEを探して</h2>
   <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
-  <button class="start-btn" onclick="showIntroScreen()">ゲーム開始</button>
+  
+  <div class="career-board">
+    <h3>📊 社内キャリア実績</h3>
+    <div class="career-item">現在の役職: <span id="boardRank">-</span></div>
+    <div class="career-item">通算クリア回数: <span id="boardClears">0 回</span></div>
+    <div class="career-item">真END達成回数: <span id="boardTrueClears">0 回</span></div>
+    <div class="bonus-desc" id="boardBonus">
+      特典: なし（クリアしてランクを上げよう）
+    </div>
+  </div>
+
+  <div class="btn-container">
+    <button class="start-btn" onclick="showIntroScreen()">ゲーム開始</button>
+    <button class="reset-btn" onclick="resetCareerData()">実績データをリセット</button>
+  </div>
 </div>
 
-<!-- ステップ2：フレーバーテキスト説明画面（初期は非表示） -->
+<!-- ステップ2：プロローグ画面 -->
 <div id="introScreen" class="screen-overlay" style="display: none;">
   <h2>プロローグ</h2>
   <div class="flavor-box">
@@ -212,6 +282,43 @@
 </div>
 
 <script>
+// --- 周回セーブデータの管理 (localStorage) ---
+let gameData = JSON.parse(localStorage.getItem("morrie_career")) || {
+  clearCount: 0,
+  trueEndCount: 0,
+  rank: "新人営業マン"
+};
+
+function updateCareerBoard() {
+  let bonusText = "特典: なし（クリアしてランクを上げよう）";
+  if (gameData.clearCount >= 3) {
+    gameData.rank = "営業部長";
+    bonusText = "特典発動中: 【部長特典】初期信頼度が少し高く、固有スキル威力が大幅アップ！";
+  } else if (gameData.clearCount >= 1) {
+    gameData.rank = "主任";
+    bonusText = "特典発動中: 【主任特典】初期信頼度が少し高い状態でスタート！";
+  } else {
+    gameData.rank = "新人営業マン";
+  }
+
+  document.getElementById("boardRank").innerText = gameData.rank;
+  document.getElementById("boardClears").innerText = `${gameData.clearCount} 回`;
+  document.getElementById("boardTrueClears").innerText = `${gameData.trueEndCount} 回`;
+  document.getElementById("boardBonus").innerText = bonusText;
+}
+
+// データの初期化（リセット）ボタン用
+function resetCareerData() {
+  if (confirm("実績データをリセットして初期状態に戻しますか？")) {
+    localStorage.removeItem("morrie_career");
+    gameData = { clearCount: 0, trueEndCount: 0, rank: "新人営業マン" };
+    updateCareerBoard();
+  }
+}
+
+// 起動時にボードを更新
+updateCareerBoard();
+
 const chars = [
   { id: 0, name: "あなた", isPlayer: true, isAlive: true, logic: 8, charisma: 8, charm: 5, stealth: 5, aggro: 5 },
   { id: 1, name: "横山", isPlayer: false, isAlive: true, logic: 8, charisma: 5, charm: 5, stealth: 6, aggro: 5 },
@@ -230,22 +337,25 @@ let trust = {};
 let hasUsedSkill = false;
 let hasInvestigatedToday = false;
 
-// タイトルからプロローグ画面へ
 function showIntroScreen() {
   document.getElementById("titleScreen").style.display = "none";
   document.getElementById("introScreen").style.display = "flex";
 }
 
-// プロローグからゲーム本編へ
 function startGame() {
   document.getElementById("introScreen").style.display = "none";
 
   const npcs = chars.filter(c => !c.isPlayer);
   morrieId = npcs[Math.floor(Math.random() * npcs.length)].id;
   
+  // 周回特典：クリア回数に応じて初期信頼度を優遇 (主任以上で55スタート)
+  let initialTrust = (gameData.clearCount >= 1) ? 55 : 50;
+
   chars.forEach(c1 => {
     trust[c1.id] = {};
-    chars.forEach(c2 => { trust[c1.id][c2.id] = 50; });
+    chars.forEach(c2 => { 
+      trust[c1.id][c2.id] = (c1.isPlayer && !c2.isPlayer) ? initialTrust : 50; 
+    });
   });
 
   addLog("期末の夜。オフィスに閉じ込められた営業部員の中に、MORRIEが潜んでいる...", "sys");
@@ -410,7 +520,8 @@ function executePlayerAction(type, targetId) {
   } else if (type === "skill") {
     hasUsedSkill = true;
     addLog(`あなた【固有スキル発動】「いい加減にしろ！${target.name}、お前のロジックには決定的な破綻がある！！」`, "skill");
-    let damage = 40;
+    // 部長特典（クリア回数3回以上）ならダメージがさらに強化
+    let damage = (gameData.clearCount >= 3) ? 55 : 40;
     chars.forEach(c => {
       if (c.isAlive) trust[c.id][target.id] = Math.max(0, trust[c.id][target.id] - damage);
     });
@@ -588,15 +699,20 @@ function checkVictory() {
   if (!isMorrieAlive) {
     const aliveCount = chars.filter(c => c.isAlive).length;
     let endingTitle = "";
+    
+    // 周回データの更新とセーブ
+    gameData.clearCount++;
     if (aliveCount >= 4) {
+      gameData.trueEndCount++;
       endingTitle = "【真END：営業目標達成＆完全勝利】被害を最小限に抑え、部門全員で期末目標を無事達成した！";
     } else {
       endingTitle = "【ノーマルEND：疲弊のクリア】MORRIEは排除したが、多くの犠牲を出し営業部はボロボロになった...";
     }
+    localStorage.setItem("morrie_career", JSON.stringify(gameData));
     
     addLog(endingTitle, "cover");
-    prompt.innerText = "CLEAR - エピローグ到達";
-    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">もう一度プレイ</button>';
+    prompt.innerText = "CLEAR - キャリアが昇進しました";
+    buttons.innerHTML = '<button onclick="location.reload()" style="flex:1 1 100%;">次の周回へ進む</button>';
     return true;
   }
   if (aliveHumans <= 1) {
