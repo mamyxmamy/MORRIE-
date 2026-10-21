@@ -48,16 +48,19 @@
     margin-bottom: 30px;
     line-height: 1.6;
   }
+  /* 適切なサイズに修正したスタートボタン */
   .start-btn {
     background: #ff4757 !important;
     color: #fff !important;
-    font-size: 1.1rem !important;
-    padding: 15px 30px !important;
+    font-size: 1rem !important;
+    padding: 12px 28px !important;
     border-radius: 6px !important;
     box-shadow: 0 0 15px rgba(255,71,87,0.4);
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+    border: none !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    width: auto !important;
+    flex: none !important;
   }
 
   /* キャラクターカード一覧グリッド */
@@ -189,6 +192,7 @@ let morrieId = -1;
 let trust = {};
 
 function startGame() {
+  // タイトル画面を完全に非表示にする
   document.getElementById("titleScreen").style.display = "none";
 
   const npcs = chars.filter(c => !c.isPlayer);
@@ -378,7 +382,6 @@ function processVote(playerVoteId) {
 
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(npc => {
     let targetId = null; let minT = 101;
-    chars.filter(other => other.isAlive && other.id !== npc.id).other.forEach ? ... : null; // 簡略化
     chars.filter(other => other.isAlive && other.id !== npc.id).forEach(other => {
       if (trust[npc.id][other.id] < minT) { minT = trust[npc.id][other.id]; targetId = other.id; }
     });
