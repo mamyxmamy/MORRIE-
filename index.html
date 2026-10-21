@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MORRIEを探して ─ 営業部・期末の惨劇 ─</title>
 <style>
-  /* -------------------------------------
-     全体設定（本格ホラーノベル風）
-  -------------------------------------- */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: #030303; 
@@ -18,11 +15,9 @@
     padding: 10px; font-size: 14px;
     user-select: none;
   }
-  header { text-align: center; padding: 10px 0; border-bottom: 1px solid #330000; margin-bottom: 10px; }
-  h1 { font-size: 1.3rem; color: #aa0000; letter-spacing: 3px; text-shadow: 0 0 10px rgba(170, 0, 0, 0.6); }
-  .status-bar { font-size: 0.85rem; color: #6b7280; margin-top: 4px; letter-spacing: 1px; }
+  
+  .game-container { padding-top: 5px; }
 
-  /* 画面共通オーバーレイ */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; display: flex; flex-direction: column;
     justify-content: center; align-items: center; z-index: 100; padding: 20px; text-align: center; overflow-y: auto;
@@ -30,13 +25,11 @@
   .screen-overlay h2 { font-size: 2rem; color: #aa0000; margin-bottom: 5px; letter-spacing: 4px; text-shadow: 0 0 15px rgba(170, 0, 0, 0.6); }
   .subtitle { font-size: 0.95rem; color: #6b7280; margin-bottom: 30px; letter-spacing: 2px; }
 
-  /* シネマティック演出エフェクト */
   @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); filter: blur(2px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
   .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.95rem; line-height: 2; margin-bottom: 1.2rem; text-align: left; letter-spacing: 1.5px; }
   .cinematic-text.red { color: #aa0000; font-weight: bold; text-shadow: 0 0 10px rgba(170, 0, 0, 0.4); }
-  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5s; } .delay-4 { animation-delay: 7s; } .delay-btn { animation-delay: 9s; opacity: 0; animation: fadeInText 1s ease forwards; }
+  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5s; } .delay-4 { animation-delay: 8s; } .delay-btn { animation-delay: 10s; opacity: 0; animation: fadeInText 1s ease forwards; }
 
-  /* モーダル（ポップアップ）用設定 */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
     display: flex; justify-content: center; align-items: center; z-index: 200; padding: 20px;
@@ -46,22 +39,18 @@
     max-width: 350px; width: 100%; text-align: left; box-shadow: 0 0 30px rgba(170,0,0,0.2);
   }
 
-  /* キャリア実績ボード（モーダル内） */
   .career-board h3 { color: #aa0000; font-size: 1.1rem; margin-bottom: 15px; border-bottom: 1px solid #331111; padding-bottom: 6px; letter-spacing: 1px; text-align: center; }
   .career-item { font-size: 0.9rem; color: #9ca3af; margin-bottom: 10px; display: flex; justify-content: space-between; }
   .career-item span { color: #e5e7eb; font-weight: bold; }
   .bonus-desc { font-size: 0.8rem; color: #ef4444; margin-top: 15px; background: #1a0505; padding: 10px; border-radius: 2px; border: 1px solid #4a0000; line-height: 1.4; }
 
-  /* 入力フォーム群（名前・ジョブ） */
   .flavor-box { background: rgba(10,10,10,0.8); border: 1px solid #331111; border-radius: 4px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; }
   .form-group { margin-top: 15px; text-align: left; }
   .form-group label { display: block; color: #6b7280; font-size: 0.8rem; margin-bottom: 5px; }
   .form-input, .form-select { width: 100%; padding: 12px; border-radius: 2px; border: 1px solid #333; background: #050505; color: #e5e7eb; font-size: 0.95rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
   .form-input:focus, .form-select:focus { border-color: #aa0000; }
 
-  /* ボタン全般（青・紫を完全排除） */
   .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 280px; align-items: center; }
-  
   .start-btn { 
     background: #4a0000 !important; color: #d1d5db !important; font-size: 1rem !important; 
     padding: 14px 20px !important; border-radius: 2px !important; border: 1px solid #8a0303 !important; 
@@ -69,14 +58,11 @@
     font-family: inherit; transition: all 0.3s; display: block; flex: none;
   }
   .start-btn:hover { background: #600000 !important; box-shadow: 0 0 10px rgba(170,0,0,0.5); }
-  
   .sub-btn { background: #111 !important; border-color: #333 !important; }
   .sub-btn:hover { background: #222 !important; border-color: #555 !important; }
-  
   .close-btn { background: #1a1a1a !important; border-color: #444 !important; margin-top: 20px; padding: 10px !important; }
   .reset-btn { background: transparent !important; color: #4b5563 !important; font-size: 0.75rem !important; padding: 6px !important; border: none !important; cursor: pointer !important; text-decoration: underline; margin-top: 15px; }
 
-  /* キャラクターカード（ダークトーン化） */
   .char-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
   .char-card { background: rgba(10,10,10,0.8); border: 1px solid #222; border-radius: 2px; padding: 10px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: border-color 0.3s; }
   .char-card.dead { opacity: 0.3; background: #000; border-color: #111; }
@@ -92,8 +78,7 @@
   .dot-player { background-color: #2563eb; }
   .dot-dead { background-color: #1f2937; }
 
-  /* ログボックス（ノベルゲーム風） */
-  .log-box { background: rgba(0,0,0,0.6); border: 1px solid #331111; border-radius: 2px; height: 220px; overflow-y: auto; padding: 12px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.6; box-shadow: inset 0 0 20px #000; }
+  .log-box { background: rgba(0,0,0,0.6); border: 1px solid #331111; border-radius: 2px; height: 260px; overflow-y: auto; padding: 12px; margin-bottom: 10px; font-size: 0.9rem; line-height: 1.6; box-shadow: inset 0 0 20px #000; }
   .log-box p { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #1a1a1a; letter-spacing: 0.5px; }
   .log-box p:last-child { border-bottom: none; margin-bottom: 0; }
   
@@ -105,9 +90,8 @@
   .passive { color: #fcd34d; font-size: 0.8rem; }
   .defend { color: #9ca3af; font-style: italic; }
 
-  /* アクションボタン群（ポップさを完全に排除した漆黒デザイン） */
   .action-panel { background: rgba(10,10,10,0.8); border: 1px solid #222; border-radius: 2px; padding: 12px; }
-  #actionPrompt { font-size: 0.9rem; margin-bottom: 10px; color: #9ca3af; letter-spacing: 1px; }
+  #actionPrompt { font-size: 0.9rem; margin-bottom: 10px; color: #9ca3af; letter-spacing: 1px; font-weight: bold; }
   .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
   
   .action-panel button { background: #0a0a0a !important; color: #d1d5db !important; border: 1px solid #333 !important; border-radius: 2px !important; padding: 12px !important; font-size: 0.85rem !important; cursor: pointer !important; flex: 1 1 calc(50% - 8px) !important; letter-spacing: 1px !important; font-family: inherit !important; transition: all 0.2s !important; }
@@ -121,17 +105,19 @@
   .btn-special { border-left: 2px solid #5b21b6 !important; }
   .btn-skip { background: #050505 !important; border: 1px dashed #333 !important; color: #6b7280 !important; width: 100% !important; flex: none !important; margin-top: 5px !important; }
 
-  /* コレクション画面用（極秘ファイル風） */
   .profile-list { text-align: left; width: 100%; max-width: 400px; margin-top: 15px; height: 60vh; overflow-y: auto; padding-right: 10px; }
   .profile-item { background: #080808; border-left: 3px solid #aa0000; border-top: 1px solid #222; border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.7; position: relative; }
   .profile-item::before { content: "極秘"; position: absolute; top: 4px; right: 8px; font-size: 0.6rem; color: #aa0000; border: 1px solid #aa0000; padding: 2px 4px; transform: rotate(15deg); opacity: 0.5; }
   .profile-locked { color: #4b5563; font-style: italic; display: block; text-align: center; padding: 10px 0; }
-  .profile-locked::before { content: "🔒"; margin-right: 5px; font-style: normal; }
+  
+  @keyframes shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-2px, 1px); } 40% { transform: translate(2px, -1px); } 60% { transform: translate(-2px, -1px); } 80% { transform: translate(2px, 1px); } }
+  .shake { animation: shake 0.4s; }
+  @keyframes glitch { 0%, 100% { background-color: #030303; } 50% { background-color: #300; } }
+  .glitch { animation: glitch 0.3s ease-in-out; }
 </style>
 </head>
 <body>
 
-<!-- タイトル画面 -->
 <div id="titleScreen" class="screen-overlay">
   <h2>MORRIEを探して</h2>
   <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
@@ -139,11 +125,10 @@
   <div class="btn-container">
     <button class="start-btn" onclick="showNameScreen()">入室する</button>
     <button class="start-btn sub-btn" onclick="showCareerModal()">キャリア実績</button>
-    <button class="start-btn sub-btn" onclick="showCollectionScreen()">社員ファイル (裏プロフ)</button>
+    <button class="start-btn sub-btn" onclick="showCollectionScreen()">社員ファイル (極秘)</button>
   </div>
 </div>
 
-<!-- キャリア実績ポップアップ（モーダル） -->
 <div id="careerModal" class="modal-overlay" style="display: none;">
   <div class="modal-content career-board">
     <h3>社内キャリア実績</h3>
@@ -158,7 +143,6 @@
   </div>
 </div>
 
-<!-- 社員登録（名前・ジョブ入力）画面 -->
 <div id="nameScreen" class="screen-overlay" style="display: none;">
   <h2>社員登録</h2>
   <div class="subtitle">─ 入館パスの発行 ─</div>
@@ -174,7 +158,7 @@
         <option value="balanced">【標準】オールラウンダー</option>
         <option value="attacker">【攻撃】新規開拓エース（追求ダメージ1.5倍）</option>
         <option value="defender">【防御】クレーム対応班（かばう回復量1.5倍）</option>
-        <option value="analyst">【論理】データアナリスト（初期ロジックが極めて高い）</option>
+        <option value="analyst">【論理】データアナリスト（初期ロジック極高）</option>
       </select>
     </div>
   </div>
@@ -185,89 +169,119 @@
   </div>
 </div>
 
-<!-- コレクション画面 -->
 <div id="collectionScreen" class="screen-overlay" style="display: none;">
-  <h2 style="font-size: 1.5rem;">社員ファイル（極秘）</h2>
+  <h2 style="font-size: 1.5rem; color: #aa0000; letter-spacing: 2px;">社員ファイル（極秘）</h2>
   <div class="profile-list" id="profileList"></div>
   <div class="btn-container" style="margin-top: 20px;">
     <button class="start-btn sub-btn" onclick="closeCollectionScreen()">タイトルに戻る</button>
   </div>
 </div>
 
-<!-- シネマティック・プロローグ画面 -->
 <div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
   <div style="max-width: 400px; width: 100%; padding: 20px;">
     <p class="cinematic-text delay-1">── 3月31日、23時45分。</p>
-    <p class="cinematic-text delay-2">期末の目標達成まで、あと数千万。<br>絶望的なノルマと終わらない残業が、<br>営業部から正気を奪い去っていた。</p>
-    <p class="cinematic-text red delay-3">だが、真の恐怖は「未達」ではなかった。</p>
-    <p class="cinematic-text delay-4">同僚の皮を被り、声帯を模写し、<br>静かにこのフロアの人間を喰らう怪物。<br>……『MORRIE』は今、誰の顔をしている？</p>
+    <p class="cinematic-text delay-2">大規模な「希望退職」の募集により、営業部の席は半分になった。残された者に突きつけられたのは、到底終わらない絶望的なノルマだ。</p>
+    <p class="cinematic-text red delay-3">さらに夜半、全社員の端末に部長からの冷酷な一通のメールが届く。<br>『本日の期末をもちまして、当部署から1名分の「希望退職（解雇）」を決定していただきます。合意に至らない場合、全員一律でクビとします』</p>
+    <p class="cinematic-text delay-4">生き残るため、他人の数字の横取りや不正の証拠を暴き合う泥沼の言い争い。<br>だが、互いの揚げ足を取り合ううちに、誰もが気づき始める。<br>……この中にいる『誰か』の記憶が、昨日のものと微妙に食い違っていることに。<br>クローン生体技術で同僚の皮を被った怪物──『MORRIE』は今、誰の顔をしている？</p>
     <div class="btn-container" style="margin: 30px auto 0;">
-      <button class="start-btn delay-btn" onclick="startGame()">惨劇の夜を始める</button>
+      <button class="start-btn delay-btn" onclick="startGame()">地獄の会議を始める</button>
     </div>
   </div>
 </div>
 
-<!-- ゲーム本編ヘッダー -->
-<header>
-  <h1>MORRIEを探して ─ 営業部</h1>
-  <div class="status-bar" id="gameInfo">待機中</div>
-</header>
-
-<div class="char-grid" id="charGrid"></div>
-<div class="log-box" id="logBox"></div>
-
-<div class="action-panel" id="actionPrompt">会議の開始を待っています...</div>
-<div class="action-panel" style="padding-top: 0; border-top: none;">
-  <div class="btn-group" id="actionButtons"></div>
+<div class="game-container" id="gameArea" style="display: none;">
+  <div class="char-grid" id="charGrid"></div>
+  <div class="log-box" id="logBox"></div>
+  
+  <div class="action-panel" id="actionPrompt">会議の開始を待っています...</div>
+  <div class="action-panel" style="padding-top: 0; border-top: none;">
+    <div class="btn-group" id="actionButtons"></div>
+  </div>
 </div>
 
 <script>
-// --- セーブデータ管理 ---
 let gameData = JSON.parse(localStorage.getItem("morrie_career")) || {
   clearCount: 0, trueEndCount: 0, rank: "新人", unlockedProfiles: [], playerName: "あなた", playerJob: "balanced"
 };
 
-// 【重要】過去のバグった名前データのサニタイズ（強制浄化）
 if (gameData.playerName) {
-  gameData.playerName = gameData.playerName.replace(/[\[\]]/g, ""); // 括弧を削除
-  if (gameData.playerName.length > 8) {
-    gameData.playerName = gameData.playerName.substring(0, 8); // 8文字にカット
-  }
+  gameData.playerName = gameData.playerName.replace(/[\[\]]/g, ""); 
+  if (gameData.playerName.length > 8) gameData.playerName = gameData.playerName.substring(0, 8);
 }
 
 const secretProfiles = {
-  1: "【横山】実は経費でキャバクラに通い、領収書を偽造している。その負い目から他者を信じられず、疑心暗鬼に陥りやすい。",
-  2: "【赤堀】一見誰にでも優しく庇うが、裏では同僚のミスをノートに記録し、昇進のダシにしようと目論んでいる。",
-  3: "【北野】ステルス行動の達人。極度のコミュ障だが、社内のサーバーにハッキングして他人の給与明細を見るのが趣味。",
-  4: "【毛利】圧倒的カリスマを持つが、実は全て親のコネ。実務能力はゼロであり、いざという時の判断力が極端に脆い。",
-  5: "【内藤】愛想が悪く常に怒っているが、実は毎晩保護猫カフェに通って癒やされている。猫以外の命には興味がない。",
-  6: "【山口】論理の化身。同僚を論破することに快感を覚えるサイコパス気質で、MORRIEよりもタチが悪い時がある。"
+  1: "【横山】\n対象の遺伝子モデル。経費でキャバクラに通い領収書を偽造した負い目から、他者を信じられず攻撃的。コピー体はしばしば過去の記憶の整合性が崩壊する。",
+  2: "【赤堀】\n対象の生体サンプル。裏では同僚のミスをノートに記録しリストラ候補として密告しようとしていた。培養液の付着により、皮膚の一部が変質している。",
+  3: "【北野】\n対象の培養記録。社内サーバーへ不正ハッキングし給与データを盗み見ていた。人間関係を極度に恐れるあまり、クローンへの置換に対する抵抗感が希薄。",
+  4: "【毛利】\n対象の遺伝子モデル。親のコネで入社したため実務能力はゼロ。解雇を言い渡される恐怖から、見境なく他人のデータを改ざんして罪を擦り付けようとする。",
+  5: "【内藤】\n対象の生体サンプル。愛想が悪く常に苛立っている。人間への共感性が低く、同僚が消えても『席が広くなって好都合だ』と冷笑する異常性を持つ。",
+  6: "【山口】\n対象の培養記録。論理の化身。同僚の不正やデータの矛盾を暴くことに快感を覚えるサイコパス。MORRIEの存在に薄々気づきながらも観察を楽しんでいる。"
 };
 
+// 「数字の横取り」「不正の疑い」「記憶の違和感」を織り交ぜたセリフバンク
 const dialogueBank = {
-  "横山": { doubt: ["「[TARGET]のヨミ、どう考えても甘すぎる。何か隠してるんじゃないか？」", "「今期の数字、辻褄が合わないんだよ。[TARGET]、本当のことを言え。」"], cover: ["「いや、[TARGET]は地道にテレアポ回してるよ。俺は信じる。」", "「数字は嘘をつかない。[TARGET]に怪しい動きはないな。」"], defend: ["「ふざけるな！俺は毎日終電まで残って数字作ってんだよ！」"], agree: ["「確かに[TARGET]の昨日の日報、おかしいと思ってたんだ。」"], disagree: ["「いや待て、[TARGET]を疑うのは早計だろ。」"] },
-  "赤堀": { doubt: ["「ねえ…[TARGET]さんの昨日の動き、ちょっと不自然じゃない…？」", "「あんまり言いたくないけど、[TARGET]さん、少し様子がおかしいかも…」"], cover: ["「待って、[TARGET]さんはそんなことする人じゃないよ！」", "「私が保証する。[TARGET]さんは絶対に味方だから！」"], defend: ["「えっ、私！？そんな、ひどいよ…私、一生懸命やってるのに…！」"], agree: ["「実は私も…[TARGET]さんのこと、少し怪しいなって思ってたの…」"], disagree: ["「やめてよ！[TARGET]さんをいじめるみたいな真似は！」"] },
-  "北野": { doubt: ["「……[TARGET]さんのPCのログイン履歴、おかしいです……」", "「……あの、[TARGET]さんが嘘をついてる確率、高いと思います……」"], cover: ["「……[TARGET]さんは、怪しくないです……データがそう言ってます……」"], defend: ["「……私じゃないです……ログを確認すればわかります……」"], agree: ["「……同意します。[TARGET]さんの行動データは異常値です……」"], disagree: ["「……その推論は間違っています。[TARGET]さんは白です……」"] },
-  "毛利": { doubt: ["「おい[TARGET]！お前のやり方は気に食わねぇ！絶対お前だろ！」", "「理屈じゃねえんだよ！俺の勘が[TARGET]が怪しいって言ってんだ！」"], cover: ["「[TARGET]は俺が面倒見てるんだ！疑う奴は許さねぇ！」"], defend: ["「あぁ！？俺が怪物なわけねぇだろ！社長に言いつけるぞ！」"], agree: ["「そうだな！やっぱり[TARGET]の野郎が一番怪しいと思ってたぜ！」"], disagree: ["「うるせえ！俺の勘は[TARGET]はシロだと言っている！」"] },
-  "内藤": { doubt: ["「あーもうイライラする！[TARGET]、お前だろふざけんな！」", "「チッ…[TARGET]の言い訳、聞いてて反吐が出るな。さっさと白状しろ。」"], cover: ["「……別に[TARGET]をかばう義理はねぇが、こいつは白だろ。」"], defend: ["「は？寝言は寝て言えよ。俺のどこが怪しいってんだ。」"], agree: ["「……違いない。さっさと[TARGET]を隔離して終わらせようぜ。」"], disagree: ["「バカかお前ら。[TARGET]を疑うなんて的外れもいいとこだ。」"] },
-  "山口": { doubt: ["「[TARGET]、お前のロジックには致命的な欠陥がある。説明できるか？」", "「感情論はどうでもいい。[TARGET]の行動履歴、すべてが黒だと言っている。」"], cover: ["「合理的に考えて、[TARGET]を疑うのは時間の無駄だ。」"], defend: ["「ふっ……俺を疑うとは、お前は論理的思考が欠如しているようだな。」"], agree: ["「完全に同意だ。[TARGET]の行動には、怪物特有のノイズが混ざっている。」"], disagree: ["「待て。その推論は浅すぎる。[TARGET]はただの無能であって怪物ではない。」"] },
-  "プレイヤー": { doubt: ["「[TARGET]の数字の出し方、何か隠してないか？」", "「昨夜の[TARGET]の行動、どう考えてもおかしいだろ！」"], cover: ["「[TARGET]さんは今期しっかり数字を作ってるし、怪しくないだろ」"], defend: ["「俺はやってない！無実だ！」"], agree: ["「確かに、[TARGET]の動きは怪しいな……。」"], disagree: ["「いや、[TARGET]を疑うのは間違っている！」"] }
+  "横山": {
+    doubt: ["「おい[TARGET]、お前が俺の担当先のデータを勝手に引っこ抜いたんだろ！数字をパクるな！」", "「[TARGET]、お前の昨日の日報、辻褄が合わないぞ。どこでデータを偽造した？」"],
+    cover: ["「いや、[TARGET]はきちんと自分の足でアポ取ってるよ。俺は信じる。」", "「[TARGET]を疑うより、自分の数字を心配しろよ。」"],
+    defend: ["「ふざけるな！データ改ざんなどしてない、俺は正当に数字を作ったんだ！」", "「俺をクビにしたいからって、濡れ衣を着せるなよ！」"],
+    agree: ["「ああ、[ACTOR]の言う通りだ。[TARGET]のPC、隠しフォルダに変な顧客リストがあったぞ。」", "「[ACTOR]に賛成だ。あいつの数字の伸び方は異常だった。」"],
+    disagree: ["「待て[ACTOR]！[TARGET]の不正を疑うなら、お前のその昨日のアリバイはどうなんだよ！」", "「いや、[ACTOR]の勘ぐりすぎだ。[TARGET]はただの無能であって不正はしてない。」"]
+  },
+  "赤堀": {
+    doubt: ["「ねえ…[TARGET]さん、先週までそんな数字の出し方知らなかったよね？ 誰に教わったの…？」", "「あんまり言いたくないけど、[TARGET]さんのパソコンから、私の顧客リストの控えが出てきたの…」"],
+    cover: ["「待って、[TARGET]さんはそんな汚い真似する人じゃないよ！」", "「[TARGET]さんを信じようよ、みんな追い詰められておかしくなってるんだよ…！」"],
+    defend: ["「えっ、私！？違うよ、それ誰かの罠だよ…！なんでそんな嘘つくの！？」", "「私をリストラに追い込もうって言うんでしょ…ひどいよ…！」"],
+    agree: ["「…実は私も、[ACTOR]さんと同じで、[TARGET]さんが昨日言ってたこと、去年の話と食い違ってて気になってたの…」"],
+    disagree: ["「やめてよ[ACTOR]さん！[TARGET]さんをいじめて犯人に仕立て上げようとしないで！」"]
+  },
+  "北野": {
+    doubt: ["「……[TARGET]さんのログイン履歴、深夜3時のもの書き換えられてます……」", "「……あの、[TARGET]さんが話してる前職の記憶、社内データベースの経歴と矛盾してます……」"],
+    cover: ["「……[TARGET]さんのデータはクリーンです……不正の形跡はありません……」"],
+    defend: ["……ログなんてどうとでも改ざんできます……私をターゲットにしないでください……」"],
+    agree: ["「……[ACTOR]さんに同意します。[TARGET]さんの通信パケットには異常な暗号化データが含まれていました……」"],
+    disagree: ["「……[ACTOR]さん、その推論は誤認です。[TARGET]さんはただ疲弊しているだけです……」"]
+  },
+  "毛利": {
+    doubt: ["「おい[TARGET]！お前、俺の売上を自分の数字に塗り替えただろ！お前をクビにさせる！」", "「理屈じゃねえ！[TARGET]の野郎、去年のプロジェクトの名前すら忘れてやがるんだ！偽物だろ！」"],
+    cover: ["「[TARGET]は俺が面倒見てるんだ！勝手な濡れ衣を着せる奴は俺が許さねぇ！」"],
+    defend: ["「あぁ！？俺がデータをパクっただと？ふざけんな、俺は部長の覚えもめでたいんだぞ！」"],
+    agree: ["「そうだな！[ACTOR]の言う通り、[TARGET]の態度は昨日から何か人外じみてやがったぜ！」"],
+    disagree: ["「うるせえ[ACTOR]！俺の目に狂いはねぇ、[TARGET]はただのバカだ！怪物じゃねえ！」"]
+  },
+  "内藤": {
+    doubt: ["「チッ…[TARGET]、お前の机のシュレッダーから他人の名刺の山が出てきたぞ。白状しろ。」", "「あーもうイライラするんだよ！[TARGET]の顔、昨日と何かパーツが違って見えねぇか？」"],
+    cover: ["「……別に[TARGET]をかばう義理はねぇが、こいつがデータを改ざんする頭脳はねぇよ。」"],
+    defend: ["「は？寝言は寝て言えよ。俺の机に名刺を仕込んだのはお前だろ！」"],
+    agree: ["「……[ACTOR]の言う通りだ。さっさと一番怪しい[TARGET]を旧サーバー室送りにしようぜ。」"],
+    disagree: ["「バカか[ACTOR]。[TARGET]を疑うなんて的外れだ。もっと他に隠してる奴がいるだろ。」"]
+  },
+  "山口": {
+    doubt: ["「[TARGET]、お前の昨日の行動ログと、今言った証言には決定的な矛盾がある。説明しろ。」", "「感情論や数字の奪い合いは時間の無駄だ。[TARGET]の生体反応そのものが、周囲の人間と波長がズレている。」"],
+    cover: ["「合理的に考えて、[TARGET]を不正犯扱いするのは論理的飛躍子だ。証拠が弱すぎる。」"],
+    defend: ["「私を疑うとはね……君たちのその低劣な推理力こそ、リストラ対象にふさわしい。」"],
+    agree: ["「[ACTOR]に完全に同意だ。[TARGET]の語る記憶には、模倣特有の致命的な欠落がある。」"],
+    disagree: ["「待て[ACTOR]。その推論は浅い。[TARGET]はただの愚者だが、排除すべき真の異物は別にいる。」"]
+  },
+  "プレイヤー": {
+    doubt: ["「[TARGET]の数字の伸び方、どう考えてもおかしいだろ。データを盗んだのか？」", "「昨夜の[TARGET]の行動、言っていることが昨日の話と全然違うじゃないか！」"],
+    cover: ["「[TARGET]さんは今期ちゃんと自分の足で数字を作ってる。濡れ衣を着せるなよ」"],
+    defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」"],
+    agree: ["「[ACTOR]の言う通りだ。確かに[TARGET]の動きはどこか人間離れしていて気味が悪い……。」"],
+    disagree: ["「いや[ACTOR]、[TARGET]を不正犯に仕立て上げるのは間違っている！」"]
+  }
 };
 
-function getDialogue(speakerName, targetName, type) {
+function getDialogue(speakerName, targetName, actorName, type) {
   const bank = dialogueBank[speakerName] || dialogueBank["プレイヤー"];
   const lines = bank[type] || ["……"];
-  return lines[Math.floor(Math.random() * lines.length)].replace(/[TARGET]/g, targetName);
+  let text = lines[Math.floor(Math.random() * lines.length)];
+  text = text.replace(/[TARGET]/g, targetName);
+  if(actorName) text = text.replace(/[ACTOR]/g, actorName);
+  return text;
 }
 
-// UI遷移・表示系
-function showCareerModal() {
-  updateCareerBoard();
-  document.getElementById("careerModal").style.display = "flex";
-}
-function closeCareerModal() {
-  document.getElementById("careerModal").style.display = "none";
-}
+function showCareerModal() { updateCareerBoard(); document.getElementById("careerModal").style.display = "flex"; }
+function closeCareerModal() { document.getElementById("careerModal").style.display = "none"; }
 
 function updateCareerBoard() {
   let bonusText = "特典: なし";
@@ -296,13 +310,11 @@ function showNameScreen() {
   document.getElementById("nameScreen").style.display = "flex";
 }
 
-function backToTitleFromName() {
-  document.getElementById("nameScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex";
-}
+function backToTitleFromName() { document.getElementById("nameScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
 
 function confirmNameAndShowIntro() {
   let inputName = document.getElementById("playerNameInput").value.trim();
-  inputName = inputName.replace(/[\[\]]/g, ""); // 念のため記号ブロック
+  inputName = inputName.replace(/[\[\]]/g, ""); 
   if (inputName.length > 8) inputName = inputName.substring(0, 8);
   
   gameData.playerName = inputName !== "" ? inputName : "あなた";
@@ -323,14 +335,13 @@ function showCollectionScreen() {
   document.getElementById("titleScreen").style.display = "none"; document.getElementById("collectionScreen").style.display = "flex";
   const list = document.getElementById("profileList"); list.innerHTML = "";
   for(let i=1; i<=6; i++) {
-    const item = document.createElement("div"); item.className = "profile-item";
+    const item = document.createElement("div");
     if (gameData.unlockedProfiles && gameData.unlockedProfiles.includes(i)) {
-      // ロック解除済みのファイル
-      item.innerHTML = secretProfiles[i];
+      item.className = "profile-item";
+      item.innerHTML = secretProfiles[i].replace(/\n/g, '<br>');
     } else {
-      // 未解除
-      item.classList.add("profile-locked");
-      item.innerHTML = `<span class="profile-locked">対象データなし（ゲームクリアで解放）</span>`;
+      item.className = "profile-locked";
+      item.innerHTML = `対象データなし（ゲームクリアで解放）`;
     }
     list.appendChild(item);
   }
@@ -338,7 +349,6 @@ function showCollectionScreen() {
 
 function closeCollectionScreen() { document.getElementById("collectionScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
 
-// --- ゲームロジック ---
 const chars = [
   { id: 0, name: gameData.playerName || "あなた", isPlayer: true, isAlive: true, logic: 8, charisma: 8, charm: 5, stealth: 5, aggro: 5 },
   { id: 1, name: "横山", isPlayer: false, isAlive: true, logic: 8, charisma: 5, charm: 5, stealth: 6, aggro: 5 },
@@ -354,52 +364,47 @@ let trust = {}, hasUsedSkill = false, hasInvestigatedToday = false;
 
 function startGame() {
   document.getElementById("introScreen").style.display = "none";
+  document.getElementById("gameArea").style.display = "block";
+  
   const npcs = chars.filter(c => !c.isPlayer);
   morrieId = npcs[Math.floor(Math.random() * npcs.length)].id;
   
-  // 初日の好感度ランダム化（初日からプレイヤーが狙われるのを防ぐ）
   chars.forEach(c1 => {
     trust[c1.id] = {}; 
     chars.forEach(c2 => { 
-      if(c1.id === c2.id) {
-        trust[c1.id][c2.id] = 100;
-      } else {
+      if(c1.id === c2.id) { trust[c1.id][c2.id] = 100; } 
+      else {
         let t = 50 + Math.floor(Math.random() * 7) - 3;
-        if (c1.isPlayer && !c2.isPlayer && gameData.clearCount >= 1) t = 55; // 周回ボーナス
+        if (c1.isPlayer && !c2.isPlayer && gameData.clearCount >= 1) t = 55;
         trust[c1.id][c2.id] = t; 
       }
     });
   });
 
-  addLog(`期末の夜。オフィスに閉じ込められた営業部員の中に、MORRIEが潜んでいる...<br><span style="color:#6b7280; font-size: 0.8rem;">（あなたのジョブ: ${getJobName(gameData.playerJob)}）</span>`, "sys");
+  addLog(`期末の夜。全端末に『希望退職（解雇）者を選べ』というメールが届いた。この中に、同僚の皮を被った生体クローン『MORRIE』が潜んでいる...<br><span style="color:#6b7280; font-size: 0.8rem;">（あなたのジョブ: ${getJobName(gameData.playerJob)}）</span>`, "sys");
   updateUI(); showActionMenu();
 }
 
 function getJobName(jobId) {
-  if (jobId === "attacker") return "新規開拓エース";
-  if (jobId === "defender") return "クレーム対応班";
-  if (jobId === "analyst") return "データアナリスト";
-  return "オールラウンダー";
+  if (jobId === "attacker") return "新規开拓エース"; if (jobId === "defender") return "クレーム対応班"; if (jobId === "analyst") return "データアナリスト"; return "オールラウンダー";
 }
 
 function getSuspectTarget(npcId) {
   let targetId = -1; let minT = 100;
-  chars.forEach(c => { 
-    if (c.isAlive && c.id !== npcId && trust[npcId][c.id] < minT) { minT = trust[npcId][c.id]; targetId = c.id; }
-  });
+  chars.forEach(c => { if (c.isAlive && c.id !== npcId && trust[npcId][c.id] < minT) { minT = trust[npcId][c.id]; targetId = c.id; }});
   if (minT >= 50) return "特になし";
   return targetId !== -1 ? chars.find(x => x.id === targetId).name : "特になし";
 }
 
 function updateUI() {
-  document.getElementById("actionPrompt").innerText = `【期末 ${day}日目】 議論 (${discussionTurn}/${MAX_TURNS})`;
+  document.getElementById("actionPrompt").innerText = `【期末 ${day}日目】 生贄選び会議 (${discussionTurn}/${MAX_TURNS})`;
   const grid = document.getElementById("charGrid"); grid.innerHTML = "";
 
   chars.forEach(c => {
     const card = document.createElement("div"); card.className = `char-card ${!c.isAlive ? "dead" : ""}`;
     let indicatorHtml = "";
     if (c.isPlayer) { indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-player"></div><span>プレイヤー</span></div>`; }
-    else if (!c.isAlive) { indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-dead"></div><span>隔離・退室</span></div>`; }
+    else if (!c.isAlive) { indicatorHtml = `<div class="trust-indicator"><div class="trust-dot dot-dead"></div><span>旧サーバー室送</span></div>`; }
     else {
       const tVal = trust[0][c.id]; let dotClass = "dot-mid"; let statusText = "中立・様子見";
       if (tVal >= 65) { dotClass = "dot-high"; statusText = "信頼"; } else if (tVal <= 40) { dotClass = "dot-low"; statusText = "要警戒"; }
@@ -407,7 +412,7 @@ function updateUI() {
     }
 
     let suspectHtml = (c.isAlive && !c.isPlayer) ? `<div class="suspect-info">▶ 疑い先: ${getSuspectTarget(c.id)}</div>` : "";
-    card.innerHTML = `<div><div class="char-name">${c.name}</div><div class="char-sub">${c.isAlive ? "社内生存" : "排除済み"}</div>${suspectHtml}</div>${indicatorHtml}`;
+    card.innerHTML = `<div><div class="char-name">${c.name}</div><div class="char-sub">${c.isAlive ? "社内生存" : "解雇・幽閉"}</div>${suspectHtml}</div>${indicatorHtml}`;
     grid.appendChild(card);
   });
 }
@@ -440,19 +445,19 @@ function showActionMenu() {
   if (!hasUsedSkill) { const btnSkill = document.createElement("button"); btnSkill.className = "btn-special"; btnSkill.innerText = "固有スキル"; btnSkill.onclick = () => showTargetSelect("skill"); buttons.appendChild(btnSkill); }
   
   if (discussionTurn > 0) {
-    const btnSkip = document.createElement("button"); btnSkip.className = "btn-skip"; btnSkip.innerText = "議論を打ち切って投票へ進む"; btnSkip.onclick = () => showVotingUI(); buttons.appendChild(btnSkip);
+    const btnSkip = document.createElement("button"); btnSkip.className = "btn-skip"; btnSkip.innerText = "議論を打ち切って生贄投票へ"; btnSkip.onclick = () => showVotingUI(); buttons.appendChild(btnSkip);
   }
 }
 
 function showTargetSelect(actionType) {
   document.getElementById("actionPrompt").innerText = "誰を対象にしますか？";
   const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
-  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => { const btn = document.createElement("button"); btn.innerText = c.name; btn.onclick = () => executePlayerAction(actionType, c.id); buttons.appendChild(btn); });
+  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => { const btn = document.createElement("button"); btn.className = "btn-doubt"; btn.innerText = c.name; btn.onclick = () => executePlayerAction(actionType, c.id); buttons.appendChild(btn); });
   const btnBack = document.createElement("button"); btnBack.innerText = "戻る"; btnBack.style.background = "#111"; btnBack.style.borderColor = "#333"; btnBack.onclick = () => showActionMenu(); buttons.appendChild(btnBack);
 }
 
 function playerPassAction() {
-  addLog(`${chars[0].name}「……（周囲の議論を静観する）」`, "sys");
+  addLog(`${chars[0].name}「……（保身のため、あえて口を閉ざす）」`, "sys");
   processDebate("pass", chars[0], null);
 }
 
@@ -461,7 +466,7 @@ function executePlayerAction(type, targetId) {
   
   if (type === "investigate") {
     hasInvestigatedToday = true;
-    let res = target.id === morrieId ? `【調査結果】${target.name}のPCから不審なログが…！こいつがMORRIEだ！` : `【調査結果】${target.name}に怪しい動きはなかった。`;
+    let res = target.id === morrieId ? `【調査結果】${target.name}のPCから『代替労働力調整マニュアル』と、全社員の改ざんされた売上データを発見した…こいつがMORRIEだ！` : `【調査結果】${target.name}のPCを調べたが、必死に自分の売上を守ろうとした痕跡しかなかった。`;
     addLog(res, "investigate");
     processDebate("pass", player, null);
     return;
@@ -469,7 +474,7 @@ function executePlayerAction(type, targetId) {
   
   if (type === "skill") {
     hasUsedSkill = true;
-    addLog(`${player.name}【固有スキル】「いい加減にしろ！${target.name}、お前のロジックは完全に破綻している！」`, "skill");
+    addLog(`${player.name}【固有スキル】「いい加減にしろ！${target.name}、お前のデータ改ざんの証拠は揃っている！」`, "skill");
     let damage = (gameData.clearCount >= 3) ? 55 : 40;
     chars.forEach(c => { if (c.isAlive) trust[c.id][target.id] = Math.max(0, trust[c.id][target.id] - damage); });
     processDebate("doubt", player, target);
@@ -477,9 +482,9 @@ function executePlayerAction(type, targetId) {
   }
 
   if (type === "doubt") {
-    addLog(`${player.name}${getDialogue("プレイヤー", target.name, "doubt")}`, "doubt"); applyDoubt(player, target);
+    addLog(`${player.name}${getDialogue("プレイヤー", target.name, null, "doubt")}`, "doubt"); applyDoubt(player, target);
   } else if (type === "cover") {
-    addLog(`${player.name}${getDialogue("プレイヤー", target.name, "cover")}`, "cover"); applyCover(player, target);
+    addLog(`${player.name}${getDialogue("プレイヤー", target.name, null, "cover")}`, "cover"); applyCover(player, target);
   }
   
   processDebate(type, player, target);
@@ -497,14 +502,14 @@ function processDebate(actionType, actor, target) {
       if (potentialTargetId !== -1 && minT < 50) {
         currentTarget = chars.find(c => c.id === potentialTargetId);
         currentAction = "doubt";
-        addLog(`${currentActor.name}${getDialogue(currentActor.name, currentTarget.name, "doubt")}`, "doubt");
+        addLog(`${currentActor.name}${getDialogue(currentActor.name, currentTarget.name, null, "doubt")}`, "doubt");
         applyDoubt(currentActor, currentTarget);
       } else {
         const others = chars.filter(c => c.isAlive && c.id !== currentActor.id);
         if(others.length > 0) {
            currentTarget = others[Math.floor(Math.random() * others.length)];
            currentAction = "cover";
-           addLog(`${currentActor.name}${getDialogue(currentActor.name, currentTarget.name, "cover")}`, "cover");
+           addLog(`${currentActor.name}${getDialogue(currentActor.name, currentTarget.name, null, "cover")}`, "cover");
            applyCover(currentActor, currentTarget);
         }
       }
@@ -512,25 +517,48 @@ function processDebate(actionType, actor, target) {
   }
 
   if (currentAction === "doubt" && currentTarget && currentTarget.isAlive && !currentTarget.isPlayer) {
-    addLog(`${currentTarget.name}${getDialogue(currentTarget.name, currentActor.name, "defend")}`, "defend");
+    addLog(`${currentTarget.name}${getDialogue(currentTarget.name, currentActor.name, null, "defend")}`, "defend");
   }
 
+  let reactionHappened = false;
   const bystanders = chars.filter(c => c.isAlive && c.id !== currentActor.id && (!currentTarget || c.id !== currentTarget.id) && !c.isPlayer);
+  
   if (bystanders.length > 0 && currentTarget) {
-    const bystander = bystanders[Math.floor(Math.random() * bystanders.length)];
-    const trustForTarget = trust[bystander.id][currentTarget.id];
+    const shuffled = bystanders.sort(() => 0.5 - Math.random());
+    let thirdPersonA = null;
 
-    if (currentAction === "doubt") {
-      if (trustForTarget > 55) {
-        addLog(`${bystander.name}${getDialogue(bystander.name, currentTarget.name, "disagree")}`, "cover"); applyCover(bystander, currentTarget);
-      } else if (trustForTarget < 45) {
-        addLog(`${bystander.name}${getDialogue(bystander.name, currentTarget.name, "agree")}`, "doubt"); applyDoubt(bystander, currentTarget);
-      }
-    } else if (currentAction === "cover") {
-      if (trustForTarget < 40) {
-        addLog(`${bystander.name}「いや、${currentActor.name}は騙されてる！${currentTarget.name}は怪しいぞ！」`, "doubt"); applyDoubt(bystander, currentTarget);
+    for (let bystander of shuffled) {
+      const trustForTarget = trust[bystander.id][currentTarget.id];
+      if (currentAction === "doubt") {
+        if (trustForTarget > 55) {
+          addLog(`${bystander.name}${getDialogue(bystander.name, currentTarget.name, currentActor.name, "disagree")}`, "cover"); 
+          applyCover(bystander, currentTarget);
+          thirdPersonA = bystander; reactionHappened = true; break;
+        } else if (trustForTarget < 45) {
+          addLog(`${bystander.name}${getDialogue(bystander.name, currentTarget.name, currentActor.name, "agree")}`, "doubt"); 
+          applyDoubt(bystander, currentTarget);
+          thirdPersonA = bystander; reactionHappened = true; break;
+        }
+      } else if (currentAction === "cover") {
+        if (trustForTarget < 40) {
+          addLog(`${bystander.name}「いや、${currentActor.name}は騙されてる！${currentTarget.name}こそデータを盗んだ張本人だぞ！」`, "doubt"); 
+          applyDoubt(bystander, currentTarget);
+          thirdPersonA = bystander; reactionHappened = true; break;
+        }
       }
     }
+
+    if (thirdPersonA && Math.random() < 0.4) {
+      const remainingBystanders = bystanders.filter(c => c.id !== thirdPersonA.id);
+      if(remainingBystanders.length > 0) {
+        const thirdPersonB = remainingBystanders[Math.floor(Math.random() * remainingBystanders.length)];
+        addLog(`${thirdPersonB.name}「ちょっと待て！俺は${thirdPersonA.name}の意見には反対だ。あいつは人間じゃない違和感がある…」`, "defend");
+      }
+    }
+  }
+
+  if (!reactionHappened && currentTarget && !currentTarget.isPlayer) {
+    addLog(`……冷え切った沈黙が流れた。誰もが自分の首を繋ぐことで頭がいっぱいだ。`, "sys");
   }
 
   const yamaguchi = chars.find(c => c.name === "山口");
@@ -539,12 +567,12 @@ function processDebate(actionType, actor, target) {
     chars.forEach(t => {
       if (t.isAlive && t.id !== yamaguchi.id) { let tt = 0; chars.forEach(v => { if(v.isAlive) tt += trust[v.id][t.id]; }); if(tt < minG) { minG = tt; gSuspect = t; } }
     });
-    if(gSuspect) { addLog(`【パッシブ: 山口の追撃】山口「お前はもう逃げられないぞ、${gSuspect.name}。」`, "passive"); applyDoubt(yamaguchi, gSuspect); }
+    if(gSuspect) { addLog(`【パッシブ: 山口の追撃】山口「お前の昨日の発言には論理的破綻があるぞ、${gSuspect.name}。お前が怪しいな。」`, "passive"); applyDoubt(yamaguchi, gSuspect); }
   }
 
   const kitano = chars.find(c => c.name === "北野");
   if (kitano && kitano.isAlive && Math.random() < 0.3) {
-    addLog(`【パッシブ: 北野のステルス】北野の気配が薄れ、ヘイトが減少した。`, "passive");
+    addLog(`【パッシブ: 北野のステルス】北野は気配を消し、誰とも目を合わせないようにしている。`, "passive");
     chars.forEach(c => { if(c.isAlive) trust[c.id][kitano.id] = Math.min(100, trust[c.id][kitano.id] + 5); });
   }
 
@@ -556,8 +584,8 @@ function triggerGlitch() { document.body.classList.add("glitch"); setTimeout(() 
 function triggerShake() { document.body.classList.add("shake"); setTimeout(() => { document.body.classList.remove("shake"); }, 500); }
 
 function showVotingUI() {
-  updateUI(); addLog("--- 会議終了: 隔離（別室送りにする）メンバーを投票します ---", "sys");
-  document.getElementById("actionPrompt").innerText = "隔離するメンバーに投票してください:"; 
+  updateUI(); addLog("--- 会議終了: 明日の希望退職（旧サーバー室送り）とするメンバーを投票します ---", "sys");
+  document.getElementById("actionPrompt").innerText = "解雇（生贄）とするメンバーに投票してください:"; 
   const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
     const btn = document.createElement("button"); btn.className = "btn-doubt"; btn.innerText = `${c.name}に投票`; btn.onclick = () => processVote(c.id); buttons.appendChild(btn);
@@ -575,7 +603,7 @@ function processVote(playerVoteId) {
   let maxV = -1; let expId = null;
   for (const [id, count] of Object.entries(votes)) { if (count > maxV) { maxV = count; expId = parseInt(id); } }
   const expelled = chars.find(c => c.id === expId); expelled.isAlive = false;
-  addLog(`【投票結果】最多得票により、${expelled.name} が会議室から隔離させられた。`, "sys");
+  addLog(`【投票結果】最多得票により、${expelled.name} が「希望退職（旧サーバー室への幽閉）」として処理された。`, "sys");
   updateUI(); if (checkVictory()) return; runNightPhase();
 }
 
@@ -595,22 +623,22 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false; triggerGlitch(); triggerShake();
-      addLog(`暗いフロアに鈍い音が響いた... ${victim.name} が消息を絶った。`, "sys");
+      addLog(`暗いフロアに、骨が砕けるような生々しい音が響いた... ${victim.name} のデスクには、未承認の培養液と「自己都合退職届」だけが残されていた。`, "sys");
     }
   }
 
   updateUI(); const player = chars.find(c => c.isPlayer);
   if (!player.isAlive) {
     triggerGlitch(); triggerShake();
-    addLog(`【GAME OVER】${chars[0].name} はMORRIEに襲撃され、暗闇の中で意識を失った...`, "sys");
-    document.getElementById("actionPrompt").innerText = "GAME OVER (脱落)"; 
+    addLog(`【GAME OVER】${chars[0].name} はMORRIEの生体サンプルとして捕食され、社員名簿から抹消された...`, "sys");
+    document.getElementById("actionPrompt").innerText = "GAME OVER (解雇・死亡)"; 
     document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>';
     return;
   }
 
   if (checkVictory()) return;
   day++; discussionTurn = 0; hasInvestigatedToday = false;
-  addLog(`--- 期末 ${day}日目の朝 ---`, "sys"); showActionMenu();
+  addLog(`--- 期末 ${day}日目の朝：空調が止まったフロアに、新たな絶望のノルマが貼り出された ---`, "sys"); showActionMenu();
 }
 
 function unlockRandomProfile() {
@@ -629,8 +657,12 @@ function checkVictory() {
 
   if (!isMorrieAlive) {
     const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
-    if (aliveCount >= 4) { gameData.trueEndCount++; endingTitle = "【真END：完全勝利】被害を最小限に抑え、期末目標を無事達成した！"; }
-    else { endingTitle = "【ノーマルEND：疲弊】MORRIEは排除したが、営業部はボロボロになった..."; }
+    if (aliveCount >= 4) { 
+      gameData.trueEndCount++; 
+      endingTitle = "【真END】MORRIEを廃棄処分した。翌朝、人事部から『次期・希望退職者募集』のメールが届いた。我々の代わりとなる生体サンプルは、まだ会社の地下で培養されている。"; 
+    } else { 
+      endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を生贄にしてしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分のノルマが容赦なく上乗せされた..."; 
+    }
     
     let unlockedName = unlockRandomProfile();
     if(unlockedName) endingTitle += `<br><span style="color:#fcd34d">🔓【社員ファイル解放】${unlockedName}の極秘ファイルが解放されました。</span>`;
@@ -640,14 +672,13 @@ function checkVictory() {
     document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" onclick="location.reload()" style="flex:1 1 100%;">次の周回へ進む</button>'; return true;
   }
   if (aliveHumans <= 1) {
-    addLog("【MORRIEの勝利】社員は全員喰らい尽くされ、営業部は崩壊した...", "sys");
+    addLog("【MORRIEの勝利】社員は全員喰らい尽くされ、空っぽになった営業部だけが残された。会社は今日も通常通り営業中である。", "sys");
     document.getElementById("actionPrompt").innerText = "GAME OVER"; 
     document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>'; return true;
   }
   return false;
 }
 
-// 念のため、現在画面に表示されている初期化処理（ページリロード時に名前を安全にする）
 if (document.getElementById("playerNameInput")) {
   document.getElementById("playerNameInput").value = gameData.playerName === "あなた" ? "" : gameData.playerName;
 }
