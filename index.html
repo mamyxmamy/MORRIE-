@@ -181,7 +181,7 @@
   <div style="max-width: 400px; width: 100%; padding: 20px;">
     <p class="cinematic-text delay-1">── 3月31日、23時45分。</p>
     <p class="cinematic-text delay-2">大規模な「希望退職」の募集により、営業部の席は半分になった。残された者に突きつけられたのは、到底終わらない絶望的なノルマだ。</p>
-    <p class="cinematic-text red delay-3">さらに夜半、全社員の端末に部長からの冷酷な一通のメールが届く。<br>『本日の期末をもちまして、当部署から1名分の「希望退職（解雇）」を決定していただきます。合意に至らない場合、全員一律でクビとします』</p>
+    <p class="cinematic-text red delay-3">さらに夜半、全端末に北野営業部長からの冷酷な一通のメールが届く。<br>『本日の期末をもちまして、当部署から1名分の「希望退職（解雇）」を決定していただきます。合意に至らない場合、全員一律でクビとします』</p>
     <p class="cinematic-text delay-4">生き残るため、他人の数字の横取りや不正の証拠を暴き合う泥沼の言い争い。<br>だが、互いの揚げ足を取り合ううちに、誰もが気づき始める。<br>……この中にいる『誰か』の記憶が、昨日のものと微妙に食い違っていることに。<br>クローン生体技術で同僚の皮を被った怪物──『MORRIE』は今、誰の顔をしている？</p>
     <div class="btn-container" style="margin: 30px auto 0;">
       <button class="start-btn delay-btn" onclick="startGame()">地獄の会議を始める</button>
@@ -211,68 +211,170 @@ if (gameData.playerName) {
 
 const secretProfiles = {
   1: "【横山】\n対象の遺伝子モデル。経費でキャバクラに通い領収書を偽造した負い目から、他者を信じられず攻撃的。コピー体はしばしば過去の記憶の整合性が崩壊する。",
-  2: "【赤堀】\n対象の生体サンプル。裏では同僚のミスをノートに記録しリストラ候補として密告しようとしていた。培養液の付着により、皮膚の一部が変質している。",
-  3: "【北野】\n対象の培養記録。社内サーバーへ不正ハッキングし給与データを盗み見ていた。人間関係を極度に恐れるあまり、クローンへの置換に対する抵抗感が希薄。",
-  4: "【毛利】\n対象の遺伝子モデル。親のコネで入社したため実務能力はゼロ。解雇を言い渡される恐怖から、見境なく他人のデータを改ざんして罪を擦り付けようとする。",
+  2: "【赤堀】\n対象の生体サンプル（男性）。一見誰にでも調子よく取り入るが、裏では同僚のミスをノートに記録し、リストラの生贄にしようと目論む保身的な二面性を持つ。",
+  3: "【北野（営業部長）】\n対象の遺伝子モデル。冷徹非道なトップダウンで部門を牛耳る営業部長。自らの保身と会社の数字のためなら、部下が何人消えようとも冷笑して見過ごす。",
+  4: "【毛利】\n営業部で一番若い新人社員。熱血でがむしゃらに頑張っているが、あまりのプレッシャーと恐怖から、焦って先輩のデータを盗み見たり数字を誤魔化そうとして疑いを買っている。",
   5: "【内藤】\n対象の生体サンプル。愛想が悪く常に苛立っている。人間への共感性が低く、同僚が消えても『席が広くなって好都合だ』と冷笑する異常性を持つ。",
   6: "【山口】\n対象の培養記録。論理の化身。同僚の不正やデータの矛盾を暴くことに快感を覚えるサイコパス。MORRIEの存在に薄々気づきながらも観察を楽しんでいる。"
 };
 
-// 「数字の横取り」「不正の疑い」「記憶の違和感」を織り交ぜたセリフバンク
 const dialogueBank = {
   "横山": {
-    doubt: ["「おい[TARGET]、お前が俺の担当先のデータを勝手に引っこ抜いたんだろ！数字をパクるな！」", "「[TARGET]、お前の昨日の日報、辻褄が合わないぞ。どこでデータを偽造した？」"],
-    cover: ["「いや、[TARGET]はきちんと自分の足でアポ取ってるよ。俺は信じる。」", "「[TARGET]を疑うより、自分の数字を心配しろよ。」"],
-    defend: ["「ふざけるな！データ改ざんなどしてない、俺は正当に数字を作ったんだ！」", "「俺をクビにしたいからって、濡れ衣を着せるなよ！」"],
-    agree: ["「ああ、[ACTOR]の言う通りだ。[TARGET]のPC、隠しフォルダに変な顧客リストがあったぞ。」", "「[ACTOR]に賛成だ。あいつの数字の伸び方は異常だった。」"],
-    disagree: ["「待て[ACTOR]！[TARGET]の不正を疑うなら、お前のその昨日のアリバイはどうなんだよ！」", "「いや、[ACTOR]の勘ぐりすぎだ。[TARGET]はただの無能であって不正はしてない。」"]
+    doubt: [
+      "「[TARGET]のヨミ、甘すぎる。何か隠してるんじゃないか？」",
+      "「[TARGET]、お前の昨日の日報、おかしいだろ。説明しろ。」",
+      "「おい[TARGET]、お前が俺の担当先のデータを勝手に引っこ抜いたんだろ！」",
+      "「[TARGET]の数字の伸び方、どう考えても個人の努力じゃ説明がつかないぞ。」",
+      "「お前、先週はそんなこと言ってなかったよな？ [TARGET]、嘘をつくな。」"
+    ],
+    cover: [
+      "「いや、[TARGET]は地道に回してるよ。俺は信じる。」",
+      "「[TARGET]に怪しい動きはないな。俺が保証する。」",
+      "「お前ら、[TARGET]を追い詰めるのはやめろ。あいつはちゃんと数字を作ってる。」"
+    ],
+    defend: [
+      "「ふざけるな！証拠もないのに適当なこと言うな！」",
+      "<span>「俺じゃない！俺は毎日終電まで残って正当に数字作ってんだよ！」</span>",
+      "<span>「俺をリストラしたいからって、組織ぐるみで濡れ衣を着せるなよ！」</span>"
+    ],
+    agree: [
+      "「ああ、[ACTOR]の言う通りだ。[TARGET]は確かにおかしかった。」",
+      "<span>「[ACTOR]に賛成だ。[TARGET]のデータ改ざんは私も怪しいとにらんでいた。」</span>"
+    ],
+    disagree: [
+      "「待て[ACTOR]！[TARGET]を疑うのは早計だろ！」",
+      "<span>「いや、[ACTOR]の推測は間違っている。[TARGET]はただ焦ってるだけだ。」</span>"
+    ]
   },
   "赤堀": {
-    doubt: ["「ねえ…[TARGET]さん、先週までそんな数字の出し方知らなかったよね？ 誰に教わったの…？」", "「あんまり言いたくないけど、[TARGET]さんのパソコンから、私の顧客リストの控えが出てきたの…」"],
-    cover: ["「待って、[TARGET]さんはそんな汚い真似する人じゃないよ！」", "「[TARGET]さんを信じようよ、みんな追い詰められておかしくなってるんだよ…！」"],
-    defend: ["「えっ、私！？違うよ、それ誰かの罠だよ…！なんでそんな嘘つくの！？」", "「私をリストラに追い込もうって言うんでしょ…ひどいよ…！」"],
-    agree: ["「…実は私も、[ACTOR]さんと同じで、[TARGET]さんが昨日言ってたこと、去年の話と食い違ってて気になってたの…」"],
-    disagree: ["「やめてよ[ACTOR]さん！[TARGET]さんをいじめて犯人に仕立て上げようとしないで！」"]
+    doubt: [
+      "<span>📦「おい[TARGET]さあ、昨日の発言と今言ってること、完全に矛盾してないか？」</span>",
+      "<span>📦「あんまり言いたくないけど、[TARGET]、君のパソコンから他の社員の売上データが出てきたって聞いたぞ。」</span>",
+      "<span>📦「先輩風を吹かせてるけどさ、[TARGET]の昨日の動き、どう見ても不自然だったよな？」</span>",
+      "<span>📦「リストラされたくないからって、[TARGET]が俺たちの足を引っ張ろうとしてるのは明白だろ。」</span>"
+    ],
+    cover: [
+      "<span>📦「まあまあ、[TARGET]も必死なんだからさ、そう責め立てるなって。」</span>",
+      "<span>📦「俺は[TARGET]を信じるよ。彼がそんな汚い真似をする男には見えないね。」</span>"
+    ],
+    defend: [
+      "<span>📦「ちょっ、待てよ！なんで俺が疑われるんだよ、ふざけんな！」</span>",
+      "<span>📦「俺をリストラ枠に押し込もうったって、そうはいかないからな！」</span>"
+    ],
+    agree: [
+      "<span>📦「だな。[ACTOR]の言う通り、[TARGET]は最初から怪しいと思ってたんだよ。」</span>"
+    ],
+    disagree: [
+      "<span>📦「いや、それは言い過ぎだろ[ACTOR]。[TARGET]をそこまで責めるのは筋違いだね。」</span>"
+    ]
   },
   "北野": {
-    doubt: ["「……[TARGET]さんのログイン履歴、深夜3時のもの書き換えられてます……」", "「……あの、[TARGET]さんが話してる前職の記憶、社内データベースの経歴と矛盾してます……」"],
-    cover: ["「……[TARGET]さんのデータはクリーンです……不正の形跡はありません……」"],
-    defend: ["……ログなんてどうとでも改ざんできます……私をターゲットにしないでください……」"],
-    agree: ["「……[ACTOR]さんに同意します。[TARGET]さんの通信パケットには異常な暗号化データが含まれていました……」"],
-    disagree: ["「……[ACTOR]さん、その推論は誤認です。[TARGET]さんはただ疲弊しているだけです……」"]
+    doubt: [
+      "<span>「……[TARGET]。君の今期の数字の推移、どうにも辻褄が合わんな。説明したまえ。」</span>",
+      "<span>「我が営業部に無能と不正は不要だ。[TARGET]、君の昨夜の行動ログに不審な点が見つかっている。」</span>",
+      "<span>「私を失望させるなよ、[TARGET]。君がデータを改ざした犯人かね？」</span>",
+      "<span>「北野である私の前で嘘をつこうなどとは思わないことだな、[TARGET]。」</span>"
+    ],
+    cover: [
+      "<span>「[TARGET]のこれまでの実績を考慮すれば、今すぐ解雇とはならんがね……。」</span>"
+    ],
+    defend: [
+      "<span>「私を疑うなど、愚か者の発言だな。[TARGET]の席を私と一緒にするな。」</span>"
+    ],
+    agree: [
+      "<span>「[ACTOR]の意見には一理ある。[TARGET]を旧サーバー室送りにする検討に入ろう。」</span>"
+    ],
+    disagree: [
+      "<span>「静かにしたまえ、[ACTOR]。私の方針に口を挟む権限が君にあるのかね？」</span>"
+    ]
   },
   "毛利": {
-    doubt: ["「おい[TARGET]！お前、俺の売上を自分の数字に塗り替えただろ！お前をクビにさせる！」", "「理屈じゃねえ！[TARGET]の野郎、去年のプロジェクトの名前すら忘れてやがるんだ！偽物だろ！」"],
-    cover: ["「[TARGET]は俺が面倒見てるんだ！勝手な濡れ衣を着せる奴は俺が許さねぇ！」"],
-    defend: ["「あぁ！？俺がデータをパクっただと？ふざけんな、俺は部長の覚えもめでたいんだぞ！」"],
-    agree: ["「そうだな！[ACTOR]の言う通り、[TARGET]の態度は昨日から何か人外じみてやがったぜ！」"],
-    disagree: ["「うるせえ[ACTOR]！俺の目に狂いはねぇ、[TARGET]はただのバカだ！怪物じゃねえ！」"]
+    doubt: [
+      "<span>「す、先輩方…！俺は不正なんてしてません！必死に数字を作ってるんです！」</span>",
+      "<span>「先輩、そんなに疑わないでくださいよ…俺、まだ入社して半年なんです、クビにしないでくれよ…！」</span>",
+      "<span>「もしかして先輩の中に、わざと俺を犯人に仕立て上げようとしてる人がいるんじゃ…っ！」</span>",
+      "<span>「俺は社内のサーバーにハッキングなんてできません！疑うなら北野部長にログを調べてもらってください！」</span>"
+    ],
+    cover: [
+      "<span>「[TARGET]さん、俺を信じてくれるんですか…？ ありがとうございます、俺、必死に頑張ります！」</span>",
+      "<span>「先輩、[TARGET]さんはそんな悪い人に見えませんよ…！」</span>"
+    ],
+    defend: [
+      "<span>「だから俺じゃないって言ってるじゃないですか…！なんで新人だからってそんなに決めつけるんですか…！」</span>",
+      "<span>「うっ…こんな会社辞めてやりたいけど、でも親に合わせる顔が…！」</span>"
+    ],
+    agree: [
+      "<span>「[ACTOR]先輩の言う通りです！[TARGET]さんの昨日の行動、俺も変だと思ってました！」</span>"
+    ],
+    disagree: [
+      "<span>「そ、それは違いますよ[ACTOR]先輩！[TARGET]さんはそんな人じゃ…！」</span>"
+    ]
   },
   "内藤": {
-    doubt: ["「チッ…[TARGET]、お前の机のシュレッダーから他人の名刺の山が出てきたぞ。白状しろ。」", "「あーもうイライラするんだよ！[TARGET]の顔、昨日と何かパーツが違って見えねぇか？」"],
-    cover: ["「……別に[TARGET]をかばう義理はねぇが、こいつがデータを改ざんする頭脳はねぇよ。」"],
-    defend: ["「は？寝言は寝て言えよ。俺の机に名刺を仕込んだのはお前だろ！」"],
-    agree: ["「……[ACTOR]の言う通りだ。さっさと一番怪しい[TARGET]を旧サーバー室送りにしようぜ。」"],
-    disagree: ["「バカか[ACTOR]。[TARGET]を疑うなんて的外れだ。もっと他に隠してる奴がいるだろ。」"]
+    doubt: [
+      "「チッ…[TARGET]、お前の机のシュレッダーから他人の名刺の山が出てきたぞ。白状しろ。」",
+      "「あーもうイライラするんだよ！[TARGET]の顔,昨日となんかパーツが違って見えねぇか？」",
+      "「おい[TARGET]、お前が俺の昨日の日報データを消した犯人だろ。認めやがれ。」"
+    ],
+    cover: [
+      "「……別に[TARGET]をかばう義理はねぇが、こいつがデータを改ざんする頭脳はねぇよ。」"
+    ],
+    defend: [
+      "「は？寝言は寝て言えよ。俺の机に名刺を仕込んだのはお前だろ！」",
+      "「証拠を出せよ証拠を！俺は自分の数字だけでここまで生き残ってんだよ！」"
+    ],
+    agree: [
+      "「……[ACTOR]の言う通りだ。さっさと[TARGET]を旧サーバー室送りにしようぜ。」"
+    ],
+    disagree: [
+      "「バカか[ACTOR]。[TARGET]を疑うなんて的外れだ。もっと他に隠してる奴がいるだろ。」"
+    ]
   },
   "山口": {
-    doubt: ["「[TARGET]、お前の昨日の行動ログと、今言った証言には決定的な矛盾がある。説明しろ。」", "「感情論や数字の奪い合いは時間の無駄だ。[TARGET]の生体反応そのものが、周囲の人間と波長がズレている。」"],
-    cover: ["「合理的に考えて、[TARGET]を不正犯扱いするのは論理的飛躍子だ。証拠が弱すぎる。」"],
-    defend: ["「私を疑うとはね……君たちのその低劣な推理力こそ、リストラ対象にふさわしい。」"],
-    agree: ["「[ACTOR]に完全に同意だ。[TARGET]の語る記憶には、模倣特有の致命的な欠落がある。」"],
-    disagree: ["「待て[ACTOR]。その推論は浅い。[TARGET]はただの愚者だが、排除すべき真の異物は別にいる。」"]
+    doubt: [
+      "<span>「[TARGET]、お前の昨日の行動ログと、今言った証言には決定的な矛盾がある。説明しろ。」</span>",
+      "<span>「感情論や数字の奪い合いは時間の無駄だ。[TARGET]の生体反応、周囲の人間と波長がズレている。」</span>",
+      "<span>「[TARGET]の構築した売上予測、数式の一部に非人間的な最適化プログラムが組み込まれている。」</span>"
+    ],
+    cover: [
+      "<span>「合理的に考えて、[TARGET]を不正犯扱いするのは論理的飛躍子だ。証拠が弱すぎる。」</span>"
+    ],
+    defend: [
+      "<span>「私を疑うとはね……君たちのその低劣な推理力こそ、リストラ対象にふさわしい。」</span>",
+      "<span>「私の行動原理はすべて最適化されている。君たちのような感情的生物と一緒にしないでくれたまえ。」</span>"
+    ],
+    agree: [
+      "<span>「[ACTOR]に完全に同意だ。[TARGET]の語る記憶には、模倣特有の致命的な欠落がある。」</span>"
+    ],
+    disagree: [
+      "<span>「待て[ACTOR]。その推論は浅い。[TARGET]はただの愚者だが、排除すべき真の異物は別にいる。」</span>"
+    ]
   },
   "プレイヤー": {
-    doubt: ["「[TARGET]の数字の伸び方、どう考えてもおかしいだろ。データを盗んだのか？」", "「昨夜の[TARGET]の行動、言っていることが昨日の話と全然違うじゃないか！」"],
-    cover: ["「[TARGET]さんは今期ちゃんと自分の足で数字を作ってる。濡れ衣を着せるなよ」"],
-    defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」"],
-    agree: ["「[ACTOR]の言う通りだ。確かに[TARGET]の動きはどこか人間離れしていて気味が悪い……。」"],
-    disagree: ["「いや[ACTOR]、[TARGET]を不正犯に仕立て上げるのは間違っている！」"]
+    doubt: [
+      "<span>「[TARGET]の数字の伸び方、どう考えてもおかしいだろ。データを盗んだのか？」</span>",
+      "<span>「昨夜の[TARGET]の行動、言っていることが昨日の話と全然違うじゃないか！」</span>"
+    ],
+    cover: [
+      "<span>「[TARGET]さんは今期ちゃんと自分の足で数字を作ってる。濡れ衣を着せるなよ」</span>"
+    ],
+    defend: [
+      "<span>「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」</span>"
+    ],
+    agree: [
+      "<span>「[ACTOR]の言う通りだ。確かに[TARGET]の動きはどこか人間離れしていて気味が悪い……。」</span>"
+    ],
+    disagree: [
+      "<span>「いや[ACTOR]、[TARGET]を不正犯に仕立て上げるのは間違っている！」</span>"
+    ]
   }
 };
 
 function getDialogue(speakerName, targetName, actorName, type) {
-  const bank = dialogueBank[speakerName] || dialogueBank["プレイヤー"];
+  let key = speakerName;
+  if(key.includes("北野")) key = "北野";
+  
+  const bank = dialogueBank[key] || dialogueBank["プレイヤー"];
   const lines = bank[type] || ["……"];
   let text = lines[Math.floor(Math.random() * lines.length)];
   text = text.replace(/[TARGET]/g, targetName);
@@ -381,12 +483,12 @@ function startGame() {
     });
   });
 
-  addLog(`期末の夜。全端末に『希望退職（解雇）者を選べ』というメールが届いた。この中に、同僚の皮を被った生体クローン『MORRIE』が潜んでいる...<br><span style="color:#6b7280; font-size: 0.8rem;">（あなたのジョブ: ${getJobName(gameData.playerJob)}）</span>`, "sys");
+  addLog(`期末の夜。全端末に北野部長から『希望退職（解雇）者を選べ』というメールが届いた。この中に、同僚の皮を被った生体クローン『MORRIE』が潜んでいる...<br><span style="color:#6b7280; font-size: 0.8rem;">（あなたのジョブ: ${getJobName(gameData.playerJob)}）</span>`, "sys");
   updateUI(); showActionMenu();
 }
 
 function getJobName(jobId) {
-  if (jobId === "attacker") return "新規开拓エース"; if (jobId === "defender") return "クレーム対応班"; if (jobId === "analyst") return "データアナリスト"; return "オールラウンダー";
+  if (jobId === "attacker") return "新規開拓エース"; if (jobId === "defender") return "クレーム対応班"; if (jobId === "analyst") return "データアナリスト"; return "オールラウンダー";
 }
 
 function getSuspectTarget(npcId) {
@@ -457,7 +559,7 @@ function showTargetSelect(actionType) {
 }
 
 function playerPassAction() {
-  addLog(`${chars[0].name}「……（保身のため、あえて口を閉ざす）」`, "sys");
+  addLog(`${chars[0].name}<span>「……（保身のため、あえて口を閉ざす）」</span>`, "sys");
   processDebate("pass", chars[0], null);
 }
 
@@ -541,7 +643,7 @@ function processDebate(actionType, actor, target) {
         }
       } else if (currentAction === "cover") {
         if (trustForTarget < 40) {
-          addLog(`${bystander.name}「いや、${currentActor.name}は騙されてる！${currentTarget.name}こそデータを盗んだ張本人だぞ！」`, "doubt"); 
+          addLog(`${bystander.name}<span>「いや、${currentActor.name}は騙されてる！${currentTarget.name}こそデータを盗んだ張本人だぞ！」</span>`, "doubt"); 
           applyDoubt(bystander, currentTarget);
           thirdPersonA = bystander; reactionHappened = true; break;
         }
@@ -552,7 +654,7 @@ function processDebate(actionType, actor, target) {
       const remainingBystanders = bystanders.filter(c => c.id !== thirdPersonA.id);
       if(remainingBystanders.length > 0) {
         const thirdPersonB = remainingBystanders[Math.floor(Math.random() * remainingBystanders.length)];
-        addLog(`${thirdPersonB.name}「ちょっと待て！俺は${thirdPersonA.name}の意見には反対だ。あいつは人間じゃない違和感がある…」`, "defend");
+        addLog(`${thirdPersonB.name}<span>「ちょっと待て！俺は${thirdPersonA.name}の意見には反対だ。あいつは人間じゃない違和感がある…」</span>`, "defend");
       }
     }
   }
@@ -572,7 +674,7 @@ function processDebate(actionType, actor, target) {
 
   const kitano = chars.find(c => c.name === "北野");
   if (kitano && kitano.isAlive && Math.random() < 0.3) {
-    addLog(`【パッシブ: 北野のステルス】北野は気配を消し、誰とも目を合わせないようにしている。`, "passive");
+    addLog(`【パッシブ: 北野の冷徹】北野部長は冷ややかな視線を投げかけ、全員のプレッシャーを高めた。`, "passive");
     chars.forEach(c => { if(c.isAlive) trust[c.id][kitano.id] = Math.min(100, trust[c.id][kitano.id] + 5); });
   }
 
@@ -603,7 +705,7 @@ function processVote(playerVoteId) {
   let maxV = -1; let expId = null;
   for (const [id, count] of Object.entries(votes)) { if (count > maxV) { maxV = count; expId = parseInt(id); } }
   const expelled = chars.find(c => c.id === expId); expelled.isAlive = false;
-  addLog(`【投票結果】最多得票により、${expelled.name} が「希望退職（旧サーバー室への幽閉）」として処理された。`, "sys");
+  addLog(`【投票結果】最多得票により、${expelled.name} が「希望退職（旧サーバー室への幽閉）」として北野部長に宣告された。`, "sys");
   updateUI(); if (checkVictory()) return; runNightPhase();
 }
 
@@ -659,7 +761,7 @@ function checkVictory() {
     const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
     if (aliveCount >= 4) { 
       gameData.trueEndCount++; 
-      endingTitle = "【真END】MORRIEを廃棄処分した。翌朝、人事部から『次期・希望退職者募集』のメールが届いた。我々の代わりとなる生体サンプルは、まだ会社の地下で培養されている。"; 
+      endingTitle = "【真END】MORRIEを廃棄処分した。翌朝、北野部長から『次期・希望退職者募集』のメールが届いた。我々の代わりとなる生体サンプルは、まだ会社の地下で培養されている。"; 
     } else { 
       endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を生贄にしてしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分のノルマが容赦なく上乗せされた..."; 
     }
@@ -672,7 +774,7 @@ function checkVictory() {
     document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" onclick="location.reload()" style="flex:1 1 100%;">次の周回へ進む</button>'; return true;
   }
   if (aliveHumans <= 1) {
-    addLog("【MORRIEの勝利】社員は全員喰らい尽くされ、空っぽになった営業部だけが残された。会社は今日も通常通り営業中である。", "sys");
+    addLog("【MORRIEの勝利】社員は全員喰らい尽くされ、空っぽになった営業部だけが残された。北野部長は今日も通常通り出社している。", "sys");
     document.getElementById("actionPrompt").innerText = "GAME OVER"; 
     document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" onclick="location.reload()" style="flex:1 1 100%;">再挑戦する</button>'; return true;
   }
