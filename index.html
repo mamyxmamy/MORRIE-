@@ -119,6 +119,7 @@ function runNpcTurn() {
     let lowestTrust = 100;
     let mostSuspected = null;
     chars.forEach(c => {
+      // ★修正：自分自身以外の中で、一番疑われている人を探す
       if (c.isAlive && c.id !== npc.id && trust[npc.id][c.id] < lowestTrust) {
         lowestTrust = trust[npc.id][c.id];
         mostSuspected = c;
@@ -127,12 +128,14 @@ function runNpcTurn() {
 
     if (!mostSuspected) return;
 
-    // 【赤堀の特殊AI】腹黒中立：一番疑われている人をあえて「かばう」ことで好感度を稼ぐ
+    // 【赤堀の特殊AI】腹黒中立：一番疑われている人をあえて「かばう」
     if (npc.name === "赤堀") {
-      addLog(`赤堀「待って、${mostSuspected.name}さんはそんな人じゃないと思う」`, "cover");
+      // ★修正：ターゲットの名前を正しくセリフに入れる
+      addLog(`赤堀「待って、${mostSuspected.name}さんはそんなこと（MORRIE）する人じゃないと思う」`, "cover");
       applyCover(npc, mostSuspected);
     } else {
-      addLog(`${npc.name}「${mostSuspected.name}が怪しい...！」`, "doubt");
+      // ★修正：他のNPCのセリフも少し自然に
+      addLog(`${npc.name}「どう考えても ${mostSuspected.name} が怪しいだろ...！」`, "doubt");
       applyDoubt(npc, mostSuspected);
     }
   });
@@ -144,6 +147,7 @@ function runNpcTurn() {
     updateInfo(`Day ${day} - 議論 (${discussionTurn}/${MAX_TURNS})`);
   }
 }
+
 
 // --- 議論UI ---
 function showDiscussionUI() {
