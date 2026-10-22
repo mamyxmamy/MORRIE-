@@ -528,7 +528,7 @@ function resetCareerData() {
   }
 }
 
-// --- キャラ・ダイアログ定義（小林さん追加・ファンタジー用語排除） ---
+// --- キャラ・ダイアログ定義 ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
   2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
@@ -677,7 +677,7 @@ const dialogueBank = {
   }
 };
 
-// 北野部長の冒頭ランダムセリフ（全6パターンに増量）
+// 北野部長の冒頭ランダムセリフ（全6パターン）
 const introBossLines = [
   [
     "「……さて、全員揃ったな。先ほどの岩田本部長からのメールの通りだ。」",
@@ -734,9 +734,9 @@ function getDialogue(speakerName, targetName, actorName, type) {
   }
 
   let text = lines[Math.floor(Math.random() * lines.length)];
-  // 相手の名前を呼ぶ時は必ず「さん」をつける（プレイヤーは「あなた」のためそのまま）
-  if (targetName) text = text.replace(/◆TARGET◆さん?/g, getColoredTarget(formatName(targetName), type));
-  if (actorName) text = text.replace(/◆ACTOR◆さん?/g, formatName(actorName));
+  // 正規表現を修正：(?:さん)? とすることで、文脈に関わらず強制的に「さん」付け置換が機能します
+  if (targetName) text = text.replace(/◆TARGET◆(?:さん)?/g, getColoredTarget(formatName(targetName), type));
+  if (actorName) text = text.replace(/◆ACTOR◆(?:さん)?/g, formatName(actorName));
   return text;
 }
 
@@ -864,7 +864,7 @@ function updateUI() {
     if (c.isAlive && !c.isPlayer) {
       suspectText = `▶ 疑い: ${getSuspectTarget(c.id)}`;
       if (chars[0].insight >= 8 && c.id === morrieId && day >= 2) {
-        suspectText += ` <span style="color:#fcd34d; font-size:0.55rem;">[※生体反応異常]</span>`;
+        suspectText += ` <span style="color:#fcd34d; font-size:0.55rem;">[※異常検知]</span>`;
       }
     }
 
