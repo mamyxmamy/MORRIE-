@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -29,7 +29,7 @@
 
   .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
 
-  /* 画面中央寄せ ＆ スクロール対応のレイアウト */
+  /* 画面中央寄せ ＆ スクロール対応の完全版レイアウト */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.95); 
     display: flex; flex-direction: column; align-items: center; 
@@ -42,7 +42,7 @@
     color: #334155 !important;
   }
 
-  /* 上下のmarginをautoにすることで、画面内なら縦中央、超えればスクロールになる */
+  /* 上下のmarginをautoにすることで縦中央配置を実現 */
   .overlay-content { margin: auto; max-width: 400px; width: 100%; padding: 20px 0; }
 
   @keyframes titleGlitch {
@@ -141,6 +141,7 @@
   .speaker-mouri { color: #fde047; background: #22200a; }
   .speaker-naito { color: #c084fc; background: #1a0a22; }
   .speaker-yamaguchi { color: #38bdf8; background: #0a1a22; }
+  .speaker-kobayashi { color: #f472b6; background: #2a0a1a; }
   .speaker-player { color: #f3f4f6; background: #111; border-color: #555; }
 
   .message-text { padding-left: 5px; color: #d1d5db; text-shadow: 0 1px 2px #000; }
@@ -225,7 +226,7 @@
       </button>
       <button class="start-btn" onclick="showHowToPlay()">
         <span class="btn-en">[MANUAL]</span>
-        <span class="btn-jp">生存のための規定</span>
+        <span class="btn-jp">職務規程</span>
       </button>
       <button class="start-btn" onclick="showCollectionScreen()">
         <span class="btn-en">[SECRET]</span>
@@ -299,23 +300,26 @@
   </div>
 </div>
 
-<!-- マニュアル -->
+<!-- マニュアル（職務規程） -->
 <div id="howToPlayScreen" class="screen-overlay" style="display: none;">
   <div class="overlay-content">
-    <h2 style="font-size: 1.3rem; color: #cc0000; letter-spacing: 2px;">生存のための規定</h2>
+    <h2 style="font-size: 1.3rem; color: #cc0000; letter-spacing: 2px;">職務規程（特別退職選定）</h2>
     <div class="flavor-box">
-      <p style="margin-bottom: 10px; font-size: 0.8rem;">同僚の顔をして潜む怪物『MORRIE』を見つけ出し、期末の解雇対象として追放すること。</p>
-      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ 昼のアクション</h3>
+      <p style="margin-bottom: 10px; font-size: 0.8rem;">当営業部における深刻な予算未達を是正するため、最も生産性の低い、あるいは『異物（MORRIE）』と疑わしきリソース1名を特定し、今夜中に特別退職の同意書にサインさせること。</p>
+      
+      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ 評価行動（昼の会議）</h3>
       <ul class="guide-list" style="font-size:0.75rem;">
-        <li><span style="color:#fca5a5; font-weight:bold;">追求：</span> 対象を攻撃しVITALを下げる。</li>
-        <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象のVITALを回復する。</li>
-        <li><span style="color:#d97706; font-weight:bold;">便乗する：</span> 他人の攻撃に乗っかり追撃する。</li>
-        <li><span style="color:#7c3aed; font-weight:bold;">話を逸らす：</span> 自身が危険な時のみ使用可。ランダムな他人にヘイトをなすりつける。</li>
-        <li><span style="color:#93c5fd; font-weight:bold;">観察・調査：</span> 情報や確証を得る。</li>
+        <li><span style="color:#fca5a5; font-weight:bold;">追求：</span> 対象の業務上の瑕疵や矛盾を指摘し、VITALを下げる。</li>
+        <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象の有益性を主張し、VITALを回復する。</li>
+        <li><span style="color:#d97706; font-weight:bold;">便乗する：</span> 他者の指摘に同調し、追撃を行う。</li>
+        <li><span style="color:#7c3aed; font-weight:bold;">話を逸らす：</span> 自身のVITALが40以下の危機的状況下のみ許可。責任を他者に転嫁する。</li>
+        <li><span style="color:#93c5fd; font-weight:bold;">観察・調査：</span> 挙動の異常値を検出、またはPCのアクセスログから確証を得る。</li>
       </ul>
-      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ VITAL（バイタル）について</h3>
+      
+      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ VITAL（総合評価指数）と安全管理</h3>
       <p style="margin-bottom: 10px; font-size: 0.75rem;">
-        VITALは「部内全員からの評価の平均」です。赤色（危険）の者が解雇されやすくなります。プレイヤー自身も追求されるとVITALが減り、0に近い状態で投票を迎えるとゲームオーバーになります。
+        VITALは部署内における「生存価値（他者からの評価の平均）」を示す指標である。この数値が赤色（危険域）に達した者は、特別退職の最有力候補となる。あなた自身のVITALがゼロになった場合、発言権を失い強制的に解雇（ゲームオーバー）となるため、適切な社内政治による数値管理を怠らないこと。<br><br>
+        また、特別退職者が決定した後、もし『MORRIE』がまだ部署内に残存していた場合、深夜の帰宅途中に無作為に選ばれた社員が物理的に排除される。対象者が0になる前に、正しく異物を特定せよ。
       </p>
     </div>
     <div class="btn-container">
@@ -415,7 +419,7 @@
 </div>
 
 <script>
-// --- セーブデータ管理（ローグライト仕様） ---
+// --- セーブデータ管理 ---
 let gameData = { 
   clearCount: 0, trueEndCount: 0, unlockedProfiles: [], playerName: "", 
   totalEarnedPoints: 0,
@@ -507,7 +511,7 @@ function showCollectionScreen() {
   document.getElementById("titleScreen").style.display = "none"; 
   document.getElementById("dispClears").innerText = gameData.clearCount || 0; document.getElementById("dispTrueClears").innerText = gameData.trueEndCount || 0;
   const list = document.getElementById("profileList"); list.innerHTML = "";
-  for(let i=1; i<=7; i++) {
+  for(let i=1; i<=8; i++) {
     const item = document.createElement("div");
     if (gameData.unlockedProfiles && gameData.unlockedProfiles.includes(i)) { item.className = "profile-item"; item.innerHTML = secretProfiles[i].replace(/\n/g, '<br>'); } 
     else { item.className = "profile-locked"; item.innerHTML = `対象データなし（クリア特典で解放）`; }
@@ -524,7 +528,7 @@ function resetCareerData() {
   }
 }
 
-// --- キャラ・ダイアログ定義（全セリフ「さん」付け強制化・ファンタジー用語排除） ---
+// --- キャラ・ダイアログ定義（小林さん追加・ファンタジー用語排除） ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
   2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
@@ -532,7 +536,8 @@ const secretProfiles = {
   4: "【毛利】\n東日本支店・若手新人。プレッシャーで焦り、先輩のNucleoSpinの案件を横取りしたことで疑心暗鬼の的になっている。",
   5: "【内藤】\n大型機器担当。西日本支店。クレーム対応に疲弊しきっており、クローンに入れ替わっても「今の労働環境よりマシ」と冷笑する。",
   6: "【山口】\n東日本支店・論理派。データとKPIを重んじ、泥臭い営業を軽視するマーケティング気質。同僚の行動ログから「ノイズ」を嗅ぎ取る。",
-  7: "【機密アクセス：MORRIE開発計画書（抜粋）】\n……第3ロット運用テスト報告。被検体における『記憶の欠落』および『数字への異常な執着』のバグは未だ解消されず。しかし、これによる社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、営業部での実地テスト（特別退職選定）を継続する。なお、本物の社員はすでに全員──"
+  7: "【小林】\n内勤営業。長年営業部を裏で支えるお局様。現場を知らない若手の事務ミスに容赦ない。コピー体は受発注システムと完全に同期しており完璧な事務処理をこなすが、長年染み付いた『嫌味』や『ため息』の感情が抜け落ちている。",
+  8: "【機密アクセス：MORRIE開発計画書（抜粋）】\n……第3ロット運用テスト報告。被検体における『記憶の欠落』および『数字への異常な執着』のバグは未だ解消されず。しかし、これによる社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、営業部での実地テスト（特別退職選定）を継続する。なお、本物の社員はすでに全員──"
 };
 
 const dialogueBank = {
@@ -611,7 +616,7 @@ const dialogueBank = {
       "「チッ…◆TARGET◆、机の引き出しから他社製ピペットのカタログが出てきたぞ。スパイかよ。」", 
       "「◆TARGET◆、このクソ忙しい月末になんでそんなに冷静なんだ？気持ちわりぃな。」",
       "「おい◆TARGET◆、西日本のラボの予算を横取りした犯人だろ。認めやがれ。」",
-      "「どうせ誰かが消えなきゃならねぇんだ。◆TARGET◆、あなたが腹を切れよ。」",
+      "「どうせ誰かが辞めなきゃならねぇんだ。◆TARGET◆、あなたが腹を切れよ。」",
       "「◆TARGET◆、リアルタイムPCRのデモ機、どこに隠した？まさか横流ししてないだろうな。」"
     ],
     cover: ["「……別に◆TARGET◆をかばう義理はねぇが、この人に高度な相見積もりを操作する頭脳はねぇよ。」", "「◆TARGET◆は不器用だが、数字をごまかすような器用な真似はできねぇだろ。」"],
@@ -635,6 +640,25 @@ const dialogueBank = {
     deflect: ["「私に矛先を向けるのは論理的エラーだ。排除すべき最大のボトルネックは◆TARGET◆だろう。」"],
     observe: ["「……◆TARGET◆の体温と心拍数、平熱の範疇を超越している。生体としての矛盾を感じるな。」"],
     meta: ["「ポータルの記述によれば、シングルセルレベルでの『複製』だ。つまり、オリジナル（本物）は既に別の場所で処分され、今ここに座っているのは培養された『肉人形』という可能性が高いね。」"]
+  },
+  "小林": {
+    doubt: [
+      "「◆TARGET◆、今日の受発注データ、また品番間違えてましたよ。何年この仕事やってるんですか？」", 
+      "「◆TARGET◆、最近出張費の精算おかしくないですか？ 領収書のつじつまが合ってませんよ。」",
+      "「◆TARGET◆の提出した月報、現場の泥臭さが一切ありませんね。誰かのコピペですか？」"
+    ],
+    cover: [
+      "「◆TARGET◆は手のかかる人ですけど、現場じゃちゃんと泥水すすってますから。私が保証しますよ。」", 
+      "「あら、◆TARGET◆の事務処理は最近すごく正確になりましたよ。疑うのは筋違いじゃありません？」"
+    ],
+    defend: [
+      "「私をリストラ対象にする気ですか？ いいですよ、明日から見積もりも受発注も全部自分たちでやってくださいね。」", 
+      "「長年この部署の尻拭いをしてきた私を疑うなんて、皆さんいい度胸してますね。」"
+    ],
+    agree: ["「ええ、私もそう思ってました。◆TARGET◆の最近の稟議書、中身がスッカラカンですから。」"],
+    deflect: ["「私より、この前サンプルの手配をすっぽかした◆TARGET◆の方を追求すべきじゃないですか？」"],
+    observe: ["「……◆TARGET◆、さっきから電卓を叩くスピードが異常ですね。息もしてないみたいだし。」"],
+    meta: ["「クローンだの何だの……もし本当にそんな何でもできる子がいるなら、この終わらない事務処理地獄を今すぐ代わってほしいくらいですけど。」"]
   },
   "プレイヤー": {
     doubt: [
@@ -677,7 +701,7 @@ const introBossLines = [
   ],
   [
     "「君たちも薄々感づいているはずだ。この中に、営業マンとして『致命的な欠陥』を抱えた者がいることにね。」",
-    "「岩田本部長は、そのエラー分子を今夜中に特定し、排除するよう命じられた。」",
+    "「岩田本部長は、そのエラー分子を今夜中に特定し、整理するよう命じられた。」",
     "「仲間意識などという非生産的な感情は捨てろ。誰かを指名しなければ、全員が職を失うのだからな。」"
   ],
   [
@@ -693,6 +717,10 @@ function getColoredTarget(name, type) {
   return `<span style="font-weight:bold;">${name}</span>`;
 }
 
+function formatName(name) {
+  return name === "あなた" ? name : name + "さん";
+}
+
 function getDialogue(speakerName, targetName, actorName, type) {
   let key = speakerName.includes("北野") ? "北野" : speakerName;
   const bank = dialogueBank[key] || dialogueBank["プレイヤー"];
@@ -706,9 +734,9 @@ function getDialogue(speakerName, targetName, actorName, type) {
   }
 
   let text = lines[Math.floor(Math.random() * lines.length)];
-  // ※名前を呼ぶときは強制的に「さん」付けする処理
-  if (targetName) text = text.replace(/◆TARGET◆さん?/g, getColoredTarget(targetName + "さん", type));
-  if (actorName) text = text.replace(/◆ACTOR◆さん?/g, actorName + "さん");
+  // 相手の名前を呼ぶ時は必ず「さん」をつける（プレイヤーは「あなた」のためそのまま）
+  if (targetName) text = text.replace(/◆TARGET◆さん?/g, getColoredTarget(formatName(targetName), type));
+  if (actorName) text = text.replace(/◆ACTOR◆さん?/g, formatName(actorName));
   return text;
 }
 
@@ -729,6 +757,7 @@ function addNovelLog(speaker, text, msgType = "") {
   else if (speaker.includes("毛利")) classKey = "mouri";
   else if (speaker.includes("内藤")) classKey = "naito";
   else if (speaker.includes("山口")) classKey = "yamaguchi";
+  else if (speaker.includes("小林")) classKey = "kobayashi";
   else if (speaker === "システム" || speaker.includes("【")) classKey = "sys";
 
   const msgDiv = document.createElement("div");
@@ -770,7 +799,8 @@ function initChars() {
     { id: 3, name: "北野", isPlayer: false, isAlive: true, jobTitle: "営業部長", logic: 3, charisma: 2, charm: 5, stealth: 10, insight: 5, mental: 10 },
     { id: 4, name: "毛利", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 2, charisma: 9, charm: 7, stealth: 4, insight: 3, mental: 3 },
     { id: 5, name: "内藤", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 5, charisma: 3, charm: 1, stealth: 5, insight: 5, mental: 6 },
-    { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 }
+    { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 },
+    { id: 7, name: "小林", isPlayer: false, isAlive: true, jobTitle: "内勤営業", logic: 8, charisma: 5, charm: 4, stealth: 7, insight: 9, mental: 8 }
   ];
 }
 
@@ -924,7 +954,7 @@ function showActionMenu() {
   }
   
   if (discussionTurn > 0) {
-    const btnSkip = document.createElement("button"); btnSkip.className = "btn-skip"; btnSkip.innerText = "議論を打ち切って解雇投票へ"; btnSkip.onclick = () => showVotingUI(); buttons.appendChild(btnSkip);
+    const btnSkip = document.createElement("button"); btnSkip.className = "btn-skip"; btnSkip.innerText = "議論を打ち切って特別退職者投票へ"; btnSkip.onclick = () => showVotingUI(); buttons.appendChild(btnSkip);
   }
 }
 
@@ -987,7 +1017,7 @@ function executePlayerAction(type, targetId) {
   
   if (type === "investigate") {
     hasInvestigatedToday = true;
-    let res = target.id === morrieId ? `【極秘調査】${target.name}さんのPCから未承認のSMART-Seqライブラリ調製データを発見した…こいつがMORRIEだ！` : `【調査結果】${target.name}さんのPCを調べたが、必死に未達の言い訳を作っていた痕跡しかなかった。`;
+    let res = target.id === morrieId ? `【極秘調査】${target.name}さんのPCから未承認のSMART-Seqライブラリ調製データを発見した…この人がMORRIEだ！` : `【調査結果】${target.name}さんのPCを調べたが、必死に未達の言い訳を作っていた痕跡しかなかった。`;
     enqueueDialogue("システム", res, "investigate");
     generateNpcActions(); startDialogueSequence(); return;
   }
@@ -1005,14 +1035,14 @@ function executePlayerAction(type, targetId) {
   } else if (type === "cover") {
     enqueueDialogue(player.name, getDialogue("プレイヤー", target.name, null, "cover"), "cover"); applyCover(player, target);
   } else if (type === "assist") {
-    enqueueDialogue(player.name, `「その通りだ！◆TARGET◆、今の説明じゃ全然納得できないぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(target.name + "さん", "doubt")), "assist");
+    enqueueDialogue(player.name, `「その通りだ！◆TARGET◆、今の説明じゃ全然納得できないぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(formatName(target.name), "doubt")), "assist");
     applyDoubt(player, target);
   } else if (type === "deflect") {
     const npcs = chars.filter(c => c.isAlive && !c.isPlayer);
     const scapegoat = npcs[Math.floor(Math.random() * npcs.length)];
     let success = (Math.random() * 10 < player.stealth);
     if(success) {
-      enqueueDialogue(player.name, `「俺のミスより、昨日大口コンペを飛ばした ${getColoredTarget(scapegoat.name + "さん", "deflect")} の方が問題だろ！」`, "deflect");
+      enqueueDialogue(player.name, `「俺のミスより、昨日大口コンペを飛ばした ${getColoredTarget(formatName(scapegoat.name), "deflect")} の方が問題だろ！」`, "deflect");
       applyDoubt(player, scapegoat);
       chars.filter(c => c.isAlive && c.id !== 0).forEach(c => trust[c.id][0] = Math.min(100, trust[c.id][0] + 20));
       triggerVitalAnim(0, "heal");
@@ -1078,7 +1108,7 @@ function generateNpcReactions(actionType, actor, target) {
         }
       } else if (actionType === "cover") {
         if (tVal < 35) {
-          let txt = `「いや、騙されてる！◆TARGET◆こそ情報を流した犯人だぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(target.name + "さん", "doubt"));
+          let txt = `「いや、騙されてる！◆TARGET◆こそ情報を流した犯人だぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(formatName(target.name), "doubt"));
           enqueueDialogue(bystander.name, txt, "doubt"); applyDoubt(bystander, target);
           thirdPersonA = bystander; reactionHappened = true; break;
         }
@@ -1089,7 +1119,7 @@ function generateNpcReactions(actionType, actor, target) {
       const rem = bystanders.filter(c => c.id !== thirdPersonA.id);
       if(rem.length > 0) {
         const thirdPersonB = rem[Math.floor(Math.random() * rem.length)];
-        enqueueDialogue(thirdPersonB.name, `「ちょっと待て！俺は${thirdPersonA.name}さんの意見には反対だ。昨日から様子がおかしい…」`, "defend");
+        enqueueDialogue(thirdPersonB.name, `「ちょっと待て！私は${thirdPersonA.name}さんの意見には反対だ。昨日から様子がおかしい…」`, "defend");
       }
     }
   }
@@ -1105,1242 +1135,7 @@ function generateNpcReactions(actionType, actor, target) {
 
   const kitano = chars.find(c => c.name === "北野");
   if (kitano && kitano.isAlive && Math.random() < 0.15) {
-    enqueueDialogue("北野", "「……まだ解雇者が決まらんのか。私を待たせるなよ。」", "boss");
-    chars.forEach(c => { if(c.isAlive) trust[c.id][kitano.id] = Math.min(100, trust[c.id][kitano.id] + 5); });
-  }
-}
-
-function triggerShake() { document.body.classList.add("shake"); setTimeout(() => { document.body.classList.remove("shake"); }, 500); }
-function triggerGlitch() { document.body.classList.add("glitch"); setTimeout(() => { document.body.classList.remove("glitch"); }, 400); }
-
-function showVotingUI() {
-  updateUI();
-  document.getElementById("actionArea").style.display = "block";
-  document.getElementById("dialogueClickArea").style.display = "none";
-  
-  const box = document.getElementById("logBox"); box.innerHTML = "";
-  addNovelLog("システム", `--- ${getCurrentDateString()} 会議終了: 整理対象とするメンバーを投票します ---`, "sys");
-  
-  document.getElementById("actionPrompt").innerText = "■ 整理対象とするメンバーに投票してください:"; 
-  const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
-  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
-    const btn = document.createElement("button"); btn.className = "btn-doubt"; 
-    btn.innerHTML = `${c.name}さんに投票<br><span class="btn-subtext" style="color:#fca5a5;">この社員を解雇リストに入れる</span>`;
-    btn.onclick = () => processVote(c.id); buttons.appendChild(btn);
-  });
-}
-
-function processVote(playerVoteId) {
-  const votes = {}; chars.forEach(c => { if(c.isAlive) votes[c.id] = 0; }); votes[playerVoteId]++;
-  chars.filter(c => c.isAlive && !c.isPlayer).forEach(npc => {
-    let tId = null; let minT = 101;
-    chars.filter(o => o.isAlive && o.id !== npc.id).forEach(o => { if (trust[npc.id][o.id] < minT) { minT = trust[npc.id][o.id]; tId = o.id; }});
-    if (tId !== null) votes[tId]++;
-  });
-
-  let maxV = -1; let expId = null;
-  for (const [id, count] of Object.entries(votes)) { if (count > maxV) { maxV = count; expId = parseInt(id); } }
-  const expelled = chars.find(c => c.id === expId); expelled.isAlive = false;
-  
-  dialogueQueue = [];
-  enqueueDialogue("システム", `【投票集計完了】最多得票により、${expelled.name}さん が「解雇対象」に選ばれました。`, "sys");
-  
-  if (expelled.name === "北野") {
-    enqueueDialogue("北野", `「ば、馬鹿な……この私が解雇だと！？ お前ら、自分が何をしているか分かっているのか！ 岩田本部長、お待ちください！私はまだ……！」`, "defend");
-  } else if (expelled.isPlayer) {
-    enqueueDialogue("システム", `同僚たちの冷たい視線が一斉にあなたに突き刺さる。言い訳をする間もなく、警備員が会議室に入ってきた。`, "boss");
-  } else {
-    enqueueDialogue("北野", `「……決まったようだな。自業自得だ。」`, "boss");
-  }
-  
-  enqueueDialogue("システム", `【全社一斉メール】送信者: 岩田本部長\n『解雇対象が決定したようだな。${expelled.name}さん、君には失望した。今すぐ入館パスを置いてオフィスから立ち去りたまえ。懲戒解雇とする。』`, "boss");
-  
-  onDialogueQueueEmpty = () => { updateUI(); if (checkVictory()) return; runNightPhase(); };
-  startDialogueSequence();
-}
-
-function runNightPhase() {
-  dialogueQueue = [];
-  enqueueDialogue("システム", `--- ${getCurrentDateString()} 深夜... 誰もいなくなったオフィス街でMORRIEが動き出す ---`, "sys");
-  
-  const morrie = chars.find(c => c.id === morrieId);
-  const player = chars.find(c => c.isPlayer);
-  
-  if (morrie && morrie.isAlive) {
-    const targets = chars.filter(c => c.isAlive && c.id !== morrieId && (!c.isPlayer || day > 1)); let victim = null;
-    
-    targets.sort(() => 0.5 - Math.random());
-    let minT = 100;
-    targets.forEach(t => { 
-      let adjT = trust[t.id][morrie.id];
-      if (t.isPlayer) adjT += (t.stealth - 5) * 5; 
-      if(adjT < minT) { minT = adjT; victim = t; }
-    });
-
-    if (victim) {
-      victim.isAlive = false;
-      enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 解雇に怯えていた ${victim.name}さん は、MORRIEの標的となり完全に消息を絶った。`, "sys");
-    }
-  }
-
-  onDialogueQueueEmpty = () => {
-    updateUI();
-    if (!player.isAlive) {
-      triggerGlitch(); triggerShake();
-      document.getElementById("actionArea").style.display = "block";
-      document.getElementById("dialogueClickArea").style.display = "none";
-      addNovelLog("システム", `【GAME OVER】あなたはMORRIEの標的となり、冷たいアスファルトの上で意識を失った...`, "sys");
-      document.getElementById("actionPrompt").innerText = "GAME OVER (捕食・解雇死亡)"; 
-      
-      gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 1;
-      localStorage.setItem("morrie_career", JSON.stringify(gameData));
-      
-      document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+1 Pt獲得）</button>';
-    } else {
-      if (checkVictory()) return;
-      day++; discussionTurn = 0; hasInvestigatedToday = false;
-      dialogueQueue.push({speaker: "システム", text: `--- ${getCurrentDateString()}の朝：行方不明になった社員の噂が流れる中、今日も地獄の営業活動が始まる ---`, msgType: "sys"});
-      onDialogueQueueEmpty = () => { showActionMenu(); };
-      startDialogueSequence();
-    }
-  };
-  startDialogueSequence();
-}
-
-function unlockRandomProfile() {
-  if(!gameData.unlockedProfiles) gameData.unlockedProfiles = [];
-  const locked = [1,2,3,4,5,6,7].filter(id => !gameData.unlockedProfiles.includes(id));
-  if(locked.length > 0) { const unlockId = locked[Math.floor(Math.random() * locked.length)]; gameData.unlockedProfiles.push(unlockId); return unlockId === 7 ? "MORRIE開発計画書" : chars.find(c => c.id === unlockId).name; }
-  return null;
-}
-
-function checkVictory() {
-  const isMorrieAlive = chars.find(c => c.id === morrieId).isAlive;
-  const aliveHumans = chars.filter(c => c.isAlive && c.id !== morrieId).length;
-
-  if (!isMorrieAlive) {
-    const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
-    if (aliveCount >= 4) { gameData.trueEndCount++; endingTitle = "【真END】MORRIEを排除した。翌朝、岩田本部長から『次期・特別退職者募集』のメールが届いた。新しい試薬の営業マンは、今日も笑顔で大学へ向かう。"; } 
-    else { endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を解雇してしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分の重いノルマが上乗せされた..."; }
-    let unlockedName = unlockRandomProfile(); if(unlockedName) endingTitle += `<br><span style="color:#fcd34d">🔓【機密ファイル解放】${unlockedName}の極秘データが解放されました。</span>`;
-    
-    gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 3;
-    localStorage.setItem("morrie_career", JSON.stringify(gameData));
-    
-    document.getElementById("actionArea").style.display = "block"; document.getElementById("dialogueClickArea").style.display = "none";
-    addNovelLog("システム", endingTitle, "cover"); 
-    document.getElementById("actionPrompt").innerText = "CLEAR - 惨劇の夜を生き延びた";
-    document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+3 Pt獲得）</button>'; return true;
-  }
-  if (aliveHumans <= 1) {
-    gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 1;
-    localStorage.setItem("morrie_career", JSON.stringify(gameData));
-
-    document.getElementById("actionArea").style.display = "block"; document.getElementById("dialogueClickArea").style.display = "none";
-    addNovelLog("システム", "【MORRIEの勝利】社員は全員消え去り、空っぽになった営業部だけが残された。岩田本部長は今日も通常通り、次の期の予算計画書を作っている。", "sys");
-    document.getElementById("actionPrompt").innerText = "GAME OVER"; 
-    document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+1 Pt獲得）</button>'; return true;
-  }
-  return false;
-}
-</script>
-
-</body>
-</html>
-
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MORRIEを探して ─ 営業部・期末の惨劇 ─</title>
-<!-- Google Fontsからホラーに合う明朝体と、ポータル用のゴシック体を読み込み -->
-<link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background-color: #020202; 
-    color: #e5e7eb; 
-    /* 明朝体を強制適用 */
-    font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
-    background-image: radial-gradient(circle at 30% 70%, rgba(30, 0, 0, 0.4) 0%, transparent 40%),
-                      radial-gradient(circle at 80% 20%, rgba(20, 0, 0, 0.5) 0%, #000000 60%);
-    background-attachment: fixed;
-    padding: 10px; font-size: 14px;
-    user-select: none;
-    overflow-x: hidden;
-  }
-  
-  .crt-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 4px, 3px 100%;
-    pointer-events: none; z-index: 999; opacity: 0.15;
-  }
-
-  .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
-
-  /* 縦中央寄せを廃止し、上寄せに修正（見切れと余白の不自然さを解消） */
-  .screen-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.95); display: flex; flex-direction: column;
-    justify-content: flex-start; align-items: center; z-index: 100; padding: 30px 15px; text-align: center; overflow-y: auto;
-    background-image: radial-gradient(circle at center, #110000 0%, #020202 100%);
-  }
-  .bright-portal-overlay {
-    background: #f8fafc !important; 
-    background-image: none !important;
-    color: #334155 !important;
-  }
-
-  /* margin: auto を margin: 0 auto に変更し、上寄せを維持 */
-  .overlay-content { margin: 0 auto; max-width: 400px; width: 100%; padding-top: 20px; padding-bottom: 40px; }
-
-  @keyframes titleGlitch {
-    0%, 96%, 100% { transform: none; color: #8b0000; text-shadow: 0 0 10px rgba(139,0,0,0.5); }
-    97% { transform: translate(-3px, 2px); color: #ff0000; text-shadow: 2px 0 #00ff00, -2px 0 #0000ff; }
-    98% { transform: translate(3px, -2px); color: #8b0000; }
-    99% { transform: translate(-3px, -2px); color: #ff0000; }
-  }
-  .screen-overlay h2.glitch-title { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 5px; animation: titleGlitch 4s infinite; font-family: "Sawarabi Mincho", "MS Mincho", serif; font-weight: bold; }
-  .subtitle { font-size: 0.95rem; color: #4b5563; margin-bottom: 35px; letter-spacing: 4px; font-family: monospace; }
-
-  @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); filter: blur(2px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.9rem; line-height: 2.0; margin-bottom: 1.2rem; text-align: left; letter-spacing: 1px; }
-  .cinematic-text.red { color: #cc0000; font-weight: bold; text-shadow: 0 0 10px rgba(204, 0, 0, 0.4); }
-  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5.0s; } .delay-4 { animation-delay: 8.0s; } .delay-5 { animation-delay: 11.0s; } .delay-btn { animation-delay: 13.5s; opacity: 0; animation: fadeInText 1s ease forwards; margin-bottom: 30px;}
-
-  @keyframes pulseGlow { 0% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } 50% { box-shadow: inset 0 0 60px rgba(200, 0, 0, 0.2); } 100% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } }
-  .pulse-bg { animation: pulseGlow 4s infinite ease-in-out; }
-
-  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
-  .modal-content { background: #080808; border: 1px solid #5a0000; border-radius: 2px; padding: 22px; max-width: 380px; width: 100%; text-align: left; box-shadow: 0 0 30px rgba(204,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-
-  .flavor-box { background: rgba(8,8,8,0.9); border: 1px solid #330000; border-radius: 2px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; }
-  
-  .portal-box-bright { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 25px; max-width: 360px; width: 100%; text-align: left; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-  .portal-box-bright label { display: block; color: #334155; font-size: 0.75rem; margin-bottom: 6px; font-weight: bold; font-family: "Noto Sans JP", sans-serif;}
-  .form-input-bright { width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #94a3b8; background: #ffffff; color: #0f172a; font-size: 1rem; outline: none; transition: all 0.2s; font-family: inherit; text-align: center; letter-spacing: 2px;}
-  .form-input-bright:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); }
-
-  .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
-  
-  .start-btn { 
-    background: linear-gradient(180deg, #150000 0%, #0a0000 100%) !important; color: #e5e7eb !important; 
-    padding: 12px !important; border-radius: 2px !important; border: 1px solid #5a0000 !important; 
-    cursor: pointer !important; width: 100% !important; transition: all 0.2s; display: block; flex: none;
-    text-align: center; font-family: inherit; line-height: 1.3;
-  }
-  .start-btn:hover:not(:disabled) { background: linear-gradient(180deg, #2a0000 0%, #150000 100%) !important; border-color: #cc0000 !important; box-shadow: 0 0 15px rgba(204,0,0,0.4); transform: scale(1.01); }
-  .start-btn:disabled { opacity: 0.4; cursor: not-allowed !important; border-color: #333 !important; }
-  
-  .btn-en { display: block; font-size: 0.65rem; color: #fca5a5; font-family: monospace; letter-spacing: 1px; margin-bottom: 2px; }
-  .btn-jp { display: block; font-size: 1.05rem; font-weight: bold; letter-spacing: 4px; }
-
-  .btn-bright { background: #0ea5e9 !important; border: none !important; border-radius: 999px !important; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2) !important; color: #ffffff !important; }
-  .btn-bright:hover:not(:disabled) { background: #0284c7 !important; transform: translateY(-1px); box-shadow: 0 6px 10px rgba(14, 165, 233, 0.3) !important; }
-  .btn-bright:disabled { background: #cbd5e1 !important; box-shadow: none !important; }
-  .btn-bright .btn-en { color: #e0f2fe; }
-  
-  .btn-cancel-bright { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; border-radius: 999px !important; color: #64748b !important; }
-  .btn-cancel-bright:hover { background: #e2e8f0 !important; }
-
-  .reset-btn { background: transparent !important; color: #4b5563 !important; font-size: 0.75rem !important; padding: 6px !important; border: none !important; cursor: pointer !important; text-decoration: underline; margin-top: 10px; }
-
-  header { display: flex; justify-content: space-between; align-items: flex-end; padding: 8px 12px; border-bottom: 1px solid #4a0000; margin-bottom: 10px; background: rgba(20,0,0,0.8); box-shadow: 0 2px 10px rgba(0,0,0,0.5); border-radius: 2px; }
-  .game-title { font-size: 1rem; color: #cc0000; font-weight: bold; letter-spacing: 2px; text-shadow: 0 0 5px rgba(204,0,0,0.5); font-family: monospace; }
-  .status-bar { font-size: 0.85rem; color: #f87171; font-weight: bold; letter-spacing: 1px; }
-
-  .char-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-  .char-card { background: linear-gradient(180deg, #0a0a0a 0%, #030303 100%); border: 1px solid #222; border-left: 3px solid #555; border-radius: 2px; padding: 8px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s; box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
-  .char-card.player-card { border-left-color: #3b82f6; }
-  .char-card.dead { opacity: 0.3; filter: grayscale(100%) contrast(1.2); border-left-color: #111; }
-  
-  .card-header { display: flex; align-items: flex-start; margin-bottom: 6px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
-  .char-id-tag { font-size: 0.55rem; color: #000; background: #555; padding: 1px 3px; border-radius: 1px; margin-right: 5px; font-family: monospace; font-weight: bold; }
-  .char-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px; line-height: 1; margin-bottom: 2px; }
-  .char-sub { font-size: 0.6rem; color: #6b7280; }
-  
-  .suspect-info { font-size: 0.65rem; color: #cc0000; margin-bottom: 4px; font-weight: bold; min-height: 12px; }
-  
-  .gauge-wrapper { width: 100%; margin-top: 2px; }
-  .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
-  .gauge-container { width: 100%; background: #111; height: 4px; border-radius: 1px; overflow: hidden; border: 1px solid #222; }
-  .gauge-fill { height: 100%; transition: width 0.4s ease, background-color 0.4s ease; }
-  
-  @keyframes healGlow { 0% { box-shadow: 0 0 0 rgba(52, 211, 153, 0); } 50% { box-shadow: 0 0 10px rgba(52, 211, 153, 1); background-color: #34d399; } 100% { box-shadow: 0 0 0 rgba(52, 211, 153, 0); } }
-  @keyframes dmgGlow { 0% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); } 50% { box-shadow: 0 0 10px rgba(220, 38, 38, 1); background-color: #ef4444; } 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); } }
-  .vital-heal .gauge-fill { animation: healGlow 0.8s ease; }
-  .vital-dmg .gauge-fill { animation: dmgGlow 0.8s ease; }
-
-  .death-stamp { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 4px 8px; font-weight: bold; font-size: 0.9rem; letter-spacing: 2px; text-shadow: 0 0 5px #000; background: rgba(10,0,0,0.8); z-index: 10; white-space: nowrap; pointer-events: none; box-shadow: 0 0 10px rgba(204,0,0,0.3); }
-  .char-card.dead .death-stamp { display: block; }
-
-  .log-box { background: rgba(3, 3, 3, 0.95); border: 1px solid #330000; border-top: 3px solid #660000; border-radius: 2px; height: 260px; overflow-y: auto; padding: 12px; margin-bottom: 12px; font-size: 0.85rem; line-height: 1.7; box-shadow: inset 0 0 30px rgba(0,0,0,1); scroll-behavior: smooth; }
-  .novel-message { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); animation: fadeInText 0.2s ease-out; }
-  .novel-message.boss-msg { background: rgba(30, 0, 0, 0.5); padding: 8px; border-left: 3px solid #cc0000; }
-  
-  .message-header { display: flex; align-items: baseline; margin-bottom: 3px; }
-  .timestamp { color: #4b5563; font-family: monospace; font-size: 0.7rem; margin-right: 6px; }
-  .speaker-name { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; padding: 2px 6px; border-radius: 2px; border: 1px solid #333; box-shadow: 0 1px 3px rgba(0,0,0,0.8); text-shadow: 0 1px 2px rgba(0,0,0,1); }
-  
-  .speaker-sys { color: #ef4444; border-color: #660000; background: #220000; }
-  .speaker-yokoyama { color: #fca5a5; background: #2a1111; }
-  .speaker-akahori { color: #6ee7b7; background: #0a2211; }
-  .speaker-kitano { color: #93c5fd; background: #0a1122; border-color: #1e3a8a; }
-  .speaker-mouri { color: #fde047; background: #22200a; }
-  .speaker-naito { color: #c084fc; background: #1a0a22; }
-  .speaker-yamaguchi { color: #38bdf8; background: #0a1a22; }
-  .speaker-player { color: #f3f4f6; background: #111; border-color: #555; }
-
-  .message-text { padding-left: 5px; color: #d1d5db; text-shadow: 0 1px 2px #000; }
-  .novel-message.boss-msg .message-text { color: #fca5a5; font-weight: bold; }
-
-  .action-panel { background: linear-gradient(180deg, #111 0%, #050505 100%); border: 1px solid #333; border-radius: 2px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.8); }
-  #actionPrompt { font-size: 0.8rem; margin-bottom: 10px; color: #9ca3af; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 6px; font-family: monospace; }
-  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  
-  .action-panel button { 
-    background: #0a0a0a !important; color: #e5e7eb !important; border: 1px solid #222 !important; 
-    border-radius: 2px !important; padding: 10px 8px !important; font-size: 0.85rem !important; cursor: pointer !important; 
-    letter-spacing: 0.5px !important; font-family: inherit !important; 
-    transition: all 0.2s ease !important; line-height: 1.3; text-align: left; display: flex; flex-direction: column; justify-content: center;
-  }
-  .action-panel button:hover:not(:disabled) { background: #1a0505 !important; border-color: #cc0000 !important; color: #fff !important; box-shadow: 0 0 12px rgba(204,0,0,0.6) !important; }
-  .action-panel button:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 0 5px rgba(204,0,0,0.8) !important; }
-  .action-panel button:disabled { background: #030303 !important; color: #444 !important; border-color: #111 !important; opacity: 0.3; }
-  
-  .btn-subtext { display: block; font-size: 0.55rem; color: #6b7280; margin-top: 3px; font-weight: normal; font-family: monospace;}
-  .btn-doubt { border-left: 3px solid #991b1b !important; }
-  .btn-cover { border-left: 3px solid #065f46 !important; }
-  .btn-assist { border-left: 3px solid #d97706 !important; }
-  .btn-deflect { border-left: 3px solid #7c3aed !important; }
-  .btn-pass { border-left: 3px solid #374151 !important; }
-  .btn-investigate { border-left: 3px solid #1e3a8a !important; }
-  
-  .btn-skip { grid-column: span 2; background: #050505 !important; border: 1px dashed #5a0000 !important; color: #fca5a5 !important; text-align: center !important; font-weight: bold; align-items: center;}
-  .btn-skip:hover:not(:disabled) { background: #220000 !important; }
-
-  #dialogueClickArea { display: none; text-align: center; padding: 16px; background: rgba(10,0,0,0.8); border: 1px dashed #cc0000; border-radius: 2px; cursor: pointer; margin-top: 10px; transition: background 0.2s; box-shadow: 0 0 15px rgba(204,0,0,0.2); }
-  #dialogueClickArea:hover { background: rgba(30,0,0,0.9); }
-  .click-prompt { color: #fca5a5; font-size: 0.95rem; letter-spacing: 2px; animation: pulseGlow 1.5s infinite; font-weight: bold; }
-
-  .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #111; padding: 6px 10px; border-radius: 2px; border: 1px solid #333; }
-  .stat-name { font-weight: bold; color: #d1d5db; width: 45%; font-size: 0.8rem;}
-  .stat-val { font-size: 1rem; color: #fca5a5; font-family: monospace; width: 15%; text-align: center; }
-  .stat-controls { display: flex; gap: 5px; }
-  .stat-btn { background: #222; border: 1px solid #444; color: #fff; width: 24px; height: 24px; border-radius: 2px; cursor: pointer; font-weight: bold; display:flex; align-items:center; justify-content:center; }
-  .stat-btn:hover:not(:disabled) { background: #cc0000; border-color: #ff0000; }
-  .stat-btn:disabled { background: #0a0a0a; color: #333; border-color: #111; cursor: not-allowed; }
-
-  .profile-list { text-align: left; width: 100%; margin-top: 15px; padding-bottom: 20px; }
-  .profile-item { background: #060606; border-left: 3px solid #cc0000; border-top: 1px solid #222; border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; color: #d1d5db; line-height: 1.8; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
-  .profile-item::before { content: "極秘"; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: #cc0000; border: 1px solid #cc0000; padding: 2px 5px; transform: rotate(12deg); opacity: 0.6; font-family: monospace;}
-  .profile-locked { color: #4b5563; font-style: italic; display: block; text-align: center; padding: 12px 0; background: #040404; border: 1px dashed #1f1f1f; margin-bottom: 10px;}
-
-  @keyframes shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-3px, 1px); } 40% { transform: translate(3px, -2px); } 60% { transform: translate(-2px, -1px); } 80% { transform: translate(2px, 2px); } }
-  .shake { animation: shake 0.4s; }
-  @keyframes glitch { 0%, 100% { transform: translate(0,0); } 20% { transform: translate(-2px,2px); filter: hue-rotate(90deg); } 40% { transform: translate(-2px,-2px); } 60% { transform: translate(2px,2px); filter: hue-rotate(-90deg); } 80% { transform: translate(2px,-2px); } }
-
-  /* スローガン演出アニメーション */
-  @keyframes sloganZoomOut {
-    0% { transform: scale(0.8); opacity: 0; filter: blur(5px); }
-    10% { transform: scale(1); opacity: 1; filter: blur(0); }
-    70% { transform: scale(1.05); opacity: 1; filter: blur(0); color: #ea580c; text-shadow: none;}
-    85% { transform: scale(1.1); opacity: 1; color: #8b0000; text-shadow: 3px 3px 0px #000; filter: invert(0.8); }
-    100% { transform: scale(1.5); opacity: 0; filter: blur(10px); }
-  }
-  .slogan-anim { animation: sloganZoomOut 2.5s ease-in forwards; font-family: "Noto Sans JP", sans-serif; font-weight: 900; }
-</style>
-</head>
-<body class="pulse-bg">
-
-<div class="crt-overlay"></div>
-
-<!-- タイトル画面 -->
-<div id="titleScreen" class="screen-overlay">
-  <div class="overlay-content">
-    <h2 class="glitch-title">MORRIEを探して</h2>
-    <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
-    
-    <div class="btn-container">
-      <button class="start-btn" onclick="showNameScreen()">
-        <span class="btn-en">[SYSTEM_LOGIN]</span>
-        <span class="btn-jp">会議室へ接続</span>
-      </button>
-      <button class="start-btn" onclick="showStatsModal()">
-        <span class="btn-en">[EVALUATION]</span>
-        <span class="btn-jp">人事考課シート</span>
-      </button>
-      <button class="start-btn" onclick="showHowToPlay()">
-        <span class="btn-en">[MANUAL]</span>
-        <span class="btn-jp">生存のための規定</span>
-      </button>
-      <button class="start-btn" onclick="showCollectionScreen()">
-        <span class="btn-en">[SECRET]</span>
-        <span class="btn-jp">機密アクセス</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- 人事考課モーダル -->
-<div id="statsModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3 style="color: #cc0000; font-size: 1.0rem; border-bottom: 1px solid #330000; padding-bottom: 6px; margin-bottom: 10px; text-align: center; font-family: monospace;">◆ 人事考課（ローグライト育成）</h3>
-    <p style="font-size: 0.7rem; color: #9ca3af; line-height: 1.4; margin-bottom: 10px;">
-      獲得したポイントを自由に振り直して最適化します。<br>
-      <span style="color:#f87171;">※能力の過度な最適化は人間性の喪失に繋がります。</span>
-    </p>
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-      <button class="reset-btn" style="margin:0; padding:4px !important;" onclick="resetStatsAllocation()">🔄 割り振りをリセット</button>
-      <div style="font-size: 0.85rem; color: #6ee7b7; font-weight: bold;">
-        残PT: <span id="availablePointsDisplay">0</span>
-      </div>
-    </div>
-
-    <div class="stat-row">
-      <div class="stat-name">論理 (LOGIC)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「追求」のダメージ増加</span></div>
-      <div class="stat-val" id="valLogic">5</div>
-      <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('logic', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('logic', 1)">+</button>
-      </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">人望 (CHARISMA)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「かばう」の回復量増加</span></div>
-      <div class="stat-val" id="valCharisma">5</div>
-      <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('charisma', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('charisma', 1)">+</button>
-      </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">政治 (STEALTH)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">ヘイト回避・「責任転嫁」成功</span></div>
-      <div class="stat-val" id="valStealth">5</div>
-      <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('stealth', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('stealth', 1)">+</button>
-      </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">洞察 (INSIGHT)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「観察」効果UP・ヒント察知</span></div>
-      <div class="stat-val" id="valInsight">5</div>
-      <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('insight', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('insight', 1)">+</button>
-      </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">精神 (MENTAL)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">追求された時のダメージ軽減</span></div>
-      <div class="stat-val" id="valMental">5</div>
-      <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('mental', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('mental', 1)">+</button>
-      </div>
-    </div>
-
-    <div style="margin-top: 15px; display: flex; gap: 10px;">
-      <button class="start-btn" style="flex:1; padding: 10px !important; font-size: 0.85rem !important;" onclick="saveStatsAndClose()">変更を保存</button>
-      <button class="start-btn" style="flex:1; padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeStatsModal()">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-<!-- マニュアル -->
-<div id="howToPlayScreen" class="screen-overlay" style="display: none;">
-  <div class="overlay-content">
-    <h2 style="font-size: 1.3rem; color: #cc0000; letter-spacing: 2px;">生存のための規定</h2>
-    <div class="flavor-box">
-      <p style="margin-bottom: 10px; font-size: 0.8rem;">同僚の顔をして潜む怪物『MORRIE』を見つけ出し、期末の解雇対象として追放すること。</p>
-      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ 昼のアクション</h3>
-      <ul class="guide-list" style="font-size:0.75rem;">
-        <li><span style="color:#fca5a5; font-weight:bold;">追求：</span> 対象を攻撃しVITALを下げる。</li>
-        <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象のVITALを回復する。</li>
-        <li><span style="color:#d97706; font-weight:bold;">便乗する：</span> 他人の攻撃に乗っかり追撃する。</li>
-        <li><span style="color:#7c3aed; font-weight:bold;">話を逸らす：</span> 自身が危険な時のみ使用可。ランダムな他人にヘイトをなすりつける。</li>
-        <li><span style="color:#93c5fd; font-weight:bold;">観察・調査：</span> 情報や確証を得る。</li>
-      </ul>
-      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ VITAL（バイタル）について</h3>
-      <p style="margin-bottom: 10px; font-size: 0.75rem;">
-        VITALは「部内全員からの評価の平均」です。赤色（危険）の者が解雇されやすくなります。プレイヤー自身も追求されるとVITALが減り、0に近い状態で解雇投票を迎えるとゲームオーバーになります。
-      </p>
-    </div>
-    <div class="btn-container">
-      <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeHowToPlay()">タイトルに戻る</button>
-    </div>
-  </div>
-</div>
-
-<!-- ログインポータル画面（不穏なホワイト企業風） -->
-<div id="nameScreen" class="screen-overlay bright-portal-overlay" style="display: none;">
-  <div class="overlay-content" style="padding-top: 50px;">
-    <h2 style="font-family: 'Noto Sans JP', sans-serif; font-size: 1.8rem; font-weight: 900; letter-spacing: 1px; color: #0284c7; text-shadow: none;">社内統合ポータル</h2>
-    <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; font-family: 'Noto Sans JP', sans-serif;">─ 営業部 アカウント認証 ─</div>
-    
-    <div style="color: #ea580c; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; font-family: 'Noto Sans JP', sans-serif;">今日もイキイキ働こう！</div>
-    <div style="color: #4b5563; font-size: 0.85rem; margin-bottom: 25px; font-family: 'Noto Sans JP', sans-serif; font-weight: bold;">会社の成長が、自分の成長！</div>
-    
-    <div class="portal-box-bright">
-      <div class="form-group">
-        <label>USER_NAME (社員氏名)</label>
-        <input type="text" id="playerNameInput" class="form-input-bright" placeholder="例: 山田" maxlength="8">
-      </div>
-      
-      <div style="margin-top:20px; padding:12px; border:1px solid #e2e8f0; background:#f8fafc; font-size:0.75rem; border-radius: 4px;">
-        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; color: #334155; font-family: 'Noto Sans JP', sans-serif;">
-          <input type="checkbox" id="agreementCheck" style="margin-top: 2px; cursor: pointer;" onchange="toggleLoginBtn()">
-          <span style="font-weight: normal; line-height: 1.5;">社内機密保持規程、および期末の『特別退職プロトコル』に同意し、システムに接続します。<br>
-          <span style="color:#ef4444; font-size: 0.65rem; margin-top: 6px; display: block; font-weight:bold;">※一度接続すると、解雇対象が決定するまで退出できません。</span></span>
-        </label>
-      </div>
-    </div>
-    
-    <div class="btn-container">
-      <button class="start-btn btn-bright" id="loginBtn" disabled onclick="confirmNameAndShowIntro()">
-        <span class="btn-en">[CONNECT]</span>
-        <span class="btn-jp">認証してログイン</span>
-      </button>
-      <button class="start-btn btn-cancel-bright" onclick="backToTitleFromName()">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-<!-- 洗脳スローガン演出画面 -->
-<div id="sloganScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f8fafc; z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
-  <h1 class="slogan-anim" style="color:#ea580c; font-size:2.5rem; text-align:center; line-height:1.4;">会社の成長が、<br>自分の成長！</h1>
-</div>
-
-<!-- コレクション画面 -->
-<div id="collectionScreen" class="screen-overlay" style="display: none;">
-  <div class="overlay-content">
-    <h2 style="font-size: 1.5rem; color: #cc0000; letter-spacing: 2px;">機密アクセス</h2>
-    <div style="font-size: 0.85rem; color: #6ee7b7; margin-bottom: 10px; font-family: monospace;">
-      [DATA] CLEAR: <span id="dispClears">0</span> / TRUE_END: <span id="dispTrueClears">0</span>
-    </div>
-
-    <div class="profile-list" id="profileList"></div>
-    
-    <div class="btn-container" style="margin-top: 20px;">
-      <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeCollectionScreen()">タイトルに戻る</button>
-      <button class="reset-btn" onclick="resetCareerData()">全てのセーブデータを破棄する</button>
-    </div>
-  </div>
-</div>
-
-<!-- オープニング -->
-<div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
-  <div class="overlay-content">
-    <p class="cinematic-text delay-1">── 3月28日、23時45分。<br>期末の検収締め切りまで残り3日。営業部には今日も重苦しい疲労が立ち込めていた。</p>
-    <p class="cinematic-text delay-2">「……おい、社内ポータルに新設されてた『次世代・働き方改革』のページ、見たかよ」<br>万年クレーム対応で疲弊しきった内藤が、吐き捨てるように呟いた。</p>
-    <p class="cinematic-text delay-3">そこには、業務効率化の究極系として、ある代替リソースのテスト運用が記されていた。<br>――『Marketing Optimized Resource & Replacement Intelligence Entity』。通称、<span style="color:#cc0000; font-weight:bold;">『MORRIE（モーリー）』</span>。<br>「優秀な営業マンの脳内を完全複製し、感情を排して稼働する生体リソース」とある。</p>
-    <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なメールが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「特別退職対象者」に選出せよ。さもなくば全員一律で解雇とする』</p>
-    <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼の言い争いが始まった。<br>だが、同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない奴。異常に「数字」と「KPI」にだけ執着する奴。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
-    <div class="btn-container" style="margin-top: 30px;">
-      <button class="start-btn delay-btn" style="border-color: #cc0000 !important;" onclick="startGame()">
-        <span class="btn-en">[INITIATE]</span>
-        <span class="btn-jp">地獄の会議を始める</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- メインゲーム画面 -->
-<div class="game-container" id="gameArea" style="display: none;">
-  <header>
-    <div class="game-title">営業部 会議室 / SYS_ACT</div>
-    <div class="status-bar" id="gameInfo">待機中</div>
-  </header>
-
-  <div class="char-grid" id="charGrid"></div>
-  <div class="log-box" id="logBox"></div>
-  
-  <div class="action-panel" id="actionArea">
-    <div id="actionPrompt">■ アクションを選択してください</div>
-    <div class="btn-group" id="actionButtons"></div>
-  </div>
-
-  <div id="dialogueClickArea" onclick="playNextDialogue()">
-    <div class="click-prompt">▼ 画面をタップして会議を進める</div>
-  </div>
-</div>
-
-<script>
-// --- セーブデータ管理（ローグライト仕様） ---
-let gameData = { 
-  clearCount: 0, trueEndCount: 0, unlockedProfiles: [], playerName: "", 
-  totalEarnedPoints: 0,
-  logic: 5, charisma: 5, stealth: 5, insight: 5, mental: 5 
-};
-try {
-  const saved = localStorage.getItem("morrie_career");
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    if (parsed && typeof parsed === 'object') { 
-      gameData = { ...gameData, ...parsed }; 
-      if(gameData.evalPoints !== undefined && gameData.totalEarnedPoints === 0) {
-        gameData.totalEarnedPoints = gameData.evalPoints;
-      }
-    }
-  }
-} catch (e) { console.warn("Save Data Error", e); }
-if (gameData.playerName) gameData.playerName = gameData.playerName.replace(/[◆\[\]<>&]/g, "").substring(0, 8);
-
-// --- ステータス割り振り処理 ---
-let tempPoints = 0;
-let tempStats = { logic: 5, charisma: 5, stealth: 5, insight: 5, mental: 5 };
-
-function resetStatsAllocation() {
-  tempPoints = gameData.totalEarnedPoints || 0;
-  tempStats = { logic: 5, charisma: 5, stealth: 5, insight: 5, mental: 5 };
-  updateStatsUI();
-}
-
-function showStatsModal() {
-  document.getElementById("titleScreen").style.display = "none";
-  let usedPoints = (gameData.logic-5) + (gameData.charisma-5) + (gameData.stealth-5) + (gameData.insight-5) + (gameData.mental-5);
-  tempPoints = Math.max(0, (gameData.totalEarnedPoints || 0) - usedPoints);
-  tempStats.logic = gameData.logic || 5; tempStats.charisma = gameData.charisma || 5; tempStats.stealth = gameData.stealth || 5; tempStats.insight = gameData.insight || 5; tempStats.mental = gameData.mental || 5;
-  updateStatsUI();
-  document.getElementById("statsModal").style.display = "flex";
-}
-function closeStatsModal() { document.getElementById("statsModal").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
-
-function updateStatsUI() {
-  document.getElementById("availablePointsDisplay").innerText = tempPoints;
-  ['logic', 'charisma', 'stealth', 'insight', 'mental'].forEach(st => {
-    document.getElementById(`val${st.charAt(0).toUpperCase() + st.slice(1)}`).innerText = tempStats[st];
-  });
-  document.querySelectorAll(".stat-row").forEach(row => {
-    row.querySelectorAll(".stat-btn")[0].disabled = (tempStats[row.querySelector(".stat-val").id.replace('val','').toLowerCase()] <= 5);
-    row.querySelectorAll(".stat-btn")[1].disabled = (tempPoints <= 0);
-  });
-}
-function modifyStat(stat, amount) {
-  if (amount > 0 && tempPoints > 0) { tempStats[stat]++; tempPoints--; } 
-  else if (amount < 0 && tempStats[stat] > 5) { tempStats[stat]--; tempPoints++; }
-  updateStatsUI();
-}
-function saveStatsAndClose() {
-  gameData.logic = tempStats.logic; gameData.charisma = tempStats.charisma; gameData.stealth = tempStats.stealth; gameData.insight = tempStats.insight; gameData.mental = tempStats.mental;
-  localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  closeStatsModal();
-}
-
-// --- UI遷移 ---
-function showHowToPlay() { document.getElementById("titleScreen").style.display = "none"; document.getElementById("howToPlayScreen").style.display = "flex"; }
-function closeHowToPlay() { document.getElementById("howToPlayScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
-function showNameScreen() { document.getElementById("titleScreen").style.display = "none"; document.getElementById("playerNameInput").value = gameData.playerName || ""; document.getElementById("agreementCheck").checked = false; toggleLoginBtn(); document.getElementById("nameScreen").style.display = "flex"; }
-function backToTitleFromName() { document.getElementById("nameScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
-function toggleLoginBtn() { document.getElementById("loginBtn").disabled = !document.getElementById("agreementCheck").checked; }
-
-// スローガン演出を挟んでイントロへ
-function confirmNameAndShowIntro() {
-  let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
-  gameData.playerName = inputName !== "" ? inputName : "あなた";
-  localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars();
-  
-  document.getElementById("nameScreen").style.display = "none";
-  
-  // 演出用画面を表示
-  const sloganScreen = document.getElementById("sloganScreen");
-  sloganScreen.style.display = "flex";
-  
-  // アニメーション完了後にイントロ画面へ
-  setTimeout(() => {
-    sloganScreen.style.display = "none";
-    document.getElementById("introScreen").style.display = "flex";
-  }, 2300);
-}
-
-function showCollectionScreen() {
-  document.getElementById("titleScreen").style.display = "none"; 
-  document.getElementById("dispClears").innerText = gameData.clearCount || 0; document.getElementById("dispTrueClears").innerText = gameData.trueEndCount || 0;
-  const list = document.getElementById("profileList"); list.innerHTML = "";
-  for(let i=1; i<=7; i++) {
-    const item = document.createElement("div");
-    if (gameData.unlockedProfiles && gameData.unlockedProfiles.includes(i)) { item.className = "profile-item"; item.innerHTML = secretProfiles[i].replace(/\n/g, '<br>'); } 
-    else { item.className = "profile-locked"; item.innerHTML = `対象データなし（クリア特典で解放）`; }
-    list.appendChild(item);
-  }
-  document.getElementById("collectionScreen").style.display = "flex";
-}
-function closeCollectionScreen() { document.getElementById("collectionScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
-function resetCareerData() {
-  if (confirm("全ての記録と強化ステータスを破棄しますか？元には戻せません。")) {
-    localStorage.removeItem("morrie_career");
-    gameData = { clearCount: 0, trueEndCount: 0, unlockedProfiles: [], playerName: "", totalEarnedPoints: 0, logic: 5, charisma: 5, stealth: 5, insight: 5, mental: 5 };
-    closeCollectionScreen();
-  }
-}
-
-// --- キャラ・ダイアログ定義（全セリフ「さん」付け強制化・呼び捨て排除） ---
-const secretProfiles = {
-  1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
-  2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
-  3: "【北野（営業部長）】\n岩田本部長の指示を忠実に実行し、東西の現場を牛耳る。自らの保身のためなら部下が何人消えようと冷笑する。",
-  4: "【毛利】\n東日本支店・若手新人。プレッシャーで焦り、先輩のNucleoSpinの案件を横取りしたことで疑心暗鬼の的になっている。",
-  5: "【内藤】\n大型機器担当。西日本支店。クレーム対応に疲弊しきっており、クローンに入れ替わっても「今の労働環境よりマシ」と冷笑する。",
-  6: "【山口】\n東日本支店・論理派。データとKPIを重んじ、泥臭い営業を軽視するマーケティング気質。同僚の行動ログから「ノイズ」を嗅ぎ取る。",
-  7: "【機密アクセス：MORRIE開発計画書（抜粋）】\n……第3ロット運用テスト報告。被検体における『記憶の欠落』および『数字への異常な執着』のバグは未だ解消されず。しかし、これによる社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、営業部での実地テスト（特別退職選定）を継続する。なお、本物の社員はすでに全員──"
-};
-
-const dialogueBank = {
-  "横山": {
-    doubt: [
-      "「◆TARGET◆、あの大学の納品、見積書の金額が変だぞ。利益率をごまかしただろ！」", 
-      "「おい◆TARGET◆、俺が育てた代理店ルートを勝手に引っこ抜いたんだろ！」",
-      "「◆TARGET◆、さっきから『在庫あります』って言ってるが、あのピペットは今欠品中だろ！」",
-      "「◆TARGET◆の数字の伸び方、異常だ。どこのコンペでそんなに抜いてきたんだ？」",
-      "「◆TARGET◆、昨日納品した抗体の保存温度、間違えてたんじゃないか？顔色が悪いぞ。」",
-      "「◆TARGET◆、昨日から瞬きを全くしてないな…。本当に人間か？」"
-    ],
-    cover: [
-      "「いや、◆TARGET◆は地道にラボの扉叩いてアポ取ってるよ。俺は信じる。」", 
-      "「西日本の仲間を売る気はない。◆TARGET◆はやってない。」",
-      "「◆TARGET◆は不器用だが、数字をごまかすような奴じゃないさ。」"
-    ],
-    defend: [
-      "「ふざけるな！利益率の件は代理店との正当な交渉の結果だ！」", 
-      "「俺をクビにしたいからって、濡れ衣を着せるなよ！」",
-      "「俺はベテランだぞ！昨日今日の新人とは背負ってるノルマが違うんだよ！」"
-    ],
-    agree: ["「ああ、的確だな。◆TARGET◆は見積書の書き方が素人っぽくて変だと思ってたんだ。」", "「言われてみれば、◆TARGET◆の昨日の動きは確かにおかしかった。」"],
-    deflect: ["「俺を疑う暇があるなら、◆TARGET◆のパソコンの検索履歴でも調べてみろよ！絶対あっちの方がクロだ！」"],
-    observe: ["「……◆TARGET◆の奴、さっきから妙に汗をかいてないか？」"],
-    meta: ["「クローンだの生体リソースだの、馬鹿馬鹿しい！どうせ岩田本部長が俺たちをビビらせて、自主退職に追い込むためにでっち上げた架空の都市伝説だろ！」"]
-  },
-  "赤堀": {
-    doubt: [
-      "「おい◆TARGET◆、昨日の商談メモ、提出されてないけどサボってたのか？」", 
-      "「東日本の数字を落とす気か？◆TARGET◆の昨日の動き、どう見ても不自然だったよな？」",
-      "「◆TARGET◆、昨日納品した次世代シーケンサーのプロトコル、全く答えられなかったよな？」",
-      "「リストラされたくないからって、◆TARGET◆が俺たちの顧客リストを他社に流してるんじゃないか？」",
-      "「いつもヘラヘラしてるけど、◆TARGET◆のその営業スマイル、今は気味が悪いぜ。」",
-      "「◆TARGET◆、さっきから同じ顧客の名前を何度も間違えてるぞ。記憶飛んでるんじゃないの？」"
-    ],
-    cover: ["「まあまあ、◆TARGET◆も必死なんだからさ、そう責め立てるなって。」", "「◆TARGET◆は東日本の大事な戦力だ。俺はかばうぜ。」"],
-    defend: ["「ちょっ、待てよ！なんで俺の直行先まで疑われるんだよ、ふざけんな！」", "「俺をリストラ枠に押し込もうったって、俺の担当ラボの教授は俺を指名してんだよ！」"],
-    agree: ["「だな。◆TARGET◆は最初から怪しいと思ってたんだよ。型番の覚え方も変だったし。」"],
-    deflect: ["「ちょっと待てよ、俺より◆TARGET◆のヨミ表の方がよっぽど粉飾されてるぜ！？あっちを追及しろよ！」"],
-    observe: ["「……ん？◆TARGET◆の持ってるその資料、他社の機密データじゃないか？」"],
-    meta: ["「昨日までピンピンしてた奴が急に顧客の名前を忘れるか？……もしかして、会社のウォーターサーバーに何かヤバい薬でも入れられて、脳をハッキングされてるんじゃないか……？」"]
-  },
-  "北野": {
-    doubt: [
-      "「……◆TARGET◆。あなたの今期の検収率、どうにも目標値に届かんね。説明したまえ。」", 
-      "「我が営業部に予算未達の言い訳は不要だ。◆TARGET◆、昨夜の社用車のGPSログに不審な立ち回りがある。」",
-      "「◆TARGET◆、顔色が良すぎるな。この期末の修羅場で、なぜあなただけ疲労を感じていない？」",
-      "「岩田本部長も、◆TARGET◆の提出したレポートの『質の低さ』には頭を抱えておられたよ。」",
-      "「◆TARGET◆、あなたの口から出るのは他社製品のスペックばかりだ。どこの社員かね？」"
-    ],
-    cover: ["「◆TARGET◆のこれまでの納品実績を考慮すれば、今すぐ解雇とはならんがね……。」", "「◆TARGET◆の数字は我が部署の支えだ。つまらん嫉妬で優秀な人間を潰すな。」"],
-    defend: ["「私を疑うなど、愚か者の発言だな。私の売上と君たちの底辺を一緒にするな。」", "「部長である私を追求するなど、査定を下げるだけだと忠告しておこう。」"],
-    agree: ["「その意見には一理ある。◆TARGET◆を整理対象とする検討に入ろう。」"],
-    deflect: ["「私に責任転嫁する気か？それならば、私は権限を持って◆TARGET◆をリストラ候補に推薦しよう。」"],
-    observe: ["「……◆TARGET◆の報告書、文字の羅列がどうも不自然だ。機械が書いたようだな。」"],
-    meta: ["「MORRIEの正体が何であろうと関係ない。会社が『最も不要な人間を一人選べ』と言っているのだ。それに従うのが我々サラリーマンだろうが！」"]
-  },
-  "毛利": {
-    doubt: [
-      "「す、先輩方…！俺は不正なんてしてません！◆TARGET◆を調べてください！」", 
-      "「◆TARGET◆、昨日まであんなに仲良かった代理店の担当さんの名前、間違えてましたよね…？」",
-      "「俺、昨日◆TARGET◆のパソコンの画面をチラッと見たら、NucleoSpinの発注データがおかしかったんです…！」",
-      "「◆TARGET◆のその冷たい目…昨日までの先輩じゃないみたいです！」",
-      "「さっき◆TARGET◆がゴミ箱に捨てたチューブ、うちの会社で扱ってないラベルでしたよ！」"
-    ],
-    cover: ["「先輩、◆TARGET◆はそんな悪い人に見えませんよ…！俺は信じます！」", "「◆TARGET◆は俺に営業のイロハを教えてくれたんです！絶対にかばいます！」"],
-    defend: ["「だから俺じゃないって言ってるじゃないですか…！なんで新人だからってそんなに決めつけるんですか…！」", "「ミスはしましたけど、情報漏洩なんてするわけないです！信じてください！」"],
-    agree: ["「先輩の言う通りです！◆TARGET◆の昨日の試薬の知識、なんか教科書丸暗記みたいで変でした！」"],
-    deflect: ["「ち、違います！俺より◆TARGET◆の方が絶対におかしいです！あの人、昨日からずっと独り言を…！」"],
-    observe: ["「……◆TARGET◆、ずっと同じ営業トークをリピートしてます。怖いです…」"],
-    meta: ["「僕、研究開発部の同期から聞いたんです……。最近、空間的トランスクリプトーム解析のラボで、明らかに『人間サイズ』の培養槽が稼働し始めたって……！」"]
-  },
-  "内藤": {
-    doubt: [
-      "「チッ…◆TARGET◆、机の引き出しから他社製ピペットのカタログが出てきたぞ。スパイかよ。」", 
-      "「◆TARGET◆、このクソ忙しい月末になんでそんなに冷静なんだ？気持ちわりぃな。」",
-      "「おい◆TARGET◆、西日本のラボの予算を横取りした犯人だろ。認めやがれ。」",
-      "「どうせ誰かが消えなきゃならねぇんだ。◆TARGET◆、あなたが腹を切れよ。」",
-      "「◆TARGET◆、リアルタイムPCRのデモ機、どこに隠した？まさか横流ししてないだろうな。」"
-    ],
-    cover: ["「……別に◆TARGET◆をかばう義理はねぇが、この人に高度な相見積もりを操作する頭脳はねぇよ。」", "「◆TARGET◆は不器用だが、数字をごまかすような器用な真似はできねぇだろ。」"],
-    defend: ["「は？寝言は寝て言えよ。俺の机に他社カタログを突っ込んだのはお前だろ！」", "「クレーム処理で俺がどれだけすり減ってると思ってんだ！ふざけるな！」"],
-    agree: ["「……その通りだ。さっさと◆TARGET◆をリストラに推して今日の検収作業に戻ろうぜ。」"],
-    deflect: ["「ふざけんな！俺をハメる気か！？◆TARGET◆、あなたが裏で糸引いてるんだろ！」"],
-    observe: ["「……◆TARGET◆の野郎、なんでさっきから同じ場所をうろついてるんだ？」"],
-    meta: ["「クローンだろうが何だろうがどうでもいい……俺たち、今月の残業150時間超えてるんだぞ。全員揃って過労で脳がイカれてるだけだろ、こんなの……」"]
-  },
-  "山口": {
-    doubt: [
-      "「◆TARGET◆、さっき言った大学ラボの研究テーマと、納品した試薬の整合性が全く取れてないぞ。適当なこと言ってないか？」", 
-      "「感情論はいい。データで見ろ。◆TARGET◆の今月の売上予測、明らかに架空の数字（ノイズ）が混ざってるぞ。」",
-      "「◆TARGET◆、昨日の行動ログ、どう見ても不自然だ。直行直帰にしては時間が空きすぎている。」",
-      "「◆TARGET◆のまばたきの回数と発声のトーン、明らかに昨日までのデータと一致しないね。」",
-      "「シングルセル解析の最新プロトコルについて質問した時の◆TARGET◆の返答……あれはWikipediaの丸写しだったぞ。」"
-    ],
-    cover: ["「エビデンスもないのに◆TARGET◆を叩くのは非生産的だ。少し冷静になれよ。」", "「俺の分析では、◆TARGET◆の行動パターンに異常値はない。疑うなら他を洗え。」"],
-    defend: ["「俺の数字は徹底したマーケティングの成果だ。お前らの行き当たりばったりのドブ板営業と一緒にしないでくれ。」", "「根拠のない推論で俺を疑うのか？そんな無駄なリソースを割く暇があるなら、自分のKPIでも見直したらどうだ。」"],
-    agree: ["「完全に同意だ。◆TARGET◆の製品知識は上っ面だけで、現場への解像度が低すぎる。」"],
-    deflect: ["「私に矛先を向けるのは論理的エラーだ。排除すべき最大のボトルネックは◆TARGET◆だろう。」"],
-    observe: ["「……◆TARGET◆の体温と心拍数、平熱の範疇を超越している。生体としての矛盾を感じるな。」"],
-    meta: ["「ポータルの記述によれば、シングルセルレベルでの『複製』だ。つまり、オリジナル（本物）は既に別の場所で処分され、今ここに座っているのは培養された『肉人形』という可能性が高いね。」"]
-  },
-  "プレイヤー": {
-    doubt: [
-      "「◆TARGET◆の納品実績の伸び方、どう考えてもおかしいだろ。顧客データを盗んだのか？」", 
-      "「この異常な状況で、◆TARGET◆だけ妙に落ち着いている。何か隠してるだろ。」",
-      "「◆TARGET◆、本当は誰だ？昨日までの記憶が抜け落ちてるんじゃないのか？」",
-      "「昨夜の◆TARGET◆の行動、今日納品した製品のプロトコル、全く答えられなかったよな！？」",
-      "「◆TARGET◆、さっきからFBS（牛胎児血清）のロットの話を避けてるな。偽物を納品したのか？」"
-    ],
-    cover: ["「◆TARGET◆は今期ちゃんと自分の足でラボを回ってる。濡れ衣を着せるなよ」", "「証拠もなしに◆TARGET◆を疑うのはやめよう。ただでさえ疲労でみんなおかしくなってるんだ。」"],
-    defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」", "「俺を身代わりにする気か！？昨日の納品ログを見れば一目瞭然だろ！」"],
-    agree: ["「確かに、◆TARGET◆の動きはどこか人間離れしていて気味が悪い……。」"],
-    deflect: ["「俺じゃない！昨日の夜遅くまでサーバー室にいた◆TARGET◆の方が絶対に怪しいだろ！」"],
-    observe: ["「（……◆TARGET◆の様子がおかしい。何か隠しているはずだ）」"],
-    meta: ["「（……本当にクローンなんて存在するのか？ もしMORRIEなんて最初からいなくて、会社はただ俺たちに『殺し合い』をさせたいだけだとしたら……？）」"]
-  }
-};
-
-// 北野部長の冒頭ランダムセリフ
-const introBossLines = [
-  [
-    "「……さて、全員揃ったな。先ほどの岩田本部長からのメールの通りだ。」",
-    "「今期の絶望的な未達の責任として、この中から1名、今夜中に『特別退職対象者』を選出する。」",
-    "「誰が相見積もりを逃したか、誰が他社のスパイか……理由は問わん。自分以外の誰かを指名したまえ。」"
-  ],
-  [
-    "「静粛に。岩田本部長からの通達はすでに読んでいるな？」",
-    "「我が部署の売上未達は看過できない事態だ。ペナルティとして、誰か1名に責任を取ってもらう。」",
-    "「弁解は不要だ。最も会社にとって無益な人間を、君たちの手で一人選び出したまえ。」"
-  ],
-  [
-    "「……夜遅くにすまないね。だが、期末の業績について重大な決定事項がある。」",
-    "「この中に、会社の不利益となる『ノイズ』が紛れ込んでいるという報告を受けている。」",
-    "「全員が路頭に迷いたくなければ、今夜中に不要なリソースを1名分、切り捨てたまえ。」"
-  ]
-];
-
-function getColoredTarget(name, type) {
-  if (type === "doubt" || type === "agree" || type === "deflect") return `<span style="color:#fca5a5; font-weight:bold;">${name}</span>`;
-  if (type === "cover") return `<span style="color:#93c5fd; font-weight:bold;">${name}</span>`;
-  return `<span style="font-weight:bold;">${name}</span>`;
-}
-
-function getDialogue(speakerName, targetName, actorName, type) {
-  let key = speakerName.includes("北野") ? "北野" : speakerName;
-  const bank = dialogueBank[key] || dialogueBank["プレイヤー"];
-  
-  let lines = bank[type] || ["……"];
-  if (type === "passive" && day >= 2 && bank["meta"] && Math.random() < 0.6) {
-    lines = bank["meta"];
-  } else if (type === "passive") {
-    lines = ["「……」", "「（重苦しい沈黙が流れる）」"];
-    if(key==="山口") lines = ["「感情論で言い合っても生産性がないぞ。もっと事実ベースで話せ。」"];
-  }
-
-  let text = lines[Math.floor(Math.random() * lines.length)];
-  // ※名前を呼ぶときは強制的に「さん」付けする処理
-  if (targetName) text = text.replace(/◆TARGET◆さん?/g, getColoredTarget(targetName + "さん", type));
-  if (actorName) text = text.replace(/◆ACTOR◆さん?/g, actorName + "さん");
-  return text;
-}
-
-let currentMinutes = 50; 
-function getFakeTime() {
-  currentMinutes += Math.floor(Math.random() * 4) + 1;
-  let h = "23"; let m = currentMinutes.toString().padStart(2, "0");
-  if(currentMinutes >= 60) { h = "00"; m = (currentMinutes % 60).toString().padStart(2, "0"); }
-  return `${h}:${m}:${Math.floor(Math.random()*60).toString().padStart(2,"0")}`;
-}
-
-function addNovelLog(speaker, text, msgType = "") {
-  const box = document.getElementById("logBox");
-  let classKey = "player";
-  if (speaker.includes("横山")) classKey = "yokoyama";
-  else if (speaker.includes("赤堀")) classKey = "akahori";
-  else if (speaker.includes("北野")) classKey = "kitano";
-  else if (speaker.includes("毛利")) classKey = "mouri";
-  else if (speaker.includes("内藤")) classKey = "naito";
-  else if (speaker.includes("山口")) classKey = "yamaguchi";
-  else if (speaker === "システム" || speaker.includes("【")) classKey = "sys";
-
-  const msgDiv = document.createElement("div");
-  msgDiv.className = `novel-message ${msgType === "sys" || msgType === "boss" ? "boss-msg" : ""}`;
-  
-  let textClass = (msgType === "doubt" || msgType === "defend" || msgType === "deflect") ? "doubt" :
-                  (msgType === "cover") ? "cover" :
-                  (msgType === "assist") ? "assist" :
-                  (msgType === "investigate" || msgType === "observe") ? "investigate" :
-                  (msgType === "passive") ? "passive" :
-                  (speaker === "システム" || msgType === "boss") ? "sys" : "";
-
-  msgDiv.innerHTML = `
-    <div class="message-header">
-      <span class="timestamp">[${getFakeTime()}]</span>
-      <span class="speaker-name speaker-${classKey}">${speaker}</span>
-    </div>
-    <div class="message-text ${textClass}">${text}</div>
-  `;
-  box.appendChild(msgDiv);
-  box.scrollTop = box.scrollHeight;
-}
-
-// --- メインゲームロジック ---
-let chars = [];
-let day = 1, discussionTurn = 0, MAX_TURNS = 5, morrieId = -1;
-let trust = {}, hasInvestigatedToday = false;
-let dialogueQueue = [];
-let onDialogueQueueEmpty = null;
-let lastAttackedId = null;
-
-function getCurrentDateString() { return `3月${27 + day}日`; }
-
-function initChars() {
-  chars = [
-    { id: 0, name: gameData.playerName, isPlayer: true, isAlive: true, jobTitle: "本社・営業", logic: gameData.logic, charisma: gameData.charisma, charm: 5, stealth: gameData.stealth, insight: gameData.insight, mental: gameData.mental },
-    { id: 1, name: "横山", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 8, charisma: 5, charm: 5, stealth: 6, insight: 4, mental: 7 },
-    { id: 2, name: "赤堀", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 6, charisma: 6, charm: 8, stealth: 8, insight: 7, mental: 5 },
-    { id: 3, name: "北野", isPlayer: false, isAlive: true, jobTitle: "営業部長", logic: 3, charisma: 2, charm: 5, stealth: 10, insight: 5, mental: 10 },
-    { id: 4, name: "毛利", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 2, charisma: 9, charm: 7, stealth: 4, insight: 3, mental: 3 },
-    { id: 5, name: "内藤", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 5, charisma: 3, charm: 1, stealth: 5, insight: 5, mental: 6 },
-    { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 }
-  ];
-}
-
-function getVital(charId) {
-  const aliveOthers = chars.filter(c => c.isAlive && c.id !== charId);
-  if(aliveOthers.length === 0) return 100;
-  let sum = 0;
-  aliveOthers.forEach(o => { sum += trust[o.id][charId]; });
-  return Math.floor(sum / aliveOthers.length);
-}
-
-function startGame() {
-  document.getElementById("introScreen").style.display = "none";
-  document.getElementById("gameArea").style.display = "block";
-  
-  if(chars.length === 0) initChars();
-  const npcs = chars.filter(c => !c.isPlayer);
-  morrieId = npcs[Math.floor(Math.random() * npcs.length)].id;
-  
-  chars.forEach(c1 => {
-    trust[c1.id] = {}; 
-    chars.forEach(c2 => { trust[c1.id][c2.id] = (c1.id === c2.id) ? 100 : (50 + Math.floor(Math.random()*7)-3); });
-  });
-
-  currentMinutes = 48;
-  dialogueQueue = [];
-  
-  const selectedIntro = introBossLines[Math.floor(Math.random() * introBossLines.length)];
-  enqueueDialogue("システム", `── ${getCurrentDateString()} 23:50。営業部 会議室 ──`, "sys");
-  selectedIntro.forEach(line => {
-    enqueueDialogue("北野", line, "boss");
-  });
-  enqueueDialogue("システム", `北野部長の冷酷な宣言により、生き残りを懸けた醜いなすりつけ合いが強制的に開始された……！`, "sys");
-  
-  onDialogueQueueEmpty = () => { updateUI(); showActionMenu(); };
-  startDialogueSequence();
-}
-
-function getSuspectTarget(npcId) {
-  let targetId = -1; let minT = 100;
-  chars.forEach(c => { if (c.isAlive && c.id !== npcId && trust[npcId][c.id] < minT) { minT = trust[npcId][c.id]; targetId = c.id; }});
-  if(minT >= 50 || targetId === -1) return "なし";
-  return chars.find(x => x.id === targetId).name + "さん";
-}
-
-function updateUI() {
-  document.getElementById("gameInfo").innerHTML = day <= 3 ? `<span style="color:#f87171">決算まで 残り ${4 - day} 日</span>` : `<span style="color:#cc0000; text-decoration:underline;">3月31日 最終日</span>`;
-  document.getElementById("actionPrompt").innerText = `■ 進行中: 責任追及会議 (${discussionTurn}/${MAX_TURNS}ターン)`;
-  const grid = document.getElementById("charGrid"); grid.innerHTML = "";
-
-  chars.forEach(c => {
-    const card = document.createElement("div"); 
-    card.id = `card-${c.id}`;
-    card.className = `char-card ${c.isPlayer ? "player-card" : ""} ${!c.isAlive ? "dead" : ""}`;
-    let vVal = !c.isAlive ? 0 : getVital(c.id);
-    let gaugeColor = "#059669"; let statusText = "安定";
-    if (vVal <= 40) { gaugeColor = "#dc2626"; statusText = "危険"; } 
-    else if (vVal < 65) { gaugeColor = "#d97706"; statusText = "注意"; }
-    
-    let suspectText = "";
-    if (c.isAlive && !c.isPlayer) {
-      suspectText = `▶ 疑い: ${getSuspectTarget(c.id)}`;
-      if (chars[0].insight >= 8 && c.id === morrieId && day >= 2) {
-        suspectText += ` <span style="color:#fcd34d; font-size:0.55rem;">[※生体反応異常]</span>`;
-      }
-    }
-
-    card.innerHTML = `
-      <div class="death-stamp">❌ 整理対象</div>
-      <div>
-        <div class="card-header"><span class="char-id-tag">ID:0${c.id}</span><div><div class="char-name">${c.name}</div><div class="char-sub">${c.jobTitle}</div></div></div>
-        <div class="suspect-info">${suspectText}</div>
-      </div>
-      <div class="gauge-wrapper">
-        <div class="gauge-label"><span>VITAL</span><span>${statusText} (${vVal}%)</span></div>
-        <div class="gauge-container"><div class="gauge-fill" style="width: ${vVal}%; background-color: ${gaugeColor};"></div></div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function applyDoubt(actor, target) { 
-  let dmg = 20;
-  if(actor.isPlayer) dmg = Math.max(10, (actor.logic * 4) - (target.mental * 1.5));
-  else dmg = Math.max(5, (actor.logic * 3) - (target.mental * 2));
-  
-  chars.filter(c => c.isAlive).forEach(c => { 
-    trust[c.id][target.id] = Math.max(0, trust[c.id][target.id] - (c.id === actor.id ? dmg : dmg/2)); 
-  });
-  lastAttackedId = target.id;
-  triggerVitalAnim(target.id, "dmg");
-}
-
-function applyCover(actor, target) { 
-  let heal = 25;
-  if(actor.isPlayer) heal = Math.max(15, actor.charisma * 3);
-  
-  trust[actor.id][target.id] = Math.min(100, trust[actor.id][target.id] + heal); 
-  trust[target.id][actor.id] = Math.min(100, trust[target.id][actor.id] + heal); 
-  chars.filter(c => c.isAlive && c.id !== actor.id && c.id !== target.id).forEach(c => {
-    trust[c.id][target.id] = Math.min(100, trust[c.id][target.id] + heal/3);
-  });
-  triggerVitalAnim(target.id, "heal");
-}
-
-function triggerVitalAnim(charId, type) {
-  const card = document.getElementById(`card-${charId}`);
-  if(card) {
-    card.classList.add(type === "heal" ? "vital-heal" : "vital-dmg");
-    setTimeout(() => { card.classList.remove("vital-heal", "vital-dmg"); }, 800);
-  }
-}
-
-function showActionMenu() {
-  updateUI();
-  const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
-  const playerV = getVital(0);
-
-  const btnDoubt = document.createElement("button"); btnDoubt.className = "btn-doubt"; 
-  btnDoubt.innerHTML = `追求する<br><span class="btn-subtext" style="color:#fca5a5;">【LOGIC】対象の不正を暴く</span>`;
-  btnDoubt.onclick = () => showTargetSelect("doubt"); buttons.appendChild(btnDoubt);
-
-  const btnCover = document.createElement("button"); btnCover.className = "btn-cover"; 
-  btnCover.innerHTML = `かばう<br><span class="btn-subtext" style="color:#6ee7b7;">【CHARISMA】対象を擁護する</span>`;
-  btnCover.onclick = () => showTargetSelect("cover"); buttons.appendChild(btnCover);
-
-  if (lastAttackedId !== null && chars.find(c => c.id === lastAttackedId && c.isAlive)) {
-    const btnAssist = document.createElement("button"); btnAssist.className = "btn-assist"; 
-    btnAssist.innerHTML = `便乗する<br><span class="btn-subtext" style="color:#fcd34d;">直前の対象を追撃する</span>`;
-    btnAssist.onclick = () => executePlayerAction("assist", lastAttackedId); buttons.appendChild(btnAssist);
-  } else {
-    const btnPass = document.createElement("button"); btnPass.className = "btn-pass"; 
-    btnPass.innerHTML = `様子を見る<br><span class="btn-subtext" style="color:#9ca3af;">発言を控え動向を伺う</span>`;
-    btnPass.onclick = () => playerPassAction(); buttons.appendChild(btnPass);
-  }
-
-  const btnDeflect = document.createElement("button"); btnDeflect.className = "btn-deflect"; 
-  btnDeflect.innerHTML = `話を逸らす<br><span class="btn-subtext" style="color:#a78bfa;">【STEALTH】VITAL40以下で使用可</span>`;
-  btnDeflect.disabled = (playerV > 40);
-  btnDeflect.onclick = () => executePlayerAction("deflect", -1); buttons.appendChild(btnDeflect);
-
-  const btnObserve = document.createElement("button"); btnObserve.className = "btn-investigate"; 
-  btnObserve.innerHTML = `観察する<br><span class="btn-subtext" style="color:#93c5fd;">【INSIGHT】顔色や動向を伺う</span>`;
-  btnObserve.onclick = () => showTargetSelect("observe"); buttons.appendChild(btnObserve);
-
-  if (!hasInvestigatedToday && day >= 2) { 
-    const btnInv = document.createElement("button"); btnInv.className = "btn-investigate"; 
-    btnInv.innerHTML = `調査する<br><span class="btn-subtext" style="color:#3b82f6;">PCを覗き、確証を探る(1日1回)</span>`;
-    btnInv.onclick = () => showTargetSelect("investigate"); buttons.appendChild(btnInv); 
-  }
-  
-  if (discussionTurn > 0) {
-    const btnSkip = document.createElement("button"); btnSkip.className = "btn-skip"; btnSkip.innerText = "議論を打ち切って解雇投票へ"; btnSkip.onclick = () => showVotingUI(); buttons.appendChild(btnSkip);
-  }
-}
-
-function showTargetSelect(actionType) {
-  document.getElementById("actionPrompt").innerText = "■ ターゲットを選択してください";
-  const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
-  chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => { 
-    const btn = document.createElement("button"); btn.className = "btn-doubt"; btn.innerText = c.name + "さん"; 
-    btn.onclick = () => executePlayerAction(actionType, c.id); buttons.appendChild(btn); 
-  });
-  const btnBack = document.createElement("button"); btnBack.className = "btn-skip"; btnBack.innerText = "戻る"; btnBack.style.marginTop = "0"; btnBack.onclick = () => showActionMenu(); buttons.appendChild(btnBack);
-}
-
-function enqueueDialogue(speaker, text, msgType) { dialogueQueue.push({ speaker, text, msgType }); }
-
-function startDialogueSequence() {
-  document.getElementById("actionArea").style.display = "none";
-  document.getElementById("dialogueClickArea").style.display = "block";
-  playNextDialogue();
-}
-
-function playNextDialogue() {
-  if (dialogueQueue.length > 0) {
-    const msg = dialogueQueue.shift();
-    addNovelLog(msg.speaker, msg.text, msg.msgType);
-    if(msg.msgType === "doubt" || msg.msgType === "boss" || msg.msgType === "deflect") triggerShake();
-  } else {
-    if (onDialogueQueueEmpty) { const cb = onDialogueQueueEmpty; onDialogueQueueEmpty = null; cb(); } 
-    else { endTurn(); }
-  }
-}
-
-function endTurn() {
-  document.getElementById("actionArea").style.display = "block";
-  document.getElementById("dialogueClickArea").style.display = "none";
-  discussionTurn++; updateUI();
-  
-  if(getVital(0) <= 0) {
-    document.getElementById("actionArea").style.display = "none";
-    addNovelLog("システム", "【警告】あなたのVITALが0になりました。周囲の冷たい視線が突き刺さります……。", "boss");
-    setTimeout(showVotingUI, 2000);
-    return;
-  }
-
-  if (discussionTurn >= MAX_TURNS) showVotingUI();
-  else showActionMenu();
-}
-
-function playerPassAction() {
-  dialogueQueue = [];
-  enqueueDialogue(chars[0].name, "「……（保身のため、あえて口を閉ざす）」", "defend");
-  generateNpcActions();
-  startDialogueSequence();
-}
-
-function executePlayerAction(type, targetId) {
-  const target = targetId !== -1 ? chars.find(c => c.id === targetId) : null; 
-  const player = chars[0];
-  dialogueQueue = [];
-  
-  if (type === "investigate") {
-    hasInvestigatedToday = true;
-    let res = target.id === morrieId ? `【極秘調査】${target.name}さんのPCから未承認のSMART-Seqライブラリ調製データを発見した…こいつがMORRIEだ！` : `【調査結果】${target.name}さんのPCを調べたが、必死に未達の言い訳を作っていた痕跡しかなかった。`;
-    enqueueDialogue("システム", res, "investigate");
-    generateNpcActions(); startDialogueSequence(); return;
-  }
-  
-  if (type === "observe") {
-    let res = `【観察】${target.name}さん を観察した。`;
-    if (player.insight >= 7 && target.id === morrieId) res += ` 微細な筋肉の痙攣、不自然な瞬きの欠如……これは「人間」の反応ではない。`;
-    else res += ` 疲労の色が濃いが、今のところ決定的な証拠は見当たらない。`;
-    enqueueDialogue("システム", res, "observe");
-    generateNpcActions(); startDialogueSequence(); return;
-  }
-
-  if (type === "doubt") {
-    enqueueDialogue(player.name, getDialogue("プレイヤー", target.name, null, "doubt"), "doubt"); applyDoubt(player, target);
-  } else if (type === "cover") {
-    enqueueDialogue(player.name, getDialogue("プレイヤー", target.name, null, "cover"), "cover"); applyCover(player, target);
-  } else if (type === "assist") {
-    enqueueDialogue(player.name, `「その通りだ！◆TARGET◆、今の説明じゃ全然納得できないぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(target.name + "さん", "doubt")), "assist");
-    applyDoubt(player, target);
-  } else if (type === "deflect") {
-    const npcs = chars.filter(c => c.isAlive && !c.isPlayer);
-    const scapegoat = npcs[Math.floor(Math.random() * npcs.length)];
-    let success = (Math.random() * 10 < player.stealth);
-    if(success) {
-      enqueueDialogue(player.name, `「俺のミスより、昨日大口コンペを飛ばした ${getColoredTarget(scapegoat.name + "さん", "deflect")} の方が問題だろ！」`, "deflect");
-      applyDoubt(player, scapegoat);
-      chars.filter(c => c.isAlive && c.id !== 0).forEach(c => trust[c.id][0] = Math.min(100, trust[c.id][0] + 20));
-      triggerVitalAnim(0, "heal");
-    } else {
-      enqueueDialogue(player.name, `「ち、違う！俺じゃない！誰か別の人が…！」`, "defend");
-      enqueueDialogue("システム", `焦って言い訳したことで、逆に周囲の不信感を買ってしまった。`, "sys");
-      applyDoubt(chars[3], player);
-    }
-  }
-  
-  generateNpcReactions(type, player, target || {id:-1});
-  startDialogueSequence();
-}
-
-function generateNpcActions() {
-  const aliveNpcs = chars.filter(c => c.isAlive && !c.isPlayer);
-  if (aliveNpcs.length === 0) return;
-  const currentActor = aliveNpcs[Math.floor(Math.random() * aliveNpcs.length)];
-  let minT = 100; let pTargetId = -1;
-  chars.forEach(c => { 
-    if (c.isAlive && c.id !== currentActor.id) {
-      let adjT = trust[currentActor.id][c.id];
-      if (c.isPlayer) adjT += (c.stealth - 5) * 3; 
-      if (adjT < minT) { minT = adjT; pTargetId = c.id; }
-    }
-  });
-  
-  if (pTargetId !== -1 && minT < 50) {
-    const t = chars.find(c => c.id === pTargetId);
-    enqueueDialogue(currentActor.name, getDialogue(currentActor.name, t.name, null, "doubt"), "doubt"); applyDoubt(currentActor, t);
-    generateNpcReactions("doubt", currentActor, t);
-  } else {
-    const others = chars.filter(c => c.isAlive && c.id !== currentActor.id);
-    if(others.length > 0) {
-       const t = others[Math.floor(Math.random() * others.length)];
-       enqueueDialogue(currentActor.name, getDialogue(currentActor.name, t.name, null, "cover"), "cover"); applyCover(currentActor, t);
-       generateNpcReactions("cover", currentActor, t);
-    }
-  }
-}
-
-function generateNpcReactions(actionType, actor, target) {
-  if (actionType === "doubt" && target && target.isAlive && !target.isPlayer) {
-    enqueueDialogue(target.name, getDialogue(target.name, actor.name, null, "defend"), "defend");
-  }
-
-  let reactionHappened = false;
-  const bystanders = chars.filter(c => c.isAlive && c.id !== actor.id && (!target || c.id !== target.id) && !c.isPlayer);
-  
-  if (bystanders.length > 0 && target && target.id !== -1) {
-    const shuffled = bystanders.sort(() => 0.5 - Math.random());
-    let thirdPersonA = null;
-
-    for (let bystander of shuffled) {
-      const tVal = trust[bystander.id][target.id];
-      if (actionType === "doubt" || actionType === "assist") {
-        if (tVal > 55) {
-          enqueueDialogue(bystander.name, getDialogue(bystander.name, target.name, actor.name, "disagree"), "cover"); applyCover(bystander, target);
-          thirdPersonA = bystander; reactionHappened = true; break;
-        } else if (tVal < 40) {
-          enqueueDialogue(bystander.name, getDialogue(bystander.name, target.name, actor.name, "agree"), "doubt"); applyDoubt(bystander, target);
-          thirdPersonA = bystander; reactionHappened = true; break;
-        }
-      } else if (actionType === "cover") {
-        if (tVal < 35) {
-          let txt = `「いや、騙されてる！◆TARGET◆こそ情報を流した犯人だぞ！」`.replace(/◆TARGET◆/g, getColoredTarget(target.name + "さん", "doubt"));
-          enqueueDialogue(bystander.name, txt, "doubt"); applyDoubt(bystander, target);
-          thirdPersonA = bystander; reactionHappened = true; break;
-        }
-      }
-    }
-
-    if (thirdPersonA && Math.random() < 0.3) {
-      const rem = bystanders.filter(c => c.id !== thirdPersonA.id);
-      if(rem.length > 0) {
-        const thirdPersonB = rem[Math.floor(Math.random() * rem.length)];
-        enqueueDialogue(thirdPersonB.name, `「ちょっと待て！俺は${thirdPersonA.name}さんの意見には反対だ。昨日から様子がおかしい…」`, "defend");
-      }
-    }
-  }
-
-  if (!reactionHappened && target && !target.isPlayer && (actionType !== "observe" && actionType !== "investigate")) {
-    const randomSpeaker = bystanders.length > 0 ? bystanders[Math.floor(Math.random() * bystanders.length)] : null;
-    if (randomSpeaker && day >= 2 && Math.random() < 0.25) {
-      enqueueDialogue(randomSpeaker.name, getDialogue(randomSpeaker.name, null, null, "passive"), "passive");
-    } else {
-      enqueueDialogue("システム", "……冷え切った沈黙が流れた。誰もが自分の検収のことで頭がいっぱいだ。", "sys");
-    }
-  }
-
-  const kitano = chars.find(c => c.name === "北野");
-  if (kitano && kitano.isAlive && Math.random() < 0.15) {
-    enqueueDialogue("北野", "「……まだ解雇者が決まらんのか。私を待たせるなよ。」", "boss");
+    enqueueDialogue("北野", "「……まだ整理対象が決まらんのか。私を待たせるなよ。」", "boss");
     chars.forEach(c => { if(c.isAlive) trust[c.id][kitano.id] = Math.min(100, trust[c.id][kitano.id] + 5); });
   }
 }
@@ -2356,11 +1151,11 @@ function showVotingUI() {
   const box = document.getElementById("logBox"); box.innerHTML = "";
   addNovelLog("システム", `--- ${getCurrentDateString()} 会議終了: 特別退職とするメンバーを投票します ---`, "sys");
   
-  document.getElementById("actionPrompt").innerText = "■ 解雇（特別退職）とするメンバーに投票してください:"; 
+  document.getElementById("actionPrompt").innerText = "■ 特別退職とするメンバーに投票してください:"; 
   const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
     const btn = document.createElement("button"); btn.className = "btn-doubt"; 
-    btn.innerHTML = `${c.name}さんに投票<br><span class="btn-subtext" style="color:#fca5a5;">この社員を解雇リストに入れる</span>`;
+    btn.innerHTML = `${c.name}さんに投票<br><span class="btn-subtext" style="color:#fca5a5;">この社員を退職リストに入れる</span>`;
     btn.onclick = () => processVote(c.id); buttons.appendChild(btn);
   });
 }
@@ -2378,17 +1173,17 @@ function processVote(playerVoteId) {
   const expelled = chars.find(c => c.id === expId); expelled.isAlive = false;
   
   dialogueQueue = [];
-  enqueueDialogue("システム", `【投票集計完了】最多得票により、${expelled.name}さん が「解雇対象」に選ばれました。`, "sys");
+  enqueueDialogue("システム", `【投票集計完了】最多得票により、${expelled.name}さん が「特別退職対象者」に選ばれました。`, "sys");
   
   if (expelled.name === "北野") {
-    enqueueDialogue("北野", `「ば、馬鹿な……この私が解雇だと！？ お前ら、自分が何をしているか分かっているのか！ 岩田本部長、お待ちください！私はまだ……！」`, "defend");
+    enqueueDialogue("北野", `「ば、馬鹿な……この私が退職だと！？ お前ら、自分が何をしているか分かっているのか！ 岩田本部長、お待ちください！私はまだ……！」`, "defend");
   } else if (expelled.isPlayer) {
     enqueueDialogue("システム", `同僚たちの冷たい視線が一斉にあなたに突き刺さる。言い訳をする間もなく、警備員が会議室に入ってきた。`, "boss");
   } else {
     enqueueDialogue("北野", `「……決まったようだな。自業自得だ。」`, "boss");
   }
   
-  enqueueDialogue("システム", `【全社一斉メール】送信者: 岩田本部長\n『解雇対象が決定したようだな。${expelled.name}さん、君には失望した。今すぐ入館パスを置いてオフィスから立ち去りたまえ。懲戒解雇とする。』`, "boss");
+  enqueueDialogue("システム", `【全社一斉メール】送信者: 岩田本部長\n『退職対象者が決定したようだな。${expelled.name}さん、君には失望した。今すぐ入館パスを置いてオフィスから立ち去りたまえ。』`, "boss");
   
   onDialogueQueueEmpty = () => { updateUI(); if (checkVictory()) return; runNightPhase(); };
   startDialogueSequence();
@@ -2414,7 +1209,7 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false;
-      enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 解雇に怯えていた ${victim.name}さん は、MORRIEの標的となり完全に消息を絶った。`, "sys");
+      enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 退職の恐怖に怯えていた ${victim.name}さん は、MORRIEの標的となり完全に消息を絶った。`, "sys");
     }
   }
 
@@ -2425,7 +1220,7 @@ function runNightPhase() {
       document.getElementById("actionArea").style.display = "block";
       document.getElementById("dialogueClickArea").style.display = "none";
       addNovelLog("システム", `【GAME OVER】あなたはMORRIEの標的となり、冷たいアスファルトの上で意識を失った...`, "sys");
-      document.getElementById("actionPrompt").innerText = "GAME OVER (捕食・解雇死亡)"; 
+      document.getElementById("actionPrompt").innerText = "GAME OVER (排除・退職)"; 
       
       gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 1;
       localStorage.setItem("morrie_career", JSON.stringify(gameData));
@@ -2444,8 +1239,8 @@ function runNightPhase() {
 
 function unlockRandomProfile() {
   if(!gameData.unlockedProfiles) gameData.unlockedProfiles = [];
-  const locked = [1,2,3,4,5,6,7].filter(id => !gameData.unlockedProfiles.includes(id));
-  if(locked.length > 0) { const unlockId = locked[Math.floor(Math.random() * locked.length)]; gameData.unlockedProfiles.push(unlockId); return unlockId === 7 ? "MORRIE開発計画書" : chars.find(c => c.id === unlockId).name; }
+  const locked = [1,2,3,4,5,6,7,8].filter(id => !gameData.unlockedProfiles.includes(id));
+  if(locked.length > 0) { const unlockId = locked[Math.floor(Math.random() * locked.length)]; gameData.unlockedProfiles.push(unlockId); return unlockId === 8 ? "MORRIE開発計画書" : chars.find(c => c.id === unlockId).name; }
   return null;
 }
 
@@ -2456,7 +1251,7 @@ function checkVictory() {
   if (!isMorrieAlive) {
     const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
     if (aliveCount >= 4) { gameData.trueEndCount++; endingTitle = "【真END】MORRIEを排除した。翌朝、岩田本部長から『次期・特別退職者募集』のメールが届いた。新しい試薬の営業マンは、今日も笑顔で大学へ向かう。"; } 
-    else { endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を解雇してしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分の重いノルマが上乗せされた..."; }
+    else { endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を退職に追い込んでしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分の重いノルマが上乗せされた..."; }
     let unlockedName = unlockRandomProfile(); if(unlockedName) endingTitle += `<br><span style="color:#fcd34d">🔓【機密ファイル解放】${unlockedName}の極秘データが解放されました。</span>`;
     
     gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 3;
