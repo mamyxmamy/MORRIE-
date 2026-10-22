@@ -10,7 +10,6 @@
     background-color: #020202; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
-    /* 背景にうっすら赤黒いシミをブレンド */
     background-image: radial-gradient(circle at 30% 70%, rgba(30, 0, 0, 0.4) 0%, transparent 40%),
                       radial-gradient(circle at 80% 20%, rgba(20, 0, 0, 0.5) 0%, #000000 60%);
     background-attachment: fixed;
@@ -29,10 +28,14 @@
 
   .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
 
+  /* 見切れ防止のため flex-start と margin: auto を併用 */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.95); display: flex; flex-direction: column;
-    justify-content: center; align-items: center; z-index: 100; padding: 20px; text-align: center; overflow-y: auto;
+    justify-content: flex-start; align-items: center; z-index: 100; padding: 30px 15px; text-align: center; overflow-y: auto;
     background-image: radial-gradient(circle at center, #110000 0%, #020202 100%);
+  }
+  .overlay-content {
+    margin: auto; max-width: 400px; width: 100%;
   }
 
   /* タイトル文字の血文字グリッチエフェクト */
@@ -46,9 +49,9 @@
   .subtitle { font-size: 0.95rem; color: #4b5563; margin-bottom: 35px; letter-spacing: 4px; font-family: monospace; }
 
   @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); filter: blur(2px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.95rem; line-height: 2.2; margin-bottom: 1.4rem; text-align: left; letter-spacing: 1.5px; }
+  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.9rem; line-height: 2.0; margin-bottom: 1.2rem; text-align: left; letter-spacing: 1px; }
   .cinematic-text.red { color: #cc0000; font-weight: bold; text-shadow: 0 0 10px rgba(204, 0, 0, 0.4); }
-  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5.0s; } .delay-4 { animation-delay: 8.0s; } .delay-btn { animation-delay: 10s; opacity: 0; animation: fadeInText 1s ease forwards; }
+  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5.0s; } .delay-4 { animation-delay: 8.0s; } .delay-btn { animation-delay: 10s; opacity: 0; animation: fadeInText 1s ease forwards; margin-bottom: 30px;}
 
   @keyframes pulseGlow { 0% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } 50% { box-shadow: inset 0 0 60px rgba(200, 0, 0, 0.2); } 100% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } }
   .pulse-bg { animation: pulseGlow 4s infinite ease-in-out; }
@@ -65,7 +68,7 @@
   .form-input { width: 100%; padding: 12px; border-radius: 2px; border: 1px solid #1e3a8a; background: #02050a; color: #f3f4f6; font-size: 1rem; outline: none; transition: border-color 0.2s; font-family: inherit; text-align: center; letter-spacing: 2px;}
   .form-input:focus { border-color: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.4); }
 
-  .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; align-items: center; }
+  .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
   
   /* タイトル画面・汎用ボタン */
   .start-btn { 
@@ -172,10 +175,10 @@
   .stat-btn:hover:not(:disabled) { background: #cc0000; border-color: #ff0000; }
   .stat-btn:disabled { background: #0a0a0a; color: #333; border-color: #111; cursor: not-allowed; }
 
-  .profile-list { text-align: left; width: 100%; max-width: 400px; margin-top: 15px; height: 60vh; overflow-y: auto; padding-right: 10px; }
+  .profile-list { text-align: left; width: 100%; margin-top: 15px; padding-bottom: 20px; }
   .profile-item { background: #060606; border-left: 3px solid #cc0000; border-top: 1px solid #222; border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; color: #d1d5db; line-height: 1.8; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
   .profile-item::before { content: "極秘"; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: #cc0000; border: 1px solid #cc0000; padding: 2px 5px; transform: rotate(12deg); opacity: 0.6; font-family: monospace;}
-  .profile-locked { color: #4b5563; font-style: italic; display: block; text-align: center; padding: 12px 0; background: #040404; border: 1px dashed #1f1f1f; }
+  .profile-locked { color: #4b5563; font-style: italic; display: block; text-align: center; padding: 12px 0; background: #040404; border: 1px dashed #1f1f1f; margin-bottom: 10px;}
   
   .guide-list { margin-left: 20px; margin-bottom: 15px; color: #d1d5db; font-size: 0.85rem; line-height: 1.6; }
   .guide-list li { margin-bottom: 6px; }
@@ -192,26 +195,28 @@
 
 <!-- タイトル画面 -->
 <div id="titleScreen" class="screen-overlay">
-  <h2 class="glitch-title">MORRIEを探して</h2>
-  <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
-  
-  <div class="btn-container">
-    <button class="start-btn" onclick="showNameScreen()">
-      <span class="btn-en">[SYSTEM_LOGIN]</span>
-      <span class="btn-jp">会議室へ接続</span>
-    </button>
-    <button class="start-btn" onclick="showStatsModal()">
-      <span class="btn-en">[EVALUATION]</span>
-      <span class="btn-jp">人事考課シート</span>
-    </button>
-    <button class="start-btn" onclick="showHowToPlay()">
-      <span class="btn-en">[MANUAL]</span>
-      <span class="btn-jp">生存のための規定</span>
-    </button>
-    <button class="start-btn" onclick="showCollectionScreen()">
-      <span class="btn-en">[SECRET]</span>
-      <span class="btn-jp">機密アクセス</span>
-    </button>
+  <div class="overlay-content">
+    <h2 class="glitch-title">MORRIEを探して</h2>
+    <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
+    
+    <div class="btn-container">
+      <button class="start-btn" onclick="showNameScreen()">
+        <span class="btn-en">[SYSTEM_LOGIN]</span>
+        <span class="btn-jp">会議室へ接続</span>
+      </button>
+      <button class="start-btn" onclick="showStatsModal()">
+        <span class="btn-en">[EVALUATION]</span>
+        <span class="btn-jp">人事考課シート</span>
+      </button>
+      <button class="start-btn" onclick="showHowToPlay()">
+        <span class="btn-en">[MANUAL]</span>
+        <span class="btn-jp">生存のための規定</span>
+      </button>
+      <button class="start-btn" onclick="showCollectionScreen()">
+        <span class="btn-en">[SECRET]</span>
+        <span class="btn-jp">機密アクセス</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -262,79 +267,86 @@
 
 <!-- マニュアル（遊戯指南） -->
 <div id="howToPlayScreen" class="screen-overlay" style="display: none;">
-  <h2 style="font-size: 1.5rem; color: #cc0000; letter-spacing: 2px;">生存のための規定</h2>
-  <div class="flavor-box" style="max-height: 60vh; overflow-y: auto;">
-    <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 目的</h3>
-    <p style="margin-bottom: 15px; font-size: 0.85rem;">
-      極限の過労の果てか、あるいは会社が極秘に導入した代替リソースか……<br>
-      同僚の顔をして潜む得体の知れない怪物『MORRIE』を見つけ出し、期末の「希望退職（解雇）」対象としてオフィスから追放すること。
-    </p>
-    <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 昼の会議（アクション）</h3>
-    <ul class="guide-list">
-      <li><span style="color:#fca5a5; font-weight:bold;">追求する：</span> 対象の不正や記憶の矛盾を指摘し、全体のヘイトを向けさせます。</li>
-      <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象を擁護し、自分と対象の信頼を回復させます。</li>
-      <li><span style="color:#93c5fd; font-weight:bold;">調査する：</span> 対象のPCをハッキングし、証拠を探します（※初日は警戒されて不可、2日目以降解禁）。</li>
-    </ul>
-    <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 隔離投票と深夜</h3>
-    <p style="margin-bottom: 15px; font-size: 0.85rem;">
-      規定ターンの議論終了後、最も疑われている社員が「懲戒解雇」としてオフィスを追放されます。もし本物のMORRIEが生き残っていれば、深夜の帰り道で誰かが餌食となります。
-    </p>
-  </div>
-  <div class="btn-container" style="margin-top: 10px;">
-    <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeHowToPlay()">タイトルに戻る</button>
+  <div class="overlay-content">
+    <h2 style="font-size: 1.5rem; color: #cc0000; letter-spacing: 2px;">生存のための規定</h2>
+    <div class="flavor-box">
+      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 目的</h3>
+      <p style="margin-bottom: 15px; font-size: 0.85rem;">
+        極限の過労の果てか、あるいは会社が極秘に導入した代替リソースか……<br>
+        同僚の顔をして潜む得体の知れない怪物『MORRIE』を見つけ出し、期末の「希望退職（解雇）」対象としてオフィスから追放すること。
+      </p>
+      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 昼の会議（アクション）</h3>
+      <ul class="guide-list">
+        <li><span style="color:#fca5a5; font-weight:bold;">追求する：</span> 対象の不正や記憶の矛盾を指摘し、全体のヘイトを向けさせます。</li>
+        <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象を擁護し、自分と対象の信頼を回復させます。</li>
+        <li><span style="color:#93c5fd; font-weight:bold;">調査する：</span> 対象のPCをハッキングし、証拠を探します（※初日は警戒されて不可、2日目以降解禁）。</li>
+      </ul>
+      <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 8px; padding-bottom: 4px;">◆ 隔離投票と深夜</h3>
+      <p style="margin-bottom: 15px; font-size: 0.85rem;">
+        規定ターンの議論終了後、最も疑われている社員が「懲戒解雇」としてオフィスを追放されます。もし本物のMORRIEが生き残っていれば、深夜の帰り道で誰かが餌食となります。
+      </p>
+    </div>
+    <div class="btn-container">
+      <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeHowToPlay()">タイトルに戻る</button>
+    </div>
   </div>
 </div>
 
 <!-- ログインポータル画面 -->
 <div id="nameScreen" class="screen-overlay" style="display: none;">
-  <h2 style="font-family: monospace; font-size: 1.6rem; letter-spacing: 2px; color: #93c5fd; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);">社内統合ポータル</h2>
-  <div class="subtitle" style="color: #60a5fa; letter-spacing: 2px;">─ 営業部 アカウント認証 ─</div>
-  
-  <div class="portal-box">
-    <div class="form-group">
-      <label>USER_NAME (社員氏名)</label>
-      <input type="text" id="playerNameInput" class="form-input" placeholder="例: 隼" maxlength="8">
+  <div class="overlay-content">
+    <h2 style="font-family: monospace; font-size: 1.6rem; letter-spacing: 2px; color: #93c5fd; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);">社内統合ポータル</h2>
+    <div class="subtitle" style="color: #60a5fa; letter-spacing: 2px;">─ 営業部 アカウント認証 ─</div>
+    
+    <div class="portal-box">
+      <div class="form-group">
+        <label>USER_NAME (社員氏名)</label>
+        <input type="text" id="playerNameInput" class="form-input" placeholder="例: 山田" maxlength="8">
+      </div>
+      
+      <div style="margin-top: 25px; font-size: 0.75rem; color: #9ca3af; text-align: left; background: #02050a; padding: 10px; border: 1px solid #1e3a8a;">
+        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; color: #d1d5db; font-family: sans-serif;">
+          <input type="checkbox" id="agreementCheck" style="margin-top: 2px; cursor: pointer;" onchange="toggleLoginBtn()">
+          <span>社内機密保持規程、および期末の『特別退職プロトコル』に同意し、システムに接続します。<br><span style="color:#f87171; font-size: 0.65rem; margin-top: 4px; display: block;">※一度接続すると、生贄が決定するまで退出できません。</span></span>
+        </label>
+      </div>
     </div>
     
-    <div style="margin-top: 25px; font-size: 0.75rem; color: #9ca3af; text-align: left; background: #02050a; padding: 10px; border: 1px solid #1e3a8a;">
-      <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; color: #d1d5db; font-family: sans-serif;">
-        <input type="checkbox" id="agreementCheck" style="margin-top: 2px; cursor: pointer;" onchange="toggleLoginBtn()">
-        <span>社内機密保持規程、および期末の『特別退職プロトコル』に同意し、システムに接続します。<br><span style="color:#f87171; font-size: 0.65rem; margin-top: 4px; display: block;">※一度接続すると、生贄が決定するまで退出できません。</span></span>
-      </label>
+    <div class="btn-container">
+      <button class="start-btn portal-btn" id="loginBtn" disabled onclick="confirmNameAndShowIntro()">
+        <span class="btn-en">[CONNECT]</span>
+        <span class="btn-jp">認証してログイン</span>
+      </button>
+      <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="backToTitleFromName()">キャンセル</button>
     </div>
-  </div>
-  
-  <div class="btn-container">
-    <button class="start-btn portal-btn" id="loginBtn" disabled onclick="confirmNameAndShowIntro()">
-      <span class="btn-en">[CONNECT]</span>
-      <span class="btn-jp">認証してログイン</span>
-    </button>
-    <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="backToTitleFromName()">キャンセル</button>
   </div>
 </div>
 
 <!-- コレクション画面 -->
 <div id="collectionScreen" class="screen-overlay" style="display: none;">
-  <h2 style="font-size: 1.5rem; color: #cc0000; letter-spacing: 2px;">機密アクセス</h2>
-  <div style="font-size: 0.85rem; color: #6ee7b7; margin-bottom: 10px; font-family: monospace;">
-    [DATA] CLEAR: <span id="dispClears">0</span> / TRUE_END: <span id="dispTrueClears">0</span>
-  </div>
+  <div class="overlay-content">
+    <h2 style="font-size: 1.5rem; color: #cc0000; letter-spacing: 2px;">機密アクセス</h2>
+    <div style="font-size: 0.85rem; color: #6ee7b7; margin-bottom: 10px; font-family: monospace;">
+      [DATA] CLEAR: <span id="dispClears">0</span> / TRUE_END: <span id="dispTrueClears">0</span>
+    </div>
 
-  <div class="profile-list" id="profileList"></div>
-  <div class="btn-container" style="margin-top: 20px;">
-    <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeCollectionScreen()">タイトルに戻る</button>
-    <button class="reset-btn" onclick="resetCareerData()">全てのセーブデータを破棄する</button>
+    <div class="profile-list" id="profileList"></div>
+    
+    <div class="btn-container" style="margin-top: 20px;">
+      <button class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeCollectionScreen()">タイトルに戻る</button>
+      <button class="reset-btn" onclick="resetCareerData()">全てのセーブデータを破棄する</button>
+    </div>
   </div>
 </div>
 
 <!-- オープニング -->
 <div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
-  <div style="max-width: 400px; width: 100%; padding: 20px;">
+  <div class="overlay-content">
     <p class="cinematic-text delay-1">── 3月28日、23時45分。</p>
     <p class="cinematic-text delay-2">期末（3/31）の売上検収締め切りまで、残りわずか3日。終わらないトラブル対応と容赦ない値引き要求にすり潰され、営業部員たちは極限の疲弊にあった。</p>
     <p class="cinematic-text red delay-3">そんな夜半、全端末に岩田本部長からの冷酷な一斉メールが届く。<br>『今期の売上未達の責任として、当部署から1名を「希望退職（生贄）」に選べ。さもなくば全員一律で解雇とする』</p>
     <p class="cinematic-text delay-4">岩田の命を受けた北野部長の監視の下、東西支店を巻き込んだ泥沼の言い争いが始まった。<br>だが、同僚のアラを探すうち、誰もが奇妙な違和感に気づき始める。<br><br>……この中にいる『誰か』の様子がおかしい。<br><br>昨日まで完璧に覚えていたはずの顧客の顔や、長年扱ってきた試薬の型番を全く思い出せない。そのくせ、売上の「数字」にだけは異常に執着し、不気味なほど完璧な営業スマイルを浮かべている。<br>激務で精神が壊れたのか。それとも、会社が「究極の営業効率」を求めて秘密裏に導入したと噂される代替リソースなのか。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
-    <div class="btn-container" style="margin: 30px auto 0;">
+    <div class="btn-container" style="margin-top: 30px;">
       <button class="start-btn delay-btn" style="border-color: #cc0000 !important;" onclick="startGame()">
         <span class="btn-en">[INITIATE]</span>
         <span class="btn-jp">地獄の会議を始める</span>
@@ -367,7 +379,7 @@
 // --- 安全なデータ初期化（フリーズ防止＆バグ回避） ---
 let gameData = { 
   clearCount: 0, trueEndCount: 0, unlockedProfiles: [], 
-  playerName: "あなた", evalPoints: 0, 
+  playerName: "", evalPoints: 0, 
   logic: 5, charisma: 5, stealth: 5 
 };
 try {
@@ -383,7 +395,6 @@ try {
 // 入力値のサニタイズ（特殊文字排除）
 if (gameData.playerName) {
   gameData.playerName = gameData.playerName.replace(/[◆\[\]<>&]/g, "").substring(0, 8);
-  if(!gameData.playerName) gameData.playerName = "あなた";
 }
 
 // --- ステータス割り振り処理 ---
@@ -438,7 +449,7 @@ function closeHowToPlay() { document.getElementById("howToPlayScreen").style.dis
 
 function showNameScreen() {
   document.getElementById("titleScreen").style.display = "none";
-  document.getElementById("playerNameInput").value = gameData.playerName === "あなた" ? "" : gameData.playerName;
+  document.getElementById("playerNameInput").value = gameData.playerName || "";
   document.getElementById("agreementCheck").checked = false;
   toggleLoginBtn();
   document.getElementById("nameScreen").style.display = "flex";
@@ -484,7 +495,7 @@ function closeCollectionScreen() { document.getElementById("collectionScreen").s
 function resetCareerData() {
   if (confirm("全ての記録と強化ステータスを破棄しますか？元には戻せません。")) {
     localStorage.removeItem("morrie_career");
-    gameData = { clearCount: 0, trueEndCount: 0, unlockedProfiles: [], playerName: "あなた", evalPoints: 0, logic: 5, charisma: 5, stealth: 5 };
+    gameData = { clearCount: 0, trueEndCount: 0, unlockedProfiles: [], playerName: "", evalPoints: 0, logic: 5, charisma: 5, stealth: 5 };
     closeCollectionScreen();
   }
 }
