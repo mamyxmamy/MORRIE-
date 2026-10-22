@@ -193,16 +193,46 @@
   .shake { animation: shake 0.4s; }
   @keyframes glitch { 0%, 100% { transform: translate(0,0); } 20% { transform: translate(-2px,2px); filter: hue-rotate(90deg); } 40% { transform: translate(-2px,-2px); } 60% { transform: translate(2px,2px); filter: hue-rotate(-90deg); } 80% { transform: translate(2px,-2px); } }
 
-  /* スローガン演出アニメーション（明るいゴシックから、禍々しい明朝へ） */
-  @keyframes sloganZoomOut {
-    0% { transform: scale(0.8); opacity: 0; font-family: "Noto Sans JP", sans-serif; color: #ea580c; filter: blur(5px); }
-    10% { transform: scale(1); opacity: 1; font-family: "Noto Sans JP", sans-serif; color: #ea580c; filter: blur(0); text-shadow: none; }
-    50% { transform: scale(1.05); opacity: 1; font-family: "Noto Sans JP", sans-serif; color: #ea580c; filter: blur(0); }
-    51% { transform: scale(1.05); opacity: 1; font-family: "Sawarabi Mincho", "MS Mincho", serif; color: #8b0000; text-shadow: 2px 2px 0px #000; letter-spacing: 5px; }
-    80% { transform: scale(1.2); opacity: 1; color: #8b0000; font-family: "Sawarabi Mincho", "MS Mincho", serif; }
-    100% { transform: scale(1.5); opacity: 0; filter: blur(10px); color: #8b0000; font-family: "Sawarabi Mincho", "MS Mincho", serif; }
+  /* 新規：洗脳スローガンポップアップアニメーション */
+  .pop-slogan {
+    position: absolute;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 900;
+    opacity: 0;
+    white-space: nowrap;
+    animation: popIn 0.4s ease-out forwards;
+    pointer-events: none;
   }
-  .slogan-anim { animation: sloganZoomOut 2.5s ease-in forwards; font-weight: 900; }
+  @keyframes popIn {
+    0% { transform: scale(0.1); opacity: 0; }
+    60% { transform: scale(1.1); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+
+  /* 新規：血文字「働きたくない」アニメーション */
+  .blood-text-anim {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #8b0000;
+    font-family: "Sawarabi Mincho", "MS Mincho", serif;
+    font-size: 3.5rem;
+    font-weight: bold;
+    letter-spacing: 12px;
+    text-shadow: 2px 2px 8px rgba(255,0,0,0.6);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  @keyframes bloodFade {
+    0% { opacity: 0; filter: blur(5px) drop-shadow(0 0 10px #ff0000); transform: translate(-50%, -50%) scale(0.9); }
+    10% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1); }
+    90% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1.05); }
+    100% { opacity: 0; filter: blur(10px); transform: translate(-50%, -50%) scale(1.1); }
+  }
+  .blood-anim-active { animation: bloodFade 1.8s ease-in-out forwards; display: block !important; }
+
 </style>
 </head>
 <body class="pulse-bg">
@@ -359,9 +389,10 @@
   </div>
 </div>
 
-<!-- 洗脳スローガン演出画面 -->
-<div id="sloganScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f8fafc; z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
-  <h1 class="slogan-anim" style="text-align:center; line-height:1.4;">会社の成長が、<br>自分の成長！</h1>
+<!-- 洗脳スローガン演出画面（JSで動的に追加） -->
+<div id="sloganScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f8fafc; z-index:9999; overflow:hidden;">
+  <div id="sloganContainer" style="position:relative; width:100%; height:100%;"></div>
+  <div id="bloodText" class="blood-text-anim">働きたくない</div>
 </div>
 
 <!-- コレクション画面 -->
@@ -487,7 +518,7 @@ function showNameScreen() { document.getElementById("titleScreen").style.display
 function backToTitleFromName() { document.getElementById("nameScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
 function toggleLoginBtn() { document.getElementById("loginBtn").disabled = !document.getElementById("agreementCheck").checked; }
 
-// スローガン演出を挟んでイントロへ
+// --- スローガン弾幕＆血文字演出 ---
 function confirmNameAndShowIntro() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
@@ -496,15 +527,58 @@ function confirmNameAndShowIntro() {
   
   document.getElementById("nameScreen").style.display = "none";
   
-  // 演出用画面を表示
   const sloganScreen = document.getElementById("sloganScreen");
-  sloganScreen.style.display = "flex";
-  
-  // アニメーション完了後にイントロ画面へ
+  const container = document.getElementById("sloganContainer");
+  const bloodText = document.getElementById("bloodText");
+
+  sloganScreen.style.display = "block";
+  sloganScreen.style.backgroundColor = "#f8fafc";
+  container.innerHTML = "";
+  bloodText.classList.remove("blood-anim-active");
+
+  const buzzwords = ["会社の成長が、自分の成長！", "やりがい", "圧倒的成長", "アットホームな職場", "お客様の笑顔", "ピンチはチャンス", "限界突破", "夢を実現", "感謝", "情熱", "今日もイキイキ働こう！", "素直な心", "自己実現", "シナジー", "フルコミット", "Win-Win", "PDCAを回せ", "当事者意識"];
+  const colors = ["#0284c7", "#ea580c", "#16a34a", "#eab308", "#64748b"];
+
+  let count = 0;
+  let interval = setInterval(() => {
+    const word = buzzwords[Math.floor(Math.random() * buzzwords.length)];
+    
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "absolute";
+    wrapper.style.left = (Math.random() * 70) + "%";
+    wrapper.style.top = (Math.random() * 80 + 10) + "%";
+    wrapper.style.transform = `rotate(${(Math.random() * 40) - 20}deg)`;
+
+    const el = document.createElement("div");
+    el.className = "pop-slogan";
+    el.innerText = word;
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.fontSize = (Math.random() * 1.5 + 1.2) + "rem";
+    
+    wrapper.appendChild(el);
+    container.appendChild(wrapper);
+    
+    count++;
+    if(count > 30) clearInterval(interval);
+  }, 70);
+
+  // 約2.5秒後に暗転
+  setTimeout(() => {
+    clearInterval(interval);
+    container.innerHTML = "";
+    sloganScreen.style.backgroundColor = "#000";
+  }, 2600);
+
+  // 約3.2秒後に「働きたくない」を浮かび上がらせる
+  setTimeout(() => {
+    bloodText.classList.add("blood-anim-active");
+  }, 3200);
+
+  // 約5.0秒後にイントロへ遷移
   setTimeout(() => {
     sloganScreen.style.display = "none";
     document.getElementById("introScreen").style.display = "flex";
-  }, 2300);
+  }, 5200);
 }
 
 function showCollectionScreen() {
@@ -652,7 +726,7 @@ const dialogueBank = {
       "「あら、◆TARGET◆の事務処理は最近すごく正確になりましたよ。疑うのは筋違いじゃありません？」"
     ],
     defend: [
-      "「私をリストラ対象にする気ですか？ いいですよ、明日から見積もりも受発注も全部自分たちでやってくださいね。」", 
+      "「私を整理対象にする気ですか？ いいですよ、明日から見積もりも受発注も全部自分たちでやってくださいね。」", 
       "「長年この部署の尻拭いをしてきた私を疑うなんて、皆さんいい度胸してますね。」"
     ],
     agree: ["「ええ、私もそう思ってました。◆TARGET◆の最近の稟議書、中身がスッカラカンですから。」"],
@@ -677,7 +751,7 @@ const dialogueBank = {
   }
 };
 
-// 北野部長の冒頭ランダムセリフ（全6パターン）
+// 北野部長の冒頭ランダムセリフ
 const introBossLines = [
   [
     "「……さて、全員揃ったな。先ほどの岩田本部長からのメールの通りだ。」",
@@ -734,7 +808,7 @@ function getDialogue(speakerName, targetName, actorName, type) {
   }
 
   let text = lines[Math.floor(Math.random() * lines.length)];
-  // 正規表現を修正：(?:さん)? とすることで、文脈に関わらず強制的に「さん」付け置換が機能します
+  // 正規表現を修正：(?:さん)? とすることで、さん付け置換が機能します
   if (targetName) text = text.replace(/◆TARGET◆(?:さん)?/g, getColoredTarget(formatName(targetName), type));
   if (actorName) text = text.replace(/◆ACTOR◆(?:さん)?/g, formatName(actorName));
   return text;
