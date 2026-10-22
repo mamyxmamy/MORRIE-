@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MORRIEを探して ─ 営業部・期末の惨劇 ─</title>
+<!-- Google Fontsからホラーに合う明朝体と、ポータル用のゴシック体を読み込み -->
+<link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: #020202; 
     color: #e5e7eb; 
+    /* 明朝体を強制適用 */
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
     background-image: radial-gradient(circle at 30% 70%, rgba(30, 0, 0, 0.4) 0%, transparent 40%),
                       radial-gradient(circle at 80% 20%, rgba(20, 0, 0, 0.5) 0%, #000000 60%);
@@ -27,21 +30,20 @@
 
   .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
 
-  /* ダーク系オーバーレイ（標準） */
+  /* 縦中央寄せを廃止し、上寄せに修正（見切れと余白の不自然さを解消） */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.95); display: flex; flex-direction: column;
     justify-content: flex-start; align-items: center; z-index: 100; padding: 30px 15px; text-align: center; overflow-y: auto;
     background-image: radial-gradient(circle at center, #110000 0%, #020202 100%);
   }
-  
-  /* ★追加：不穏なほど明るいホワイト企業風ポータル */
   .bright-portal-overlay {
-    background: #f8fafc !important; /* 明るいグレーホワイト */
+    background: #f8fafc !important; 
     background-image: none !important;
     color: #334155 !important;
   }
 
-  .overlay-content { margin: auto; max-width: 400px; width: 100%; }
+  /* margin: auto を margin: 0 auto に変更し、上寄せを維持 */
+  .overlay-content { margin: 0 auto; max-width: 400px; width: 100%; padding-top: 20px; padding-bottom: 40px; }
 
   @keyframes titleGlitch {
     0%, 96%, 100% { transform: none; color: #8b0000; text-shadow: 0 0 10px rgba(139,0,0,0.5); }
@@ -49,7 +51,7 @@
     98% { transform: translate(3px, -2px); color: #8b0000; }
     99% { transform: translate(-3px, -2px); color: #ff0000; }
   }
-  .screen-overlay h2.glitch-title { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 5px; animation: titleGlitch 4s infinite; font-family: "MS Mincho", serif; font-weight: bold; }
+  .screen-overlay h2.glitch-title { font-size: 2.2rem; margin-bottom: 5px; letter-spacing: 5px; animation: titleGlitch 4s infinite; font-family: "Sawarabi Mincho", "MS Mincho", serif; font-weight: bold; }
   .subtitle { font-size: 0.95rem; color: #4b5563; margin-bottom: 35px; letter-spacing: 4px; font-family: monospace; }
 
   @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); filter: blur(2px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
@@ -65,9 +67,8 @@
 
   .flavor-box { background: rgba(8,8,8,0.9); border: 1px solid #330000; border-radius: 2px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; }
   
-  /* ★追加：ホワイト企業風ログインボックス */
   .portal-box-bright { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 25px; max-width: 360px; width: 100%; text-align: left; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-  .portal-box-bright label { display: block; color: #334155; font-size: 0.75rem; margin-bottom: 6px; font-weight: bold; font-family: "Meiryo", sans-serif;}
+  .portal-box-bright label { display: block; color: #334155; font-size: 0.75rem; margin-bottom: 6px; font-weight: bold; font-family: "Noto Sans JP", sans-serif;}
   .form-input-bright { width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #94a3b8; background: #ffffff; color: #0f172a; font-size: 1rem; outline: none; transition: all 0.2s; font-family: inherit; text-align: center; letter-spacing: 2px;}
   .form-input-bright:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); }
 
@@ -85,7 +86,6 @@
   .btn-en { display: block; font-size: 0.65rem; color: #fca5a5; font-family: monospace; letter-spacing: 1px; margin-bottom: 2px; }
   .btn-jp { display: block; font-size: 1.05rem; font-weight: bold; letter-spacing: 4px; }
 
-  /* ★追加：ホワイト企業風ボタン */
   .btn-bright { background: #0ea5e9 !important; border: none !important; border-radius: 999px !important; box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2) !important; color: #ffffff !important; }
   .btn-bright:hover:not(:disabled) { background: #0284c7 !important; transform: translateY(-1px); box-shadow: 0 6px 10px rgba(14, 165, 233, 0.3) !important; }
   .btn-bright:disabled { background: #cbd5e1 !important; box-shadow: none !important; }
@@ -190,6 +190,16 @@
   @keyframes shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-3px, 1px); } 40% { transform: translate(3px, -2px); } 60% { transform: translate(-2px, -1px); } 80% { transform: translate(2px, 2px); } }
   .shake { animation: shake 0.4s; }
   @keyframes glitch { 0%, 100% { transform: translate(0,0); } 20% { transform: translate(-2px,2px); filter: hue-rotate(90deg); } 40% { transform: translate(-2px,-2px); } 60% { transform: translate(2px,2px); filter: hue-rotate(-90deg); } 80% { transform: translate(2px,-2px); } }
+
+  /* スローガン演出アニメーション */
+  @keyframes sloganZoomOut {
+    0% { transform: scale(0.8); opacity: 0; filter: blur(5px); }
+    10% { transform: scale(1); opacity: 1; filter: blur(0); }
+    70% { transform: scale(1.05); opacity: 1; filter: blur(0); color: #ea580c; text-shadow: none;}
+    85% { transform: scale(1.1); opacity: 1; color: #8b0000; text-shadow: 3px 3px 0px #000; filter: invert(0.8); }
+    100% { transform: scale(1.5); opacity: 0; filter: blur(10px); }
+  }
+  .slogan-anim { animation: sloganZoomOut 2.5s ease-in forwards; font-family: "Noto Sans JP", sans-serif; font-weight: 900; }
 </style>
 </head>
 <body class="pulse-bg">
@@ -314,12 +324,12 @@
 
 <!-- ログインポータル画面（不穏なホワイト企業風） -->
 <div id="nameScreen" class="screen-overlay bright-portal-overlay" style="display: none;">
-  <div class="overlay-content" style="padding-top: 60px;">
-    <h2 style="font-family: 'Meiryo', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: #0284c7; text-shadow: none;">社内統合ポータル</h2>
-    <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; font-family: 'Meiryo', sans-serif;">─ 営業部 アカウント認証 ─</div>
+  <div class="overlay-content" style="padding-top: 50px;">
+    <h2 style="font-family: 'Noto Sans JP', sans-serif; font-size: 1.8rem; font-weight: 900; letter-spacing: 1px; color: #0284c7; text-shadow: none;">社内統合ポータル</h2>
+    <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; font-family: 'Noto Sans JP', sans-serif;">─ 営業部 アカウント認証 ─</div>
     
-    <div style="color: #ea580c; font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; font-family: 'Meiryo', sans-serif;">今日もイキイキ働こう！</div>
-    <div style="color: #4b5563; font-size: 0.85rem; margin-bottom: 25px; font-family: 'Meiryo', sans-serif;">会社の成長が、自分の成長！</div>
+    <div style="color: #ea580c; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; font-family: 'Noto Sans JP', sans-serif;">今日もイキイキ働こう！</div>
+    <div style="color: #4b5563; font-size: 0.85rem; margin-bottom: 25px; font-family: 'Noto Sans JP', sans-serif; font-weight: bold;">会社の成長が、自分の成長！</div>
     
     <div class="portal-box-bright">
       <div class="form-group">
@@ -328,10 +338,10 @@
       </div>
       
       <div style="margin-top:20px; padding:12px; border:1px solid #e2e8f0; background:#f8fafc; font-size:0.75rem; border-radius: 4px;">
-        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; color: #334155; font-family: sans-serif;">
+        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; color: #334155; font-family: 'Noto Sans JP', sans-serif;">
           <input type="checkbox" id="agreementCheck" style="margin-top: 2px; cursor: pointer;" onchange="toggleLoginBtn()">
           <span style="font-weight: normal; line-height: 1.5;">社内機密保持規程、および期末の『特別退職プロトコル』に同意し、システムに接続します。<br>
-          <span style="color:#ef4444; font-size: 0.65rem; margin-top: 6px; display: block; font-weight:bold;">※一度接続すると、生贄が決定するまで退出できません。</span></span>
+          <span style="color:#ef4444; font-size: 0.65rem; margin-top: 6px; display: block; font-weight:bold;">※一度接続すると、解雇対象が決定するまで退出できません。</span></span>
         </label>
       </div>
     </div>
@@ -344,6 +354,11 @@
       <button class="start-btn btn-cancel-bright" onclick="backToTitleFromName()">キャンセル</button>
     </div>
   </div>
+</div>
+
+<!-- 洗脳スローガン演出画面 -->
+<div id="sloganScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f8fafc; z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
+  <h1 class="slogan-anim" style="color:#ea580c; font-size:2.5rem; text-align:center; line-height:1.4;">会社の成長が、<br>自分の成長！</h1>
 </div>
 
 <!-- コレクション画面 -->
@@ -369,7 +384,7 @@
     <p class="cinematic-text delay-1">── 3月28日、23時45分。<br>期末の検収締め切りまで残り3日。営業部には今日も重苦しい疲労が立ち込めていた。</p>
     <p class="cinematic-text delay-2">「……おい、社内ポータルに新設されてた『次世代・働き方改革』のページ、見たかよ」<br>万年クレーム対応で疲弊しきった内藤が、吐き捨てるように呟いた。</p>
     <p class="cinematic-text delay-3">そこには、業務効率化の究極系として、ある代替リソースのテスト運用が記されていた。<br>――『Marketing Optimized Resource & Replacement Intelligence Entity』。通称、<span style="color:#cc0000; font-weight:bold;">『MORRIE（モーリー）』</span>。<br>「優秀な営業マンの脳内を完全複製し、感情を排して稼働する生体リソース」とある。</p>
-    <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なメールが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「希望退職（生贄）」に選べ。さもなくば全員一律で解雇とする』</p>
+    <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なメールが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「特別退職対象者」に選出せよ。さもなくば全員一律で解雇とする』</p>
     <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼の言い争いが始まった。<br>だが、同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない奴。異常に「数字」と「KPI」にだけ執着する奴。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     <div class="btn-container" style="margin-top: 30px;">
       <button class="start-btn delay-btn" style="border-color: #cc0000 !important;" onclick="startGame()">
@@ -468,13 +483,27 @@ function closeHowToPlay() { document.getElementById("howToPlayScreen").style.dis
 function showNameScreen() { document.getElementById("titleScreen").style.display = "none"; document.getElementById("playerNameInput").value = gameData.playerName || ""; document.getElementById("agreementCheck").checked = false; toggleLoginBtn(); document.getElementById("nameScreen").style.display = "flex"; }
 function backToTitleFromName() { document.getElementById("nameScreen").style.display = "none"; document.getElementById("titleScreen").style.display = "flex"; }
 function toggleLoginBtn() { document.getElementById("loginBtn").disabled = !document.getElementById("agreementCheck").checked; }
+
+// スローガン演出を挟んでイントロへ
 function confirmNameAndShowIntro() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
   initChars();
-  document.getElementById("nameScreen").style.display = "none"; document.getElementById("introScreen").style.display = "flex";
+  
+  document.getElementById("nameScreen").style.display = "none";
+  
+  // 演出用画面を表示
+  const sloganScreen = document.getElementById("sloganScreen");
+  sloganScreen.style.display = "flex";
+  
+  // アニメーション完了後にイントロ画面へ
+  setTimeout(() => {
+    sloganScreen.style.display = "none";
+    document.getElementById("introScreen").style.display = "flex";
+  }, 2300);
 }
+
 function showCollectionScreen() {
   document.getElementById("titleScreen").style.display = "none"; 
   document.getElementById("dispClears").innerText = gameData.clearCount || 0; document.getElementById("dispTrueClears").innerText = gameData.trueEndCount || 0;
@@ -499,12 +528,12 @@ function resetCareerData() {
 // --- キャラ・ダイアログ定義（全セリフ「さん」付け強制化・呼び捨て排除） ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
-  2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの生贄にしようとする。",
+  2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
   3: "【北野（営業部長）】\n岩田本部長の指示を忠実に実行し、東西の現場を牛耳る。自らの保身のためなら部下が何人消えようと冷笑する。",
   4: "【毛利】\n東日本支店・若手新人。プレッシャーで焦り、先輩のNucleoSpinの案件を横取りしたことで疑心暗鬼の的になっている。",
   5: "【内藤】\n大型機器担当。西日本支店。クレーム対応に疲弊しきっており、クローンに入れ替わっても「今の労働環境よりマシ」と冷笑する。",
   6: "【山口】\n東日本支店・論理派。データとKPIを重んじ、泥臭い営業を軽視するマーケティング気質。同僚の行動ログから「ノイズ」を嗅ぎ取る。",
-  7: "【機密アクセス：MORRIE開発計画書（抜粋）】\n……第3ロット運用テスト報告。被検体における『記憶の欠落』および『数字への異常な執着』のバグは未だ解消されず。しかし、これによる社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、営業部での実地テスト（デスゲーム）を継続する。なお、本物の社員はすでに全員──"
+  7: "【機密アクセス：MORRIE開発計画書（抜粋）】\n……第3ロット運用テスト報告。被検体における『記憶の欠落』および『数字への異常な執着』のバグは未だ解消されず。しかし、これによる社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、営業部での実地テスト（特別退職選定）を継続する。なお、本物の社員はすでに全員──"
 };
 
 const dialogueBank = {
@@ -558,7 +587,7 @@ const dialogueBank = {
     ],
     cover: ["「◆TARGET◆のこれまでの納品実績を考慮すれば、今すぐ解雇とはならんがね……。」", "「◆TARGET◆の数字は我が部署の支えだ。つまらん嫉妬で優秀な人間を潰すな。」"],
     defend: ["「私を疑うなど、愚か者の発言だな。私の売上と君たちの底辺を一緒にするな。」", "「部長である私を追求するなど、査定を下げるだけだと忠告しておこう。」"],
-    agree: ["「その意見には一理ある。◆TARGET◆を解雇する検討に入ろう。」"],
+    agree: ["「その意見には一理ある。◆TARGET◆を整理対象とする検討に入ろう。」"],
     deflect: ["「私に責任転嫁する気か？それならば、私は権限を持って◆TARGET◆をリストラ候補に推薦しよう。」"],
     observe: ["「……◆TARGET◆の報告書、文字の羅列がどうも不自然だ。機械が書いたようだな。」"],
     meta: ["「MORRIEの正体が何であろうと関係ない。会社が『最も不要な人間を一人選べ』と言っているのだ。それに従うのが我々サラリーマンだろうが！」"]
@@ -588,7 +617,7 @@ const dialogueBank = {
     ],
     cover: ["「……別に◆TARGET◆をかばう義理はねぇが、この人に高度な相見積もりを操作する頭脳はねぇよ。」", "「◆TARGET◆は不器用だが、数字をごまかすような器用な真似はできねぇだろ。」"],
     defend: ["「は？寝言は寝て言えよ。俺の机に他社カタログを突っ込んだのはお前だろ！」", "「クレーム処理で俺がどれだけすり減ってると思ってんだ！ふざけるな！」"],
-    agree: ["「……その通りだ。さっさと◆TARGET◆をクビにして今日の検収作業に戻ろうぜ。」"],
+    agree: ["「……その通りだ。さっさと◆TARGET◆をリストラに推して今日の検収作業に戻ろうぜ。」"],
     deflect: ["「ふざけんな！俺をハメる気か！？◆TARGET◆、あなたが裏で糸引いてるんだろ！」"],
     observe: ["「……◆TARGET◆の野郎、なんでさっきから同じ場所をうろついてるんだ？」"],
     meta: ["「クローンだろうが何だろうがどうでもいい……俺たち、今月の残業150時間超えてるんだぞ。全員揃って過労で脳がイカれてるだけだろ、こんなの……」"]
@@ -617,13 +646,32 @@ const dialogueBank = {
       "「◆TARGET◆、さっきからFBS（牛胎児血清）のロットの話を避けてるな。偽物を納品したのか？」"
     ],
     cover: ["「◆TARGET◆は今期ちゃんと自分の足でラボを回ってる。濡れ衣を着せるなよ」", "「証拠もなしに◆TARGET◆を疑うのはやめよう。ただでさえ疲労でみんなおかしくなってるんだ。」"],
-    defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」", "「俺をスケープゴートにする気か！？昨日の納品ログを見れば一目瞭然だろ！」"],
+    defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」", "「俺を身代わりにする気か！？昨日の納品ログを見れば一目瞭然だろ！」"],
     agree: ["「確かに、◆TARGET◆の動きはどこか人間離れしていて気味が悪い……。」"],
     deflect: ["「俺じゃない！昨日の夜遅くまでサーバー室にいた◆TARGET◆の方が絶対に怪しいだろ！」"],
     observe: ["「（……◆TARGET◆の様子がおかしい。何か隠しているはずだ）」"],
     meta: ["「（……本当にクローンなんて存在するのか？ もしMORRIEなんて最初からいなくて、会社はただ俺たちに『殺し合い』をさせたいだけだとしたら……？）」"]
   }
 };
+
+// 北野部長の冒頭ランダムセリフ
+const introBossLines = [
+  [
+    "「……さて、全員揃ったな。先ほどの岩田本部長からのメールの通りだ。」",
+    "「今期の絶望的な未達の責任として、この中から1名、今夜中に『特別退職対象者』を選出する。」",
+    "「誰が相見積もりを逃したか、誰が他社のスパイか……理由は問わん。自分以外の誰かを指名したまえ。」"
+  ],
+  [
+    "「静粛に。岩田本部長からの通達はすでに読んでいるな？」",
+    "「我が部署の売上未達は看過できない事態だ。ペナルティとして、誰か1名に責任を取ってもらう。」",
+    "「弁解は不要だ。最も会社にとって無益な人間を、君たちの手で一人選び出したまえ。」"
+  ],
+  [
+    "「……夜遅くにすまないね。だが、期末の業績について重大な決定事項がある。」",
+    "「この中に、会社の不利益となる『ノイズ』が紛れ込んでいるという報告を受けている。」",
+    "「全員が路頭に迷いたくなければ、今夜中に不要なリソースを1名分、切り捨てたまえ。」"
+  ]
+];
 
 function getColoredTarget(name, type) {
   if (type === "doubt" || type === "agree" || type === "deflect") return `<span style="color:#fca5a5; font-weight:bold;">${name}</span>`;
@@ -735,10 +783,12 @@ function startGame() {
 
   currentMinutes = 48;
   dialogueQueue = [];
+  
+  const selectedIntro = introBossLines[Math.floor(Math.random() * introBossLines.length)];
   enqueueDialogue("システム", `── ${getCurrentDateString()} 23:50。営業部 会議室 ──`, "sys");
-  enqueueDialogue("北野", `「……さて、全員揃ったな。先ほどの岩田本部長からのメールの通りだ。」`, "boss");
-  enqueueDialogue("北野", `「今期の絶望的な未達の責任として、この中から1名、今夜中に『希望退職（生贄）』を選出する。」`, "boss");
-  enqueueDialogue("北野", `「誰が相見積もりを逃したか、誰が他社のスパイか……理由は問わん。自分以外の誰かを指名したまえ。」`, "boss");
+  selectedIntro.forEach(line => {
+    enqueueDialogue("北野", line, "boss");
+  });
   enqueueDialogue("システム", `北野部長の冷酷な宣言により、生き残りを懸けた醜いなすりつけ合いが強制的に開始された……！`, "sys");
   
   onDialogueQueueEmpty = () => { updateUI(); showActionMenu(); };
@@ -775,7 +825,7 @@ function updateUI() {
     }
 
     card.innerHTML = `
-      <div class="death-stamp">❌ 懲戒解雇</div>
+      <div class="death-stamp">❌ 整理対象</div>
       <div>
         <div class="card-header"><span class="char-id-tag">ID:0${c.id}</span><div><div class="char-name">${c.name}</div><div class="char-sub">${c.jobTitle}</div></div></div>
         <div class="suspect-info">${suspectText}</div>
@@ -1055,13 +1105,13 @@ function showVotingUI() {
   document.getElementById("dialogueClickArea").style.display = "none";
   
   const box = document.getElementById("logBox"); box.innerHTML = "";
-  addNovelLog("システム", `--- ${getCurrentDateString()} 会議終了: 解雇メンバーを投票します ---`, "sys");
+  addNovelLog("システム", `--- ${getCurrentDateString()} 会議終了: 特別退職とするメンバーを投票します ---`, "sys");
   
-  document.getElementById("actionPrompt").innerText = "■ 解雇（生贄）とするメンバーに投票してください:"; 
+  document.getElementById("actionPrompt").innerText = "■ 解雇（特別退職）とするメンバーに投票してください:"; 
   const buttons = document.getElementById("actionButtons"); buttons.innerHTML = "";
   chars.filter(c => c.isAlive && !c.isPlayer).forEach(c => {
     const btn = document.createElement("button"); btn.className = "btn-doubt"; 
-    btn.innerHTML = `${c.name}さんに投票<br><span class="btn-subtext" style="color:#fca5a5;">この社員を懲戒解雇する</span>`;
+    btn.innerHTML = `${c.name}さんに投票<br><span class="btn-subtext" style="color:#fca5a5;">この社員を解雇リストに入れる</span>`;
     btn.onclick = () => processVote(c.id); buttons.appendChild(btn);
   });
 }
@@ -1089,7 +1139,7 @@ function processVote(playerVoteId) {
     enqueueDialogue("北野", `「……決まったようだな。自業自得だ。」`, "boss");
   }
   
-  enqueueDialogue("システム", `【全社一斉メール】送信者: 岩田本部長\n『生贄が決定したようだな。${expelled.name}さん、君には失望した。今すぐ入館パスを置いてオフィスから立ち去りたまえ。懲戒解雇とする。』`, "boss");
+  enqueueDialogue("システム", `【全社一斉メール】送信者: 岩田本部長\n『解雇対象が決定したようだな。${expelled.name}さん、君には失望した。今すぐ入館パスを置いてオフィスから立ち去りたまえ。懲戒解雇とする。』`, "boss");
   
   onDialogueQueueEmpty = () => { updateUI(); if (checkVictory()) return; runNightPhase(); };
   startDialogueSequence();
@@ -1115,7 +1165,7 @@ function runNightPhase() {
 
     if (victim) {
       victim.isAlive = false;
-      enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 解雇に怯えていた ${victim.name}さん は、MORRIEの餌食となり完全に消息を絶った。`, "sys");
+      enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 解雇に怯えていた ${victim.name}さん は、MORRIEの標的となり完全に消息を絶った。`, "sys");
     }
   }
 
@@ -1156,7 +1206,7 @@ function checkVictory() {
 
   if (!isMorrieAlive) {
     const aliveCount = chars.filter(c => c.isAlive).length; let endingTitle = ""; gameData.clearCount++;
-    if (aliveCount >= 4) { gameData.trueEndCount++; endingTitle = "【真END】MORRIEを排除した。翌朝、岩田本部長から『次期・希望退職者募集』のメールが届いた。新しい試薬の営業マンは、今日も笑顔で大学へ向かう。"; } 
+    if (aliveCount >= 4) { gameData.trueEndCount++; endingTitle = "【真END】MORRIEを排除した。翌朝、岩田本部長から『次期・特別退職者募集』のメールが届いた。新しい試薬の営業マンは、今日も笑顔で大学へ向かう。"; } 
     else { endingTitle = "【ノーマルEND】MORRIEは排除したが、大半の同僚を解雇してしまった。人事部はこれを『集団退職』として処理し、残されたあなたには彼らの分の重いノルマが上乗せされた..."; }
     let unlockedName = unlockRandomProfile(); if(unlockedName) endingTitle += `<br><span style="color:#fcd34d">🔓【機密ファイル解放】${unlockedName}の極秘データが解放されました。</span>`;
     
