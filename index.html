@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- ★強制キャッシュ無効化（古いエラーコードを読み込ませない） -->
+<!-- 強制キャッシュ無効化メタタグ -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -14,9 +14,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   html, body {
-    width: 100%; 
-    height: 100vh; /* fallback */
-    height: 100dvh; /* スマホのアドレスバー・キーボード高さを動的に計算 */
+    width: 100%; height: 100%;
     margin: 0; padding: 0;
     overflow: hidden; 
     background-color: #111; 
@@ -25,30 +23,27 @@
     font-size: 14px;
     user-select: none;
     display: flex; justify-content: center;
-    /* ダブルタップズームを無効化し、タップ反応速度を最速にする */
-    touch-action: manipulation;
+    touch-action: manipulation; /* スマホのタップ遅延を防止 */
   }
   
   .crt-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 4px, 3px 100%;
-    pointer-events: none; z-index: 50; opacity: 0.2; /* ボタンより背面に設定 */
+    pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
+  /* メインゲーム画面用コンテナ */
   .game-container { 
-    width: 100%; max-width: 600px; 
-    height: 100vh; /* fallback */
-    height: 100dvh;
+    width: 100%; max-width: 600px; height: 100%;
     margin: 0 auto; padding: 10px 8px;
     display: flex; flex-direction: column; 
     position: relative; z-index: 2; 
   }
 
+  /* オーバーレイ画面（タイトル等） */
   .screen-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; 
-    height: 100vh; /* fallback */
-    height: 100dvh; 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(10,10,10,0.98); 
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     z-index: 100; padding: 15px; text-align: center;
@@ -87,9 +82,7 @@
   .modal-content { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 22px; max-width: 380px; width: 100%; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto; }
   .flavor-box { background: #111; border: 1px solid #333; border-radius: 4px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; font-family: 'Noto Sans JP', sans-serif;}
 
-  /* -------------------------------------
-     Teams風 参加前画面
-     ------------------------------------- */
+  /* Teams風 参加前画面 */
   .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: flex-start; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
   .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: 0 auto; padding-bottom: 40px;}
   @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; padding-top: 40px;} }
@@ -119,13 +112,11 @@
   .teams-checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; font-size: 0.75rem; color: #ccc; line-height: 1.4; background: #292929; padding: 12px; border-radius: 6px; border-left: 3px solid #cc0000;}
   .teams-checkbox-group input { margin-top: 2px; transform: scale(1.1); accent-color: #5b5fc7; cursor: pointer;}
   
-  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center; position: relative; z-index: 1000;}
+  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center;}
   .teams-join-btn:hover:not(:disabled) { background: #4a4e9e; }
   .teams-join-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-  /* -------------------------------------
-     Teams風 ロード画面
-     ------------------------------------- */
+  /* Teams風 ロード画面 */
   .teams-loading-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1f1f1f; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -143,9 +134,7 @@
   .loading-text { font-size: 1.1rem; color: #e5e7eb; transition: color 0.3s; letter-spacing: 1px;}
   .loading-glitch { animation: glitch 0.2s infinite; color: #ef4444; font-family: monospace; font-weight: bold; font-size: 1.2rem;}
 
-  /* -------------------------------------
-     Teams風 会議画面
-     ------------------------------------- */
+  /* Teams風 会議画面 */
   .teams-header { 
     flex-shrink: 0; 
     display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; 
@@ -189,6 +178,7 @@
   }
 
   .teams-name-tag { position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 4px; border-radius: 2px; font-size: 0.65rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+  .mic-off-icon { font-size: 0.6rem; color: #aaa; text-decoration: line-through;}
   
   .card-footer { padding: 4px 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #333;}
   .suspect-info { font-size: 0.55rem; color: #fca5a5; font-weight: bold; min-height: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -239,9 +229,10 @@
   #actionPrompt { font-size: 0.75rem; margin-bottom: 6px; color: #ccc; font-weight: bold; }
   .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   
-  .action-panel button { background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 8px 6px !important; font-size: 0.75rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; transition: background 0.1s; position: relative; z-index: 1000;}
-  .action-panel button:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
-  .action-panel button:disabled { background: #111 !important; color: #555 !important; border-color: #222 !important; cursor: not-allowed !important;}
+  /* ボタン系の指定 */
+  .action-panel button { background: #292929; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 8px 6px; font-size: 0.75rem; cursor: pointer; font-family: inherit; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; transition: background 0.1s;}
+  .action-panel button:hover:not(:disabled) { background: #333; border-color: #666; }
+  .action-panel button:disabled { background: #111; color: #555; border-color: #222; cursor: not-allowed;}
   
   .btn-subtext { display: block; font-size: 0.5rem; color: #aaa; margin-top: 2px; font-weight: normal; }
   .btn-doubt { border-left: 3px solid #ef4444 !important; }
@@ -262,16 +253,14 @@
 
   .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
   
-  /* ★修正：あらゆるボタンのタップ判定を確実にする最強の指定 */
   .start-btn { 
-    position: relative; z-index: 99999 !important; 
-    background: #292929 !important; color: #e5e7eb !important; 
-    padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; 
-    cursor: pointer !important; width: 100% !important; display: block; flex: none; 
+    position: relative; z-index: 100; 
+    background: #292929; color: #e5e7eb; 
+    padding: 12px; border-radius: 4px; border: 1px solid #444; 
+    cursor: pointer; width: 100%; display: block; flex: none; 
     text-align: center; line-height: 1.3; font-family: inherit;
-    pointer-events: auto !important; /* タップを強制有効化 */
   }
-  .start-btn:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
+  .start-btn:hover:not(:disabled) { background: #333; border-color: #666; }
 
   .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
@@ -302,26 +291,26 @@
 
 <div class="crt-overlay"></div>
 
-<!-- タイトル画面 (最初から表示) -->
+<!-- タイトル画面 -->
 <div id="titleScreen" class="screen-overlay">
   <div class="overlay-content">
     <h2 class="glitch-title">MORRIEを探して</h2>
     <div class="subtitle">─ 営業部・期末の惨劇 ─</div>
     
     <div class="btn-container">
-      <button class="start-btn" onclick="showIntroScreen()">
+      <button type="button" class="start-btn" onclick="showIntroScreen()">
         <span class="btn-en">[SYSTEM_LOGIN]</span>
         <span class="btn-jp">システムへ接続</span>
       </button>
-      <button class="start-btn" onclick="showStatsModal()">
+      <button type="button" class="start-btn" onclick="showStatsModal()">
         <span class="btn-en">[EVALUATION]</span>
         <span class="btn-jp">人事考課シート</span>
       </button>
-      <button class="start-btn" onclick="showHowToPlay()">
+      <button type="button" class="start-btn" onclick="showHowToPlay()">
         <span class="btn-en">[MANUAL]</span>
         <span class="btn-jp">職務規程</span>
       </button>
-      <button class="start-btn" onclick="showCollectionScreen()">
+      <button type="button" class="start-btn" onclick="showCollectionScreen()">
         <span class="btn-en">[SECRET]</span>
         <span class="btn-jp">機密アクセス</span>
       </button>
@@ -339,7 +328,7 @@
     </p>
     
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-      <button class="reset-btn" style="margin:0; padding:4px !important;" onclick="resetStatsAllocation()">🔄 割り振りをリセット</button>
+      <button type="button" class="reset-btn" style="margin:0; padding:4px !important;" onclick="resetStatsAllocation()">🔄 割り振りをリセット</button>
       <div style="font-size: 0.85rem; color: #6ee7b7; font-weight: bold;">
         残PT: <span id="availablePointsDisplay">0</span>
       </div>
@@ -349,46 +338,46 @@
       <div class="stat-name">論理 (LOGIC)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「追求」のダメージ増加</span></div>
       <div class="stat-val" id="valLogic">5</div>
       <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('logic', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('logic', 1)">+</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('logic', -1)">-</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('logic', 1)">+</button>
       </div>
     </div>
     <div class="stat-row">
       <div class="stat-name">人望 (CHARISMA)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「かばう」の回復量増加</span></div>
       <div class="stat-val" id="valCharisma">5</div>
       <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('charisma', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('charisma', 1)">+</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('charisma', -1)">-</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('charisma', 1)">+</button>
       </div>
     </div>
     <div class="stat-row">
       <div class="stat-name">政治 (STEALTH)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">ヘイト回避・「責任転嫁」成功</span></div>
       <div class="stat-val" id="valStealth">5</div>
       <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('stealth', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('stealth', 1)">+</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('stealth', -1)">-</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('stealth', 1)">+</button>
       </div>
     </div>
     <div class="stat-row">
       <div class="stat-name">洞察 (INSIGHT)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">「観察」効果UP・ヒント察知</span></div>
       <div class="stat-val" id="valInsight">5</div>
       <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('insight', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('insight', 1)">+</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('insight', -1)">-</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('insight', 1)">+</button>
       </div>
     </div>
     <div class="stat-row">
       <div class="stat-name">精神 (MENTAL)<br><span style="font-size:0.55rem; color:#6b7280; font-weight:normal;">追求された時のダメージ軽減</span></div>
       <div class="stat-val" id="valMental">5</div>
       <div class="stat-controls">
-        <button class="stat-btn" onclick="modifyStat('mental', -1)">-</button>
-        <button class="stat-btn" onclick="modifyStat('mental', 1)">+</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('mental', -1)">-</button>
+        <button type="button" class="stat-btn" onclick="modifyStat('mental', 1)">+</button>
       </div>
     </div>
 
     <div style="margin-top: 15px; display: flex; gap: 10px;">
-      <button class="start-btn" style="flex:1; padding: 10px !important; font-size: 0.85rem !important;" onclick="saveStatsAndClose()">変更を保存</button>
-      <button class="start-btn" style="flex:1; padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeStatsModal()">キャンセル</button>
+      <button type="button" class="start-btn" style="flex:1; padding: 10px !important; font-size: 0.85rem !important;" onclick="saveStatsAndClose()">変更を保存</button>
+      <button type="button" class="start-btn" style="flex:1; padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeStatsModal()">キャンセル</button>
     </div>
   </div>
 </div>
@@ -416,7 +405,7 @@
       </p>
     </div>
     <div class="btn-container">
-      <button class="start-btn" onclick="closeHowToPlay()">タイトルに戻る</button>
+      <button type="button" class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeHowToPlay()">タイトルに戻る</button>
     </div>
   </div>
 </div>
@@ -431,7 +420,7 @@
     <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼のWeb会議が始まろうとしている。<br>だが、画面越しの同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない同僚。異常に「数字」と「KPI」にだけ執着する同僚。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     
     <div class="delay-btn" style="margin-top: 50px; z-index: 20; position: relative; display: flex; justify-content: center; width: 100%;">
-      <button class="start-btn" onclick="showNameScreen()" style="background: rgba(20, 20, 30, 0.8) !important; border-left: 4px solid #5b5fc7 !important; text-align: left;">
+      <button type="button" onclick="showNameScreen()" style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 14px 20px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; text-align: left;">
         <div style="font-size: 0.7rem; color: #a5b4fc; margin-bottom: 2px; letter-spacing: 1px;">[SYSTEM_NOTIFICATION]</div>
         <div style="font-weight: bold; font-size: 1rem; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;">
           <span>📹</span> ウェブ会議アプリケーションを起動する
@@ -477,7 +466,7 @@
         </span>
       </label>
       
-      <button class="teams-join-btn" id="loginBtn" disabled onclick="confirmNameAndJoinMeeting()">今すぐ参加</button>
+      <button type="button" class="teams-join-btn" id="loginBtn" disabled onclick="confirmNameAndJoinMeeting()">今すぐ参加</button>
     </div>
     
   </div>
@@ -508,8 +497,8 @@
     <div class="profile-list" id="profileList"></div>
     
     <div class="btn-container" style="margin-top: 20px;">
-      <button class="start-btn" onclick="closeCollectionScreen()">タイトルに戻る</button>
-      <button class="reset-btn" onclick="resetCareerData()">全てのセーブデータを破棄する</button>
+      <button type="button" class="start-btn" style="padding: 10px !important; background: #111 !important; border-color: #333 !important;" onclick="closeCollectionScreen()">タイトルに戻る</button>
+      <button type="button" class="reset-btn" onclick="resetCareerData()">全てのセーブデータを破棄する</button>
     </div>
   </div>
 </div>
@@ -519,7 +508,7 @@
   <header class="teams-header">
     <div class="teams-time">00:00:00</div>
     <div class="teams-title-text" id="gameInfo">待機中</div>
-    <button class="teams-leave-btn">退出</button>
+    <button type="button" class="teams-leave-btn">退出</button>
   </header>
 
   <!-- キャラクターカードグリッド -->
@@ -563,7 +552,7 @@ if (gameData.playerName) gameData.playerName = gameData.playerName.replace(/[◆
 
 function getUnlockRate() { return Math.floor((gameData.unlockedProfiles.length / 8) * 100); }
 
-// ★バグ修正：機密ファイル解放関数を確実に実装
+// 機密ファイル解放処理
 function unlockRandomProfile() {
   const locked = [1,2,3,4,5,6,7,8].filter(id => !gameData.unlockedProfiles.includes(id));
   if(locked.length === 0) return null;
@@ -638,7 +627,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars();
+  initChars(); 
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -712,7 +701,7 @@ function resetCareerData() {
   }
 }
 
-// --- キャラ・ダイアログ定義（★バグ修正：構文エラーを完全除去） ---
+// --- キャラ・ダイアログ定義 ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
   2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
@@ -778,7 +767,7 @@ const dialogueBank = {
     agree: ["「その意見には一理ある。◆TARGET◆を整理対象とする検討に入ろう。」"],
     deflect: ["「私に責任転嫁する気か？それならば、私は権限を持って◆TARGET◆をリストラ候補に推薦しよう。」"],
     observe: ["「……◆TARGET◆の報告書、文字の羅列がどうも不自然だ。機械が書いたようだな。」"],
-    meta: ["「MORRIEの正体が何であろうと関係ない。会社が『最も不要な人間を一人選べ』と言っているのだ。それに従うのが我々サラリーマンだろうが！」"]
+    meta: ["「MORRIEの正体的が何であろうと関係ない。会社が『最も不要な人間を一人選べ』と言っているのだ。それに従うのが我々サラリーマンだろうが！」"]
   },
   "毛利": {
     doubt: [
@@ -981,7 +970,6 @@ let bossHp = 1000;
 
 function getCurrentDateString() { return `3月${27 + day}日`; }
 
-// ★バグ修正：getVital関数を確実に実装
 function getVital(charId) {
   if (!trust || Object.keys(trust).length === 0) return 100;
   
@@ -1617,7 +1605,7 @@ function endTrueRouteTurn() {
     setTimeout(() => {
       triggerGlitch(); triggerShake();
       document.getElementById("actionPrompt").innerText = "ERROR END (初期化完了)"; 
-      document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る</button>';
+      document.getElementById("actionButtons").innerHTML = '<button type="button" class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る</button>';
     }, 2000);
     return;
   }
@@ -1634,7 +1622,7 @@ function endTrueRouteTurn() {
       gameData.trueEndCount++;
       gameData.totalEarnedPoints += 5;
       localStorage.setItem("morrie_career", JSON.stringify(gameData));
-      document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+5 Pt獲得）</button>';
+      document.getElementById("actionButtons").innerHTML = '<button type="button" class="btn-cover" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+5 Pt獲得）</button>';
       document.getElementById("actionArea").style.display = "block";
     };
     startDialogueSequence();
@@ -1662,7 +1650,7 @@ function checkVictory() {
     document.getElementById("actionArea").style.display = "block"; document.getElementById("dialogueClickArea").style.display = "none";
     addNovelLog("システム", endingTitle, "cover"); 
     document.getElementById("actionPrompt").innerText = "CLEAR - 惨劇の夜を生き延びた";
-    document.getElementById("actionButtons").innerHTML = '<button class="btn-cover" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+3 Pt獲得）</button>'; return true;
+    document.getElementById("actionButtons").innerHTML = '<button type="button" class="btn-cover" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+3 Pt獲得）</button>'; return true;
   }
   if (aliveHumans <= 1) {
     gameData.totalEarnedPoints = (gameData.totalEarnedPoints || 0) + 1;
@@ -1671,7 +1659,7 @@ function checkVictory() {
     document.getElementById("actionArea").style.display = "block"; document.getElementById("dialogueClickArea").style.display = "none";
     addNovelLog("システム", "【MORRIEの勝利】社員は全員消え去り、誰もいないオンライン会議室だけが残された。岩田本部長は今日も通常通り、次の期の予算計画書を作っている。", "sys");
     document.getElementById("actionPrompt").innerText = "GAME OVER"; 
-    document.getElementById("actionButtons").innerHTML = '<button class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+1 Pt獲得）</button>'; return true;
+    document.getElementById("actionButtons").innerHTML = '<button type="button" class="btn-doubt" style="grid-column: span 2; text-align:center;" onclick="location.reload()">タイトルへ戻る（+1 Pt獲得）</button>'; return true;
   }
   return false;
 }
