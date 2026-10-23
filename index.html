@@ -9,16 +9,19 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
-  /* ★修正：スマホで見切れない・ボタンが押せる安全な全画面設定 */
+  /* スマホのキーボード干渉を防ぎつつ1画面に収める最強設定（古いブラウザ用フォールバック追加） */
   html, body {
-    width: 100%; height: 100%;
+    width: 100%; 
+    height: 100vh; /* fallback */
+    height: 100dvh; /* スマホのアドレスバー・キーボード高さを動的に計算 */
     margin: 0; padding: 0;
-    overflow: hidden; /* 画面全体の余計なスクロールを禁止 */
+    overflow: hidden; 
     background-color: #111; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
     font-size: 14px;
     user-select: none;
+    display: flex; justify-content: center;
   }
   
   .crt-overlay {
@@ -28,27 +31,30 @@
     pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
-  /* メインのゲーム画面用コンテナ */
+  /* メインゲーム画面用コンテナ */
   .game-container { 
-    width: 100%; max-width: 600px; height: 100%;
+    width: 100%; max-width: 600px; 
+    height: 100vh; /* fallback */
+    height: 100dvh;
     margin: 0 auto; padding: 10px 8px;
     display: flex; flex-direction: column; 
     position: relative; z-index: 2; 
   }
 
-  /* ★修正：画面中央寄せを復活させつつ、はみ出しを防ぐ */
+  /* オーバーレイ画面（タイトル等） */
   .screen-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    position: absolute; top: 0; left: 0; width: 100%; 
+    height: 100vh; /* fallback */
+    height: 100dvh; 
     background: rgba(10,10,10,0.98); 
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     z-index: 100; padding: 15px; text-align: center;
   }
   
-  /* ★修正：長文（オープニング等）は枠内でスクロールさせる */
   .overlay-content { 
     max-width: 400px; width: 100%; 
     max-height: 100%; overflow-y: auto; 
-    padding: 20px 10px; z-index: 10; position: relative;
+    padding: 20px 10px 60px 10px; z-index: 10; position: relative; margin: 0 auto;
   }
   .overlay-content::-webkit-scrollbar { width: 4px; }
   .overlay-content::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
@@ -81,9 +87,9 @@
   /* -------------------------------------
      Teams風 参加前画面
      ------------------------------------- */
-  .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
-  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: auto; }
-  @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; justify-content: center; } }
+  .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: flex-start; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
+  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: 0 auto; padding-bottom: 40px;}
+  @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; padding-top: 40px;} }
   
   .teams-video-section { flex: 2; display: flex; flex-direction: column; align-items: center; width: 100%; }
   .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 40vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
@@ -110,11 +116,13 @@
   .teams-checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; font-size: 0.75rem; color: #ccc; line-height: 1.4; background: #292929; padding: 12px; border-radius: 6px; border-left: 3px solid #cc0000;}
   .teams-checkbox-group input { margin-top: 2px; transform: scale(1.1); accent-color: #5b5fc7; cursor: pointer;}
   
-  .teams-join-btn { position: relative; z-index: 20; width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: inherit;}
+  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center;}
   .teams-join-btn:hover:not(:disabled) { background: #4a4e9e; }
   .teams-join-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-  /* Teams風 ロード画面 */
+  /* -------------------------------------
+     Teams風 ロード画面
+     ------------------------------------- */
   .teams-loading-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1f1f1f; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -133,7 +141,7 @@
   .loading-glitch { animation: glitch 0.2s infinite; color: #ef4444; font-family: monospace; font-weight: bold; font-size: 1.2rem;}
 
   /* -------------------------------------
-     Teams風 会議画面（絶対に見切れない設定）
+     Teams風 会議画面
      ------------------------------------- */
   .teams-header { 
     flex-shrink: 0; 
@@ -178,6 +186,7 @@
   }
 
   .teams-name-tag { position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 4px; border-radius: 2px; font-size: 0.65rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+  .mic-off-icon { font-size: 0.6rem; color: #aaa; text-decoration: line-through;}
   
   .card-footer { padding: 4px 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #333;}
   .suspect-info { font-size: 0.55rem; color: #fca5a5; font-weight: bold; min-height: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -190,7 +199,6 @@
   .char-card.dead .death-stamp { display: block; }
   .char-card.dead .mosaic-layer { animation: none; background-color: rgba(200,0,0,0.5); } 
 
-  /* ログボックス：残りの高さをすべて埋めてスクロールする */
   .log-box { 
     flex: 1 1 0; 
     min-height: 0; 
@@ -222,7 +230,6 @@
   .message-text { padding-left: 4px; color: #d1d5db; }
   .novel-message.boss-msg .message-text { color: #fca5a5; font-weight: bold; font-family: "Sawarabi Mincho", serif;}
 
-  /* アクションパネル：絶対に画面外に飛ばないようコンパクトに固定 */
   .action-panel { 
     flex-shrink: 0; 
     background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 8px; font-family: 'Noto Sans JP', sans-serif;
@@ -230,7 +237,7 @@
   #actionPrompt { font-size: 0.75rem; margin-bottom: 6px; color: #ccc; font-weight: bold; }
   .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   
-  .action-panel button { position: relative; z-index: 20; background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 8px 6px !important; font-size: 0.75rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; }
+  .action-panel button { background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 8px 6px !important; font-size: 0.75rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; transition: background 0.1s;}
   .action-panel button:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
   .action-panel button:disabled { background: #111 !important; color: #555 !important; border-color: #222 !important; cursor: not-allowed !important;}
   
@@ -251,12 +258,10 @@
   }
   .click-prompt { color: #fff; font-size: 0.85rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
 
-  /* その他共通UI */
   .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
   .start-btn { position: relative; z-index: 20; background: #292929 !important; color: #e5e7eb !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; cursor: pointer !important; width: 100% !important; display: block; flex: none; text-align: center; line-height: 1.3; font-family: inherit;}
   .start-btn:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
 
-  /* 役割表示の演出 */
   .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
   .role-text { font-size: 2rem; font-weight: bold; letter-spacing: 2px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
@@ -266,7 +271,6 @@
   
   .true-route-bg { background-image: radial-gradient(circle at center, #330000 0%, #000000 100%) !important; animation: glitch 3s infinite; }
 
-  /* 機密アクセス＆ステータス用 */
   .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #111; padding: 6px 10px; border-radius: 2px; border: 1px solid #333; }
   .stat-name { font-weight: bold; color: #d1d5db; width: 45%; font-size: 0.8rem;}
   .stat-val { font-size: 1rem; color: #fca5a5; font-family: monospace; width: 15%; text-align: center; }
@@ -407,15 +411,15 @@
 </div>
 
 <!-- オープニング -->
-<div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
-  <div class="overlay-content" style="max-width: 90%; padding: 20px;">
+<div id="introScreen" class="screen-overlay" style="display: none;">
+  <div class="overlay-content">
     <p class="cinematic-text delay-1">── 3月28日、23時45分。<br>期末の検収締め切りまで残り3日。営業部には今日も重苦しい疲労が立ち込めていた。</p>
     <p class="cinematic-text delay-2">「……おい、SYS_TEAMSに新設されてた『次世代・働き方改革』のページ、見たかよ」<br>クレーム対応で疲弊しきった内藤さんが、吐き捨てるように呟いた。</p>
     <p class="cinematic-text delay-3">そこには、業務効率化の究極系として、ある代替リソースのテスト運用が記されていた。<br>――『Marketing Optimized Resource & Replacement Intelligence Entity』。通称、<span style="color:#cc0000; font-weight:bold;">『MORRIE（モーリー）』</span>。<br>「優秀な営業マンの脳内を完全複製し、感情を排して稼働する生体リソース」とある。</p>
     <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なチャットが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「特別退職対象者」に選出せよ。さもなくば全員一律で解雇とする』</p>
     <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼のWeb会議が始まろうとしている。<br>だが、画面越しの同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない同僚。異常に「数字」と「KPI」にだけ執着する同僚。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     
-    <div class="delay-btn" style="margin-top: 50px; z-index: 10; position: relative; display: flex; justify-content: center; width: 100%;">
+    <div class="delay-btn" style="margin-top: 50px; z-index: 20; position: relative; display: flex; justify-content: center; width: 100%;">
       <button onclick="showNameScreen()" style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 14px 20px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; text-align: left;">
         <div style="font-size: 0.7rem; color: #a5b4fc; margin-bottom: 2px; letter-spacing: 1px;">[SYSTEM_NOTIFICATION]</div>
         <div style="font-weight: bold; font-size: 1rem; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;">
@@ -547,6 +551,16 @@ if (gameData.playerName) gameData.playerName = gameData.playerName.replace(/[◆
 
 function getUnlockRate() { return Math.floor((gameData.unlockedProfiles.length / 8) * 100); }
 
+// 機密ファイル解放処理
+function unlockRandomProfile() {
+  const locked = [1,2,3,4,5,6,7,8].filter(id => !gameData.unlockedProfiles.includes(id));
+  if(locked.length === 0) return null;
+  const target = locked[Math.floor(Math.random() * locked.length)];
+  gameData.unlockedProfiles.push(target);
+  const names = {1:"横山",2:"赤堀",3:"北野",4:"毛利",5:"内藤",6:"山口",7:"小林",8:"機密計画書"};
+  return names[target];
+}
+
 // --- ステータス割り振り処理 ---
 let tempPoints = 0;
 let tempStats = { logic: 5, charisma: 5, stealth: 5, insight: 5, mental: 5 };
@@ -612,7 +626,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars(); // キャラ＆役職の初期化
+  initChars(); 
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -936,7 +950,6 @@ function addNovelLog(speaker, text, msgType = "") {
   `;
   box.appendChild(msgDiv);
   
-  // スマホでも確実にはみ出ないようにスクロール
   requestAnimationFrame(() => {
     box.scrollTop = box.scrollHeight;
   });
@@ -955,6 +968,29 @@ let isTrueRoute = false;
 let bossHp = 1000;
 
 function getCurrentDateString() { return `3月${27 + day}日`; }
+
+// ★バグ修正：getVital関数を確実に実装
+function getVital(charId) {
+  if (!trust || Object.keys(trust).length === 0) return 100;
+  
+  let sum = 0; let count = 0;
+  if (charId === 0) {
+    chars.forEach(c => {
+      if (c.isAlive && c.id !== 0 && trust[c.id]) {
+        sum += (trust[c.id][0] || 50);
+        count++;
+      }
+    });
+  } else {
+    chars.forEach(c => {
+      if (c.isAlive && c.id !== charId && trust[c.id]) {
+        sum += (trust[c.id][charId] || 50);
+        count++;
+      }
+    });
+  }
+  return count === 0 ? 0 : Math.floor(sum / count);
+}
 
 function initChars() {
   chars = [
@@ -983,7 +1019,6 @@ function initChars() {
 }
 
 function startMeetingFromRole() {
-  // ★バグ対策：直接呼ばれた場合でもキャラが生成されるようにする
   if (chars.length === 0) {
     initChars();
   }
