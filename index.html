@@ -10,14 +10,15 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   html, body {
-    width: 100%; 
-    min-height: 100vh;
+    width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
     background-color: #111; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
     font-size: 14px;
     user-select: none;
-    overflow-x: hidden;
+    display: flex; justify-content: center;
   }
   
   .crt-overlay {
@@ -27,17 +28,16 @@
     pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
-  /* メインゲーム画面：スマホで1画面に完全に収める設計 */
   .game-container { 
-    width: 100%; max-width: 600px; height: 100dvh;
-    margin: 0 auto; padding: 8px; 
-    display: flex; flex-direction: column; 
-    overflow: hidden; position: relative; z-index: 2;
+    width: 100%; max-width: 600px; height: 100%;
+    max-height: 100%;
+    padding: 8px; position: relative; z-index: 2; 
+    display: flex; flex-direction: column; overflow: hidden;
   }
 
   .screen-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(10,10,10,0.98); 
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,10,10,0.98); 
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     z-index: 100; padding: 20px 15px; text-align: center; overflow-y: auto;
   }
   .overlay-content { max-width: 400px; width: 100%; padding: 20px 0; z-index: 10; position: relative; margin: auto;}
@@ -68,7 +68,7 @@
   .flavor-box { background: #111; border: 1px solid #333; border-radius: 4px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; font-family: 'Noto Sans JP', sans-serif;}
 
   /* Teams風 参加前画面 */
-  .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: center; justify-content: center; height: 100dvh; width: 100%; position: fixed; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
+  .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
   .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: auto; }
   @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; justify-content: center; } }
   
@@ -103,7 +103,7 @@
 
   /* Teams風 接続中ロード画面 */
   .teams-loading-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1f1f1f; display: flex; flex-direction: column; justify-content: center; align-items: center;
     z-index: 9999; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff;
   }
@@ -234,7 +234,7 @@
   .start-btn { background: #292929 !important; color: #e5e7eb !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; cursor: pointer !important; width: 100% !important; display: block; flex: none; text-align: center; line-height: 1.3; font-family: inherit;}
   .start-btn:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
 
-  .role-reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
+  .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
   .role-text { font-size: 2rem; font-weight: bold; letter-spacing: 2px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
@@ -273,11 +273,11 @@
       ヘッドホン等の着用を推奨いたします。
     </p>
     <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px; margin: 0 auto; width: 100%;">
-      <button class="start-btn" style="border-color: #5b5fc7 !important;" onclick="initGameWithSound(true)">
+      <button class="start-btn" style="border-color: #5b5fc7 !important;" onclick="skipSoundCheck(true)">
         <span class="btn-en">[AUDIO_ON]</span>
         <span class="btn-jp" style="font-size: 0.9rem;">サウンドを有効にする</span>
       </button>
-      <button class="start-btn" style="border-color: #333 !important;" onclick="initGameWithSound(false)">
+      <button class="start-btn" style="border-color: #333 !important;" onclick="skipSoundCheck(false)">
         <span class="btn-en">[AUDIO_OFF]</span>
         <span class="btn-jp" style="font-size: 0.9rem; color:#888;">無音で開始する</span>
       </button>
@@ -523,11 +523,8 @@
 </div>
 
 <script>
-// --- オーディオ管理 (Web Audio API) ---
-let isSoundEnabled = false;
-let audioCtx = null;
-
-function initGameWithSound(enable) {
+// --- オーディオ管理の安全化（エラー回避） ---
+function skipSoundCheck(enable) {
   isSoundEnabled = enable;
   document.getElementById("soundCheckScreen").style.display = "none";
   document.getElementById("titleScreen").style.display = "flex";
@@ -543,10 +540,13 @@ function initGameWithSound(enable) {
         playBootSound();
       }
     } catch(e) {
-      console.warn("AudioContext init error:", e);
+      console.warn("AudioContext skipped/error:", e);
     }
   }
 }
+
+let isSoundEnabled = false;
+let audioCtx = null;
 
 function playBootSound() {
   if (!audioCtx) return;
@@ -777,7 +777,7 @@ const dialogueBank = {
     ],
     cover: ["「まあまあ、◆TARGET◆も必死なんだからさ、そう責め立てるなって。」", "「◆TARGET◆は東日本の大事な戦力だ。俺はかばうぜ。」"],
     defend: ["「ちょっ、待てよ！なんで俺の直行先まで疑われるんだよ、ふざけんな！」", "「俺をリストラ枠に押し込もうったって、俺の担当ラボの教授は俺を指名してんだよ！」"],
-    agree: [""「だな。◆TARGET◆は最初から怪しいと思ってたんだよ。型番の覚え方も変だったし。」"],
+    agree: ["「だな。◆TARGET◆は最初から怪しいと思ってたんだよ。型番の覚え方も変だったし。」"],
     deflect: ["「ちょっと待てよ、俺より◆TARGET◆のヨミ表の方がよっぽど粉飾されてるぜ！？あっちを追及しろよ！」"],
     observe: ["「……ん？◆TARGET◆の持ってるその資料、他社の機密データじゃないか？」"],
     meta: ["「昨日までピンピンしてた人が急に顧客の名前を忘れるか？……もしかして、会社のウォーターサーバーに何かヤバい薬でも入れられて、脳をハッキングされてるんじゃないか……？」"]
@@ -805,7 +805,7 @@ const dialogueBank = {
       "「◆TARGET◆のその冷たい目…昨日までの先輩じゃないみたいです！」",
       "「さっき◆TARGET◆がゴミ箱に捨てたチューブ、うちの会社で扱ってないラベルでしたよ！」"
     ],
-    cover: [""「先輩、◆TARGET◆はそんな悪い人に見えませんよ…！俺は信じます！」", "「◆TARGET◆は俺に営業のイロハを教えてくれたんです！絶対にかばいます！」"],
+    cover: ["「先輩、◆TARGET◆はそんな悪い人に見えませんよ…！俺は信じます！」", "「◆TARGET◆は俺に営業のイロハを教えてくれたんです！絶対にかばいます！」"],
     defend: ["「だから俺じゃないって言ってるじゃないですか…！なんで新人だからってそんなに決めつけるんですか…！」", "「ミスはしましたけど、情報漏洩なんてするわけないです！信じてください！」"],
     agree: ["「先輩の言う通りです！◆TARGET◆の昨日の試薬の知識、なんか教科書丸暗記みたいで変でした！」"],
     deflect: ["「ち、違います！俺より◆TARGET◆の方が絶対におかしいです！あの人、昨日からずっと独り言を…！」"],
@@ -836,7 +836,7 @@ const dialogueBank = {
       "「シングルセル解析の最新プロトコルについて質問した時の◆TARGET◆の返答……あれはWikipediaの丸写しだったぞ。」"
     ],
     cover: ["「エビデンスもないのに◆TARGET◆を叩くのは非生産的だ。少し冷静になれよ。」", "「俺の分析では、◆TARGET◆の行動パターンに異常値はない。疑うなら他を洗え。」"],
-    defend: [""「俺の数字は徹底したマーケティングの成果だ。お前らの行き当たりばったりのドブ板営業と一緒にしないでくれ。」", "「根拠のない推論で俺を疑うのか？そんな無駄なリソースを割く暇があるなら、自分のKPIでも見直したらどうだ。」"],
+    defend: ["「俺の数字は徹底したマーケティングの成果だ。お前らの行き当たりばったりのドブ板営業と一緒にしないでくれ。」", "「根拠のない推論で俺を疑うのか？そんな無駄なリソースを割く暇があるなら、自分のKPIでも見直したらどうだ。」"],
     agree: ["「完全に同意だ。◆TARGET◆の製品知識は上っ面だけで、現場への解像度が低すぎる。」"],
     deflect: ["「私に矛先を向けるのは論理的エラーだ。排除すべき最大のボトルネックは◆TARGET◆だろう。」"],
     observe: ["「……◆TARGET◆の体温と心拍数、平熱の範疇を超越している。生体としての矛盾を感じるな。」"],
@@ -871,7 +871,7 @@ const dialogueBank = {
     ],
     cover: ["「◆TARGET◆は今期ちゃんと自分の足でラボを回ってる。濡れ衣を着せるなよ」", "「証拠もなしに◆TARGET◆を疑うのはやめよう。ただでさえ疲労でみんなおかしくなってるんだ。」"],
     defend: ["「俺はデータをパクってない！身に覚えのない言いがかりはやめろ！」", "「俺を身代わりにする気か！？昨日の納品ログを見れば一目瞭然だろ！」"],
-    agree: [""「確かに、◆TARGET◆の動きはどこか人間離れしていて気味が悪い……。」"],
+    agree: ["「確かに、◆TARGET◆の動きはどこか人間離れしていて気味が悪い……。」"],
     deflect: ["「俺じゃない！昨日の夜遅くまでサーバー室にいた◆TARGET◆の方が絶対に怪しいだろ！」"],
     observe: ["「（……◆TARGET◆の様子がおかしい。何か隠しているはずだ）」"],
     meta: ["「（……本当にクローンなんて存在するのか？ もしMORRIEなんて最初からいなくて、会社はただ俺たちに『殺し合い』をさせたいだけだとしたら……？）」"]
@@ -1392,7 +1392,7 @@ function processVote(playerVoteId) {
   if (expelled.isPlayer) {
     enqueueDialogue("システム", `同僚たちの冷たい視線が一斉にあなたに突き刺さる。言い訳をする間もなく、システムから強制切断された。`, "boss");
   } else {
-    enqueueDialogue("岩田本部長", ``「……決まったようだな。自業自得だ。${expelled.name}さん、君には失望した。」`, "boss");
+    enqueueDialogue("岩田本部長", `「……決まったようだな。自業自得だ。${expelled.name}さん、君には失望した。」`, "boss");
   }
   
   enqueueDialogue("システム", `【全社一斉チャット】送信者: 岩田本部長\n『今すぐ入館パスを置いてオフィスから立ち去りたまえ。』`, "boss");
