@@ -4,28 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SYS_TEAMS - 営業部 定例会議</title>
-<!-- ホラー用明朝体とビジネス用ゴシック体 -->
 <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
-  /* ★修正：画面を絶対に固定し、スマホのスクロールバーやアドレスバーの干渉を防ぐ */
   html, body {
-    width: 100%; 
-    height: 100%; 
+    width: 100%; height: 100%;
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     overflow: hidden;
-  }
-  
-  body {
     background-color: #111; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
-    background-image: radial-gradient(circle at 30% 70%, rgba(30, 0, 0, 0.3) 0%, transparent 40%),
-                      radial-gradient(circle at 80% 20%, rgba(20, 0, 0, 0.4) 0%, #000000 60%);
-    font-size: 14px;
+    font-size: 13px;
     user-select: none;
-    display: flex; justify-content: center;
   }
   
   .crt-overlay {
@@ -35,23 +26,20 @@
     pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
-  /* ★修正：ゲーム画面全体を高さ100%に強制し、内部でスクロールさせる */
+  /* メインゲーム画面：スマホで1画面に完全に収める設計 */
   .game-container { 
-    width: 100%; max-width: 600px; 
-    height: 100%; max-height: 100%;
-    padding: 10px 10px 15px 10px; /* 下部に少し余裕を持たせる */
-    position: relative; z-index: 2; 
+    width: 100%; max-width: 600px; height: 100%;
+    margin: 0 auto; padding: 8px; 
     display: flex; flex-direction: column; 
+    overflow: hidden; position: relative; z-index: 2;
   }
 
-  /* ★修正：オーバーレイ画面（オープニング等）の見切れを防止 */
   .screen-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,10,10,0.98); 
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     z-index: 100; padding: 20px 15px; text-align: center; overflow-y: auto;
   }
-  /* 上下中央寄せ(margin: auto)を廃止し、長文でも上から読めるように */
-  .overlay-content { max-width: 400px; width: 100%; padding: 20px 0 60px 0; z-index: 10; position: relative; margin: 0 auto;}
+  .overlay-content { max-width: 400px; width: 100%; padding: 20px 0; z-index: 10; position: relative; margin: auto;}
 
   @keyframes titleGlitch {
     0%, 96%, 100% { transform: none; color: #8b0000; text-shadow: 0 0 10px rgba(139,0,0,0.5); }
@@ -66,10 +54,10 @@
     from { opacity: 0; transform: translateY(10px); filter: blur(2px); pointer-events: none; } 
     to { opacity: 1; transform: translateY(0); filter: blur(0); pointer-events: auto; } 
   }
-  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.9rem; line-height: 2.0; margin-bottom: 1.2rem; text-align: left; letter-spacing: 1px; }
+  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.85rem; line-height: 1.8; margin-bottom: 1rem; text-align: left; letter-spacing: 1px; }
   .cinematic-text.red { color: #cc0000; font-weight: bold; text-shadow: 0 0 10px rgba(204, 0, 0, 0.4); }
-  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5.0s; } .delay-4 { animation-delay: 8.0s; } .delay-5 { animation-delay: 11.0s; } 
-  .delay-btn { animation-delay: 13.5s; opacity: 0; pointer-events: none; animation: fadeInText 1s ease forwards; margin-bottom: 30px;}
+  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.0s; } .delay-3 { animation-delay: 3.5s; } .delay-4 { animation-delay: 5.5s; } .delay-5 { animation-delay: 7.5s; } 
+  .delay-btn { animation-delay: 9.5s; opacity: 0; pointer-events: none; animation: fadeInText 1s ease forwards; margin-bottom: 20px;}
 
   @keyframes pulseGlow { 0% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } 50% { box-shadow: inset 0 0 60px rgba(200, 0, 0, 0.2); } 100% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } }
   .pulse-bg { animation: pulseGlow 4s infinite ease-in-out; }
@@ -78,44 +66,39 @@
   .modal-content { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 22px; max-width: 380px; width: 100%; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto; }
   .flavor-box { background: #111; border: 1px solid #333; border-radius: 4px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; font-family: 'Noto Sans JP', sans-serif;}
 
-  /* -------------------------------------
-     Teams風 参加前画面 (プレイン画面)
-     ------------------------------------- */
+  /* Teams風 参加前画面 */
   .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
-  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 860px; margin: auto; }
+  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: auto; }
   @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; justify-content: center; } }
   
   .teams-video-section { flex: 2; display: flex; flex-direction: column; align-items: center; width: 100%; }
-  .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 50vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
-  .teams-avatar-large { width: 100px; height: 100px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; color: #888; }
+  .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 40vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
+  .teams-avatar-large { width: 80px; height: 80px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: #888; }
   
-  .teams-control-bar { position: absolute; bottom: 20px; background: rgba(36, 36, 36, 0.95); padding: 8px 16px; border-radius: 6px; display: flex; gap: 20px; align-items: center; border: 1px solid #444; }
-  .teams-control-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #fff; pointer-events: none;}
-  .teams-toggle { width: 32px; height: 18px; background: #5b5fc7; border-radius: 10px; position: relative; transition: 0.2s;}
-  .teams-toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: 0.2s;}
+  .teams-control-bar { position: absolute; bottom: 15px; background: rgba(36, 36, 36, 0.95); padding: 6px 12px; border-radius: 6px; display: flex; gap: 15px; align-items: center; border: 1px solid #444; }
+  .teams-control-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #fff; pointer-events: none;}
+  .teams-toggle { width: 28px; height: 16px; background: #5b5fc7; border-radius: 10px; position: relative; }
+  .teams-toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
   .teams-toggle.off { background: #444; }
   .teams-toggle.off::after { left: 2px; right: auto; background: #aaa; }
-  .teams-icon { font-size: 1.1rem; }
+  .teams-icon { font-size: 1rem; }
   .teams-icon.off { position: relative; color: #aaa; }
   .teams-icon.off::after { content: ""; position: absolute; top: 50%; left: -2px; right: -2px; height: 2px; background: #aaa; transform: rotate(45deg); }
   
-  .teams-info-section { flex: 1; display: flex; flex-direction: column; width: 100%; padding-top: 10px; min-width: 280px; text-align: left; }
-  .teams-meeting-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 6px; line-height: 1.3;}
-  .teams-meeting-host { color: #a6a6a6; font-size: 0.9rem; margin-bottom: 30px; }
+  .teams-info-section { flex: 1; display: flex; flex-direction: column; width: 100%; padding-top: 5px; min-width: 280px; text-align: left; }
+  .teams-meeting-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 4px; line-height: 1.3;}
+  .teams-meeting-host { color: #a6a6a6; font-size: 0.85rem; margin-bottom: 20px; }
   
-  .teams-input-group { margin-bottom: 25px; width: 100%; position: relative;}
-  .teams-input { width: 100%; background: #fff; border: none; border-radius: 4px; padding: 12px 14px; font-size: 1rem; color: #000; font-family: inherit; transition: all 0.2s; box-shadow: 0 0 0 1px transparent;}
+  .teams-input-group { margin-bottom: 15px; width: 100%; }
+  .teams-input { width: 100%; background: #fff; border: none; border-radius: 4px; padding: 10px 12px; font-size: 1rem; color: #000; font-family: inherit; box-shadow: 0 0 0 1px transparent;}
   .teams-input:focus { outline: none; box-shadow: 0 0 0 2px #5b5fc7; }
   
-  .teams-checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 30px; font-size: 0.8rem; color: #ccc; line-height: 1.5; background: #292929; padding: 15px; border-radius: 6px; border-left: 3px solid #cc0000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
-  .teams-checkbox-group input { margin-top: 2px; transform: scale(1.2); accent-color: #5b5fc7; cursor: pointer;}
+  .teams-checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; font-size: 0.75rem; color: #ccc; line-height: 1.4; background: #292929; padding: 12px; border-radius: 6px; border-left: 3px solid #cc0000;}
+  .teams-checkbox-group input { margin-top: 2px; transform: scale(1.1); accent-color: #5b5fc7; cursor: pointer;}
   
-  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center;}
+  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: inherit;}
   .teams-join-btn:hover:not(:disabled) { background: #4a4e9e; }
   .teams-join-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
-  
-  .teams-cancel-btn { width: 100%; background: transparent; color: #a6a6a6; border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; font-family: inherit;}
-  .teams-cancel-btn:hover { color: #fff; }
 
   /* -------------------------------------
      Teams風 接続中ロード画面
@@ -138,81 +121,78 @@
   .loading-glitch { animation: glitch 0.2s infinite; color: #ef4444; font-family: monospace; font-weight: bold; font-size: 1.2rem;}
 
   /* -------------------------------------
-     Teams風 会議画面内の要素
-     ★ここが重要：縮まない要素と伸びる要素を厳格に分ける
+     Teams風 会議画面（完璧なレイアウト崩れ防止）
      ------------------------------------- */
   .teams-header { 
-    flex-shrink: 0; /* 絶対に縮まない */
-    display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; 
-    background: #1f1f1f; border-bottom: 1px solid #333; margin-bottom: 10px; 
-    border-radius: 6px; font-family: 'Noto Sans JP', sans-serif;
+    flex-shrink: 0; 
+    display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; 
+    background: #1f1f1f; border-bottom: 1px solid #333; margin-bottom: 6px; 
+    border-radius: 4px; font-family: 'Noto Sans JP', sans-serif;
   }
-  .teams-time { font-size: 0.85rem; color: #aaa; display: flex; align-items: center; gap: 6px; }
-  .teams-time::before { content: "●"; color: #ef4444; font-size: 0.6rem; animation: pulseGlow 2s infinite; }
-  .teams-title-text { font-size: 0.9rem; font-weight: bold; color: #fff; }
-  .teams-leave-btn { background: #dc2626; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+  .teams-time { font-size: 0.8rem; color: #aaa; display: flex; align-items: center; gap: 6px; }
+  .teams-time::before { content: "●"; color: #ef4444; font-size: 0.5rem; animation: pulseGlow 2s infinite; }
+  .teams-title-text { font-size: 0.85rem; font-weight: bold; color: #fff; }
+  .teams-leave-btn { background: #dc2626; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;}
   
+  /* キャラグリッド（IDカード一覧）：高さをコンパクトにして絶対に見切れないようにする */
   .char-grid { 
-    flex-shrink: 0; /* 縮まない */
-    max-height: 40%; /* 画面高さを超えないように制限 */
-    overflow-y: auto; /* メンバーが多い場合はスクロール */
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; 
-    align-content: start; padding-right: 4px;
+    flex-shrink: 0; 
+    max-height: 28vh; /* 高さを画面の28%までに制限 */
+    min-height: 90px;
+    overflow-y: auto; 
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px; 
+    align-content: start; padding-right: 2px;
   }
-  @media(min-width: 400px) { .char-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media(min-width: 400px) { .char-grid { grid-template-columns: repeat(4, 1fr); } }
   
-  .char-card { background: #1a1a1a; border: 1px solid #333; border-radius: 6px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.5); font-family: 'Noto Sans JP', sans-serif;}
+  .char-card { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; position: relative; overflow: hidden; display: flex; flex-direction: column; font-family: 'Noto Sans JP', sans-serif;}
   .char-card.player-card { border: 2px solid #5b5fc7; }
-  .char-card.boss-card { border: 2px solid #cc0000; box-shadow: 0 0 15px rgba(204,0,0,0.5); grid-column: 1 / -1; }
+  .char-card.boss-card { border: 2px solid #cc0000; box-shadow: 0 0 10px rgba(204,0,0,0.5); grid-column: 1 / -1; }
   .char-card.dead { opacity: 0.4; filter: grayscale(100%); border-color: #111; }
   
-  .webcam-view { width: 100%; aspect-ratio: 4/3; background: #050505; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
-  .boss-card .webcam-view { aspect-ratio: 21/9; }
+  .webcam-view { width: 100%; aspect-ratio: 16/9; background: #050505; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
+  .boss-card .webcam-view { aspect-ratio: 24/5; }
   .mosaic-layer {
     position: absolute; top:0; left:0; width: 100%; height: 100%;
     background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.85) 4px, rgba(0,0,0,0.85) 8px),
-      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.85) 4px, rgba(0,0,0,0.85) 8px);
-    background-size: 8px 8px;
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.85) 3px, rgba(0,0,0,0.85) 6px),
+      repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.85) 3px, rgba(0,0,0,0.85) 6px);
+    background-size: 6px 6px;
     animation: mosaicNoise 0.8s steps(4) infinite;
   }
   @keyframes mosaicNoise {
-    0% { transform: translate(0, 0) scale(1.1); background-color: rgba(50, 0, 0, 0.2); }
-    25% { transform: translate(-4px, 4px) scale(1.15); background-color: rgba(0, 0, 0, 0.5); }
-    50% { transform: translate(4px, -4px) scale(1.1); background-color: rgba(50, 0, 0, 0.1); }
-    75% { transform: translate(-4px, -4px) scale(1.15); background-color: rgba(80, 0, 0, 0.3); }
-    100% { transform: translate(0, 0) scale(1.1); background-color: rgba(50, 0, 0, 0.2); }
+    0% { transform: translate(0, 0); background-color: rgba(50, 0, 0, 0.2); }
+    50% { transform: translate(-2px, 2px); background-color: rgba(0, 0, 0, 0.4); }
+    100% { transform: translate(0, 0); background-color: rgba(50, 0, 0, 0.2); }
   }
 
-  .teams-name-tag { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.7); padding: 3px 8px; border-radius: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-  .mic-off-icon { font-size: 0.6rem; color: #aaa; text-decoration: line-through;}
+  .teams-name-tag { position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 4px; border-radius: 2px; font-size: 0.65rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
   
-  .card-footer { padding: 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 4px; border-top: 1px solid #333;}
-  .suspect-info { font-size: 0.65rem; color: #fca5a5; font-weight: bold; min-height: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+  .card-footer { padding: 4px 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #333;}
+  .suspect-info { font-size: 0.55rem; color: #fca5a5; font-weight: bold; min-height: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
   .gauge-wrapper { width: 100%; }
-  .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
-  .gauge-container { width: 100%; background: #000; height: 4px; border-radius: 2px; overflow: hidden; }
-  .boss-card .gauge-container { height: 6px; }
+  .gauge-label { font-size: 0.5rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 1px; font-family: monospace; }
+  .gauge-container { width: 100%; background: #000; height: 3px; border-radius: 1px; overflow: hidden; }
   .gauge-fill { height: 100%; transition: width 0.4s ease, background-color 0.4s ease; }
   
-  .death-stamp { display: none; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 4px 10px; font-weight: bold; font-size: 1rem; letter-spacing: 2px; text-shadow: 0 0 5px #000; background: rgba(10,0,0,0.9); z-index: 20; white-space: nowrap; }
+  .death-stamp { display: none; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 2px 6px; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; background: rgba(10,0,0,0.9); z-index: 20; white-space: nowrap; }
   .char-card.dead .death-stamp { display: block; }
   .char-card.dead .mosaic-layer { animation: none; background-color: rgba(200,0,0,0.5); } 
 
-  /* ★修正：ログボックスだけが伸縮して余白を埋める（押し出しを完全防止） */
+  /* ログボックス：残りの高さをすべて埋めてスクロールする */
   .log-box { 
-    flex: 1; /* 余白をすべて埋める */
-    min-height: 0; /* Flexboxの仕様で必須：これがないと中身に合わせて伸びてしまう */
+    flex: 1 1 0; 
+    min-height: 0; 
     background: #1a1a1a; border: 1px solid #333; border-radius: 6px; 
-    overflow-y: auto; padding: 10px; margin-bottom: 10px; 
-    font-size: 0.85rem; line-height: 1.6; scroll-behavior: smooth; font-family: 'Noto Sans JP', sans-serif;
+    overflow-y: auto; padding: 8px; margin-bottom: 6px; 
+    font-size: 0.8rem; line-height: 1.5; scroll-behavior: smooth; font-family: 'Noto Sans JP', sans-serif;
   }
-  .novel-message { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #222; animation: fadeInText 0.2s ease-out; }
-  .novel-message.boss-msg { background: rgba(40, 0, 0, 0.4); padding: 8px; border-left: 3px solid #cc0000; border-radius: 0 4px 4px 0;}
+  .novel-message { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #222; animation: fadeInText 0.2s ease-out; }
+  .novel-message.boss-msg { background: rgba(40, 0, 0, 0.4); padding: 6px; border-left: 3px solid #cc0000; border-radius: 0 4px 4px 0;}
   
-  .message-header { display: flex; align-items: baseline; margin-bottom: 4px; }
-  .timestamp { color: #6b7280; font-family: monospace; font-size: 0.7rem; margin-right: 8px; }
-  .speaker-name { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; }
+  .message-header { display: flex; align-items: baseline; margin-bottom: 2px; }
+  .timestamp { color: #6b7280; font-family: monospace; font-size: 0.65rem; margin-right: 6px; }
+  .speaker-name { font-weight: bold; font-size: 0.7rem; letter-spacing: 1px; }
   
   .speaker-sys { color: #ef4444; }
   .speaker-iwata { color: #ff0000; text-shadow: 0 0 5px red;}
@@ -225,23 +205,22 @@
   .speaker-kobayashi { color: #f472b6; }
   .speaker-player { color: #fff; }
 
-  .message-text { padding-left: 5px; color: #d1d5db; }
+  .message-text { padding-left: 4px; color: #d1d5db; }
   .novel-message.boss-msg .message-text { color: #fca5a5; font-weight: bold; font-family: "Sawarabi Mincho", serif;}
 
-  /* ★修正：アクションパネルを縮ませない */
+  /* アクションパネル：絶対に画面外に飛ばないようコンパクトに固定 */
   .action-panel { 
     flex-shrink: 0; 
-    background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 12px; font-family: 'Noto Sans JP', sans-serif;
+    background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 8px; font-family: 'Noto Sans JP', sans-serif;
   }
-  #actionPrompt { font-size: 0.8rem; margin-bottom: 8px; color: #ccc; font-weight: bold; }
-  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #actionPrompt { font-size: 0.75rem; margin-bottom: 6px; color: #ccc; font-weight: bold; }
+  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   
-  .action-panel button { background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 10px 6px !important; font-size: 0.8rem !important; cursor: pointer !important; font-family: inherit !important; transition: all 0.1s ease !important; line-height: 1.3; text-align: left; display: flex; flex-direction: column; justify-content: center; }
+  .action-panel button { background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 8px 6px !important; font-size: 0.75rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; }
   .action-panel button:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
-  .action-panel button:active:not(:disabled) { transform: translateY(1px); }
   .action-panel button:disabled { background: #111 !important; color: #555 !important; border-color: #222 !important; cursor: not-allowed !important;}
   
-  .btn-subtext { display: block; font-size: 0.55rem; color: #aaa; margin-top: 4px; font-weight: normal; }
+  .btn-subtext { display: block; font-size: 0.5rem; color: #aaa; margin-top: 2px; font-weight: normal; }
   .btn-doubt { border-left: 3px solid #ef4444 !important; }
   .btn-cover { border-left: 3px solid #10b981 !important; }
   .btn-assist { border-left: 3px solid #f59e0b !important; }
@@ -249,15 +228,13 @@
   .btn-pass { border-left: 3px solid #6b7280 !important; }
   .btn-investigate { border-left: 3px solid #3b82f6 !important; }
   .btn-hack { border-left: 3px solid #ef4444 !important; color: #fca5a5 !important; background: #2a0a0a !important;}
+  .btn-skip { grid-column: span 2; background: #111 !important; border: 1px dashed #555 !important; color: #ccc !important; text-align: center !important; font-weight: bold;}
   
-  .btn-skip { grid-column: span 2; background: #111 !important; border: 1px dashed #555 !important; color: #ccc !important; text-align: center !important; font-weight: bold; align-items: center;}
-  
-  /* タップ領域も縮ませない */
   #dialogueClickArea { 
     flex-shrink: 0; 
-    display: none; text-align: center; padding: 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
+    display: none; text-align: center; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
   }
-  .click-prompt { color: #fff; font-size: 0.95rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
+  .click-prompt { color: #fff; font-size: 0.85rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
 
   /* その他共通UI */
   .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
@@ -267,14 +244,13 @@
   /* 役割表示の演出 */
   .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
-  .role-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
+  .role-text { font-size: 2rem; font-weight: bold; letter-spacing: 2px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
   .role-morrie { color: #ef4444; text-shadow: 0 0 20px rgba(239,68,68,0.8); font-family: "Sawarabi Mincho", serif; }
   .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 320px; line-height: 1.8; margin-left: auto; margin-right: auto; text-align: center; }
   
   .true-route-bg { background-image: radial-gradient(circle at center, #330000 0%, #000000 100%) !important; animation: glitch 3s infinite; }
 
-  /* 機密アクセス＆ステータス用 */
   .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #111; padding: 6px 10px; border-radius: 2px; border: 1px solid #333; }
   .stat-name { font-weight: bold; color: #d1d5db; width: 45%; font-size: 0.8rem;}
   .stat-val { font-size: 1rem; color: #fca5a5; font-family: monospace; width: 15%; text-align: center; }
@@ -317,7 +293,7 @@
   </div>
 </div>
 
-<!-- タイトル画面 (初期状態では非表示) -->
+<!-- タイトル画面 -->
 <div id="titleScreen" class="screen-overlay" style="display: none;">
   <div class="overlay-content">
     <h2 class="glitch-title">MORRIEを探して</h2>
@@ -445,18 +421,15 @@
     <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なチャットが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「特別退職対象者」に選出せよ。さもなくば全員一律で解雇とする』</p>
     <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼のWeb会議が始まろうとしている。<br>だが、画面越しの同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない同僚。異常に「数字」と「KPI」にだけ執着する同僚。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     
-    <div class="delay-btn" style="margin-top: 50px; z-index: 10; position: relative; display: flex; justify-content: center; width: 100%;" onclick="showNameScreen()">
-      <div style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 16px 24px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-        <div style="font-size: 0.75rem; color: #a5b4fc; margin-bottom: 4px; letter-spacing: 1px;">[SYSTEM_NOTIFICATION]</div>
-        <div style="font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 1.3rem;">📹</span> ウェブ会議アプリケーションを起動する
+    <div class="delay-btn" style="margin-top: 30px; z-index: 10; position: relative; display: flex; justify-content: center; width: 100%;" onclick="showNameScreen()">
+      <div style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 14px 20px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+        <div style="font-size: 0.7rem; color: #a5b4fc; margin-bottom: 2px; letter-spacing: 1px;">[SYSTEM_NOTIFICATION]</div>
+        <div style="font-weight: bold; font-size: 1rem; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;">
+          <span>📹</span> ウェブ会議アプリケーションを起動する
         </div>
-        <div style="font-size: 0.75rem; color: #6b7280; margin-top: 12px; text-align: right; animation: pulseGlow 2s infinite;">▼ 画面をタップして実行</div>
       </div>
     </div>
   </div>
-  
-  <div class="delay-btn" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; z-index: 5;" onclick="showNameScreen()"></div>
 </div>
 
 <!-- Teams風 参加前画面 -->
@@ -471,12 +444,9 @@
             <span class="teams-icon off">📷</span>
             <div class="teams-toggle off"></div>
           </div>
-          <div class="teams-control-item" style="border-left: 1px solid #555; padding-left: 20px;">
+          <div class="teams-control-item" style="border-left: 1px solid #555; padding-left: 15px;">
             <span class="teams-icon off">🎤</span>
             <div class="teams-toggle off"></div>
-          </div>
-          <div class="teams-control-item" style="border-left: 1px solid #555; padding-left: 20px;">
-            <span class="teams-icon" style="font-size:1.4rem;">⚙️</span>
           </div>
         </div>
       </div>
@@ -494,7 +464,7 @@
         <input type="checkbox" id="agreementCheck" onchange="toggleLoginBtn()">
         <span>
           社内機密保持規程、および『特別退職プロトコル』に同意して参加します。<br>
-          <span style="color:#ff6b6b; font-size: 0.75rem; font-weight:bold; display:block; margin-top:4px;">※ 一度会議に参加すると退出できません。</span>
+          <span style="color:#ff6b6b; font-size: 0.7rem; font-weight:bold; display:block; margin-top:2px;">※ 一度会議に参加すると退出できません。</span>
         </span>
       </label>
       
@@ -543,9 +513,13 @@
     <button class="teams-leave-btn">退出</button>
   </header>
 
+  <!-- カード一覧（ここが消えていた原因のエリア） -->
   <div class="char-grid" id="charGrid"></div>
+  
+  <!-- チャットログ -->
   <div class="log-box" id="logBox"></div>
   
+  <!-- アクションコマンドエリア（ここが見切れていた原因のエリア） -->
   <div class="action-panel" id="actionArea">
     <div id="actionPrompt">■ アクションを選択してください</div>
     <div class="btn-group" id="actionButtons"></div>
@@ -677,7 +651,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars();
+  initChars(); // キャラ＆役職の初期化
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -1002,7 +976,6 @@ function addNovelLog(speaker, text, msgType = "") {
   `;
   box.appendChild(msgDiv);
   
-  // スクロールバーが確実にはみ出ないように対応
   requestAnimationFrame(() => {
     box.scrollTop = box.scrollHeight;
   });
@@ -1022,34 +995,7 @@ let bossHp = 1000;
 
 function getCurrentDateString() { return `3月${27 + day}日`; }
 
-function initChars() {
-  chars = [
-    { id: 0, name: gameData.playerName || "あなた", isPlayer: true, isAlive: true, jobTitle: "本社・営業", logic: gameData.logic, charisma: gameData.charisma, charm: 5, stealth: gameData.stealth, insight: gameData.insight, mental: gameData.mental },
-    { id: 1, name: "横山", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 8, charisma: 5, charm: 5, stealth: 6, insight: 4, mental: 7 },
-    { id: 2, name: "赤堀", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 6, charisma: 6, charm: 8, stealth: 8, insight: 7, mental: 5 },
-    { id: 3, name: "北野", isPlayer: false, isAlive: true, jobTitle: "営業部長", logic: 3, charisma: 2, charm: 5, stealth: 10, insight: 5, mental: 10 },
-    { id: 4, name: "毛利", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 2, charisma: 9, charm: 7, stealth: 4, insight: 3, mental: 3 },
-    { id: 5, name: "内藤", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 5, charisma: 3, charm: 1, stealth: 5, insight: 5, mental: 6 },
-    { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 },
-    { id: 7, name: "小林", isPlayer: false, isAlive: true, jobTitle: "内勤営業", logic: 8, charisma: 5, charm: 4, stealth: 7, insight: 9, mental: 8 }
-  ];
-  
-  isPlayerMorrie = false;
-  if (getUnlockRate() >= 50 && Math.random() < 0.15) {
-    isPlayerMorrie = true;
-  }
-  
-  const npcs = chars.filter(c => !c.isPlayer);
-  morrieId = isPlayerMorrie ? chars[0].id : npcs[Math.floor(Math.random() * npcs.length)].id;
-  
-  chars.forEach(c1 => {
-    trust[c1.id] = {}; 
-    chars.forEach(c2 => { trust[c1.id][c2.id] = (c1.id === c2.id) ? 100 : (50 + Math.floor(Math.random()*7)-3); });
-  });
-}
-
 function startMeetingFromRole() {
-  // ★隠れバグ対策：直接呼ばれた場合でもキャラが生成されるようにする
   if (chars.length === 0) {
     initChars();
   }
@@ -1489,8 +1435,8 @@ function runNightPhase() {
              dialogueQueue.push({speaker: aliveNpcs[0].name, text: `「……おかしい。俺以外に……誰かいた気がするのに……思い出せない……」`, msgType: "passive"});
          }
          
-         dialogueQueue.push({speaker: "システム", text: `誰かの顔が思い出せない。だが、強烈な疲労とKPIへのプレッシャーが、社員たちから深く追求する思考力を奪っていく……。`, msgType: "sys"});
-         dialogueQueue.push({speaker: "システム", text: `── 同日 23:50。SYS_TEAMS 会議室 ──`, msgType: "sys"});
+         dialogueQueue.push({speaker: "システム", text: `誰かの顔が思い出せない。だが、強烈な疲労とKPIへのプレッシャーが、社員たちから深く追求する思考力を奪っていく……。`, "sys"});
+         dialogueQueue.push({speaker: "システム", text: `── 同日 23:50。SYS_TEAMS 会議室 ──`, "sys"});
          
          const kitano = chars.find(c => c.name === "北野");
          if(kitano && kitano.isAlive) {
