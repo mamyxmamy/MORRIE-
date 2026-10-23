@@ -9,11 +9,11 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
-  /* --- ★スマホ対応最強レイアウト設定 --- */
+  /* ★修正：スマホで見切れない・ボタンが押せる安全な全画面設定 */
   html, body {
     width: 100%; height: 100%;
     margin: 0; padding: 0;
-    overflow: hidden; /* 画面全体のスクロールを禁止 */
+    overflow: hidden; /* 画面全体の余計なスクロールを禁止 */
     background-color: #111; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
@@ -28,23 +28,30 @@
     pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
-  /* メインのゲーム画面用コンテナ（画面内に完全に収める） */
+  /* メインのゲーム画面用コンテナ */
   .game-container { 
-    width: 100%; max-width: 600px; 
-    height: 100dvh; /* スマホのアドレスバーを考慮した高さ */
-    margin: 0 auto; padding: 6px;
+    width: 100%; max-width: 600px; height: 100%;
+    margin: 0 auto; padding: 10px 8px;
     display: flex; flex-direction: column; 
     position: relative; z-index: 2; 
   }
 
-  /* フルスクリーンオーバーレイ（タイトルやマニュアル用） */
+  /* ★修正：画面中央寄せを復活させつつ、はみ出しを防ぐ */
   .screen-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100dvh; 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(10,10,10,0.98); 
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    z-index: 100; padding: 20px 15px; text-align: center; overflow-y: auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 100; padding: 15px; text-align: center;
   }
-  .overlay-content { max-width: 400px; width: 100%; padding: 20px 0 60px 0; z-index: 10; position: relative; margin: 0 auto;}
+  
+  /* ★修正：長文（オープニング等）は枠内でスクロールさせる */
+  .overlay-content { 
+    max-width: 400px; width: 100%; 
+    max-height: 100%; overflow-y: auto; 
+    padding: 20px 10px; z-index: 10; position: relative;
+  }
+  .overlay-content::-webkit-scrollbar { width: 4px; }
+  .overlay-content::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
   @keyframes titleGlitch {
     0%, 96%, 100% { transform: none; color: #8b0000; text-shadow: 0 0 10px rgba(139,0,0,0.5); }
@@ -59,10 +66,10 @@
     from { opacity: 0; transform: translateY(10px); filter: blur(2px); pointer-events: none; } 
     to { opacity: 1; transform: translateY(0); filter: blur(0); pointer-events: auto; } 
   }
-  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.9rem; line-height: 2.0; margin-bottom: 1.2rem; text-align: left; letter-spacing: 1px; }
+  .cinematic-text { opacity: 0; animation: fadeInText 1.5s ease-out forwards; color: #d1d5db; font-size: 0.85rem; line-height: 1.8; margin-bottom: 1rem; text-align: left; letter-spacing: 1px; }
   .cinematic-text.red { color: #cc0000; font-weight: bold; text-shadow: 0 0 10px rgba(204, 0, 0, 0.4); }
-  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.5s; } .delay-3 { animation-delay: 5.0s; } .delay-4 { animation-delay: 8.0s; } .delay-5 { animation-delay: 11.0s; } 
-  .delay-btn { animation-delay: 13.5s; opacity: 0; pointer-events: none; animation: fadeInText 1s ease forwards; margin-bottom: 30px;}
+  .delay-1 { animation-delay: 0.5s; } .delay-2 { animation-delay: 2.0s; } .delay-3 { animation-delay: 3.5s; } .delay-4 { animation-delay: 5.5s; } .delay-5 { animation-delay: 7.5s; } 
+  .delay-btn { animation-delay: 9.5s; opacity: 0; pointer-events: none; animation: fadeInText 1s ease forwards; margin-bottom: 20px;}
 
   @keyframes pulseGlow { 0% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } 50% { box-shadow: inset 0 0 60px rgba(200, 0, 0, 0.2); } 100% { box-shadow: inset 0 0 30px rgba(100, 0, 0, 0.1); } }
   .pulse-bg { animation: pulseGlow 4s infinite ease-in-out; }
@@ -72,47 +79,42 @@
   .flavor-box { background: #111; border: 1px solid #333; border-radius: 4px; padding: 16px; max-width: 420px; width: 100%; text-align: left; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8; color: #9ca3af; font-family: 'Noto Sans JP', sans-serif;}
 
   /* -------------------------------------
-     Teams風 参加前画面 (プレイン画面)
+     Teams風 参加前画面
      ------------------------------------- */
   .teams-prejoin-bg { background-color: #201f1f; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; z-index: 100; font-family: 'Segoe UI', 'Noto Sans JP', sans-serif; color: #fff; overflow-y: auto; padding: 20px; }
-  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 860px; margin: auto; }
+  .teams-prejoin-modal { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 860px; margin: auto; }
   @media(min-width: 768px) { .teams-prejoin-modal { flex-direction: row; align-items: flex-start; justify-content: center; } }
   
   .teams-video-section { flex: 2; display: flex; flex-direction: column; align-items: center; width: 100%; }
-  .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 50vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
-  .teams-avatar-large { width: 100px; height: 100px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; color: #888; }
+  .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 40vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
+  .teams-avatar-large { width: 80px; height: 80px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; color: #888; }
   
-  .teams-control-bar { position: absolute; bottom: 20px; background: rgba(36, 36, 36, 0.95); padding: 8px 16px; border-radius: 6px; display: flex; gap: 20px; align-items: center; border: 1px solid #444; }
-  .teams-control-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #fff; pointer-events: none;}
-  .teams-toggle { width: 32px; height: 18px; background: #5b5fc7; border-radius: 10px; position: relative; transition: 0.2s;}
-  .teams-toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: 0.2s;}
+  .teams-control-bar { position: absolute; bottom: 15px; background: rgba(36, 36, 36, 0.95); padding: 6px 12px; border-radius: 6px; display: flex; gap: 15px; align-items: center; border: 1px solid #444; }
+  .teams-control-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #fff; pointer-events: none;}
+  .teams-toggle { width: 28px; height: 16px; background: #5b5fc7; border-radius: 10px; position: relative; }
+  .teams-toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; }
   .teams-toggle.off { background: #444; }
   .teams-toggle.off::after { left: 2px; right: auto; background: #aaa; }
-  .teams-icon { font-size: 1.1rem; }
+  .teams-icon { font-size: 1rem; }
   .teams-icon.off { position: relative; color: #aaa; }
   .teams-icon.off::after { content: ""; position: absolute; top: 50%; left: -2px; right: -2px; height: 2px; background: #aaa; transform: rotate(45deg); }
   
-  .teams-info-section { flex: 1; display: flex; flex-direction: column; width: 100%; padding-top: 10px; min-width: 280px; text-align: left; }
-  .teams-meeting-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 6px; line-height: 1.3;}
-  .teams-meeting-host { color: #a6a6a6; font-size: 0.9rem; margin-bottom: 30px; }
+  .teams-info-section { flex: 1; display: flex; flex-direction: column; width: 100%; padding-top: 5px; min-width: 280px; text-align: left; }
+  .teams-meeting-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 4px; line-height: 1.3;}
+  .teams-meeting-host { color: #a6a6a6; font-size: 0.85rem; margin-bottom: 20px; }
   
-  .teams-input-group { margin-bottom: 25px; width: 100%; position: relative;}
-  .teams-input { width: 100%; background: #fff; border: none; border-radius: 4px; padding: 12px 14px; font-size: 1rem; color: #000; font-family: inherit; transition: all 0.2s; box-shadow: 0 0 0 1px transparent;}
+  .teams-input-group { margin-bottom: 15px; width: 100%; }
+  .teams-input { width: 100%; background: #fff; border: none; border-radius: 4px; padding: 10px 12px; font-size: 1rem; color: #000; font-family: inherit; box-shadow: 0 0 0 1px transparent;}
   .teams-input:focus { outline: none; box-shadow: 0 0 0 2px #5b5fc7; }
   
-  .teams-checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 30px; font-size: 0.8rem; color: #ccc; line-height: 1.5; background: #292929; padding: 15px; border-radius: 6px; border-left: 3px solid #cc0000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
-  .teams-checkbox-group input { margin-top: 2px; transform: scale(1.2); accent-color: #5b5fc7; cursor: pointer;}
+  .teams-checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; font-size: 0.75rem; color: #ccc; line-height: 1.4; background: #292929; padding: 12px; border-radius: 6px; border-left: 3px solid #cc0000;}
+  .teams-checkbox-group input { margin-top: 2px; transform: scale(1.1); accent-color: #5b5fc7; cursor: pointer;}
   
-  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center;}
+  .teams-join-btn { position: relative; z-index: 20; width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: inherit;}
   .teams-join-btn:hover:not(:disabled) { background: #4a4e9e; }
   .teams-join-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
-  
-  .teams-cancel-btn { width: 100%; background: transparent; color: #a6a6a6; border: none; font-size: 0.9rem; cursor: pointer; text-decoration: underline; font-family: inherit;}
-  .teams-cancel-btn:hover { color: #fff; }
 
-  /* -------------------------------------
-     Teams風 接続中ロード画面
-     ------------------------------------- */
+  /* Teams風 ロード画面 */
   .teams-loading-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1f1f1f; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -131,79 +133,80 @@
   .loading-glitch { animation: glitch 0.2s infinite; color: #ef4444; font-family: monospace; font-weight: bold; font-size: 1.2rem;}
 
   /* -------------------------------------
-     Teams風 会議画面 (Webカメラ風カード)
+     Teams風 会議画面（絶対に見切れない設定）
      ------------------------------------- */
   .teams-header { 
-    flex-shrink: 0; /* ヘッダーは縮まない */
-    display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; 
-    background: #1f1f1f; border-bottom: 1px solid #333; margin-bottom: 10px; 
-    border-radius: 6px; font-family: 'Noto Sans JP', sans-serif;
+    flex-shrink: 0; 
+    display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; 
+    background: #1f1f1f; border-bottom: 1px solid #333; margin-bottom: 6px; 
+    border-radius: 4px; font-family: 'Noto Sans JP', sans-serif;
   }
-  .teams-time { font-size: 0.85rem; color: #aaa; display: flex; align-items: center; gap: 6px; }
-  .teams-time::before { content: "●"; color: #ef4444; font-size: 0.6rem; animation: pulseGlow 2s infinite; }
-  .teams-title-text { font-size: 0.9rem; font-weight: bold; color: #fff; }
-  .teams-leave-btn { background: #dc2626; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+  .teams-time { font-size: 0.8rem; color: #aaa; display: flex; align-items: center; gap: 6px; }
+  .teams-time::before { content: "●"; color: #ef4444; font-size: 0.5rem; animation: pulseGlow 2s infinite; }
+  .teams-title-text { font-size: 0.85rem; font-weight: bold; color: #fff; }
+  .teams-leave-btn { background: #dc2626; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;}
   
   .char-grid { 
-    flex-shrink: 0; /* 縮まない */
-    max-height: 32vh; /* 高さを制限 */
-    min-height: 100px;
+    flex-shrink: 0; 
+    max-height: 28vh; 
+    min-height: 90px;
     overflow-y: auto; 
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; 
-    align-content: start; padding-right: 4px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px; 
+    align-content: start; padding-right: 2px;
   }
-  @media(min-width: 400px) { .char-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media(min-width: 400px) { .char-grid { grid-template-columns: repeat(4, 1fr); } }
   
-  .char-card { background: #1a1a1a; border: 1px solid #333; border-radius: 6px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.5); font-family: 'Noto Sans JP', sans-serif;}
+  .char-card { background: #1a1a1a; border: 1px solid #333; border-radius: 4px; position: relative; overflow: hidden; display: flex; flex-direction: column; font-family: 'Noto Sans JP', sans-serif;}
   .char-card.player-card { border: 2px solid #5b5fc7; }
-  .char-card.boss-card { border: 2px solid #cc0000; box-shadow: 0 0 15px rgba(204,0,0,0.5); grid-column: 1 / -1; }
+  .char-card.boss-card { border: 2px solid #cc0000; box-shadow: 0 0 10px rgba(204,0,0,0.5); grid-column: 1 / -1; }
   .char-card.dead { opacity: 0.4; filter: grayscale(100%); border-color: #111; }
   
   .webcam-view { width: 100%; aspect-ratio: 16/9; background: #050505; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
-  .boss-card .webcam-view { aspect-ratio: 21/9; }
+  .boss-card .webcam-view { aspect-ratio: 24/5; }
   .mosaic-layer {
     position: absolute; top:0; left:0; width: 100%; height: 100%;
     background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.85) 4px, rgba(0,0,0,0.85) 8px),
-      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.85) 4px, rgba(0,0,0,0.85) 8px);
-    background-size: 8px 8px;
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.85) 3px, rgba(0,0,0,0.85) 6px),
+      repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.85) 3px, rgba(0,0,0,0.85) 6px);
+    background-size: 6px 6px;
     animation: mosaicNoise 0.8s steps(4) infinite;
   }
   @keyframes mosaicNoise {
     0% { transform: translate(0, 0); background-color: rgba(50, 0, 0, 0.2); }
-    50% { transform: translate(-3px, 3px); background-color: rgba(0, 0, 0, 0.5); }
+    50% { transform: translate(-2px, 2px); background-color: rgba(0, 0, 0, 0.4); }
     100% { transform: translate(0, 0); background-color: rgba(50, 0, 0, 0.2); }
   }
 
-  .teams-name-tag { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.7); padding: 3px 6px; border-radius: 4px; display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-  .mic-off-icon { font-size: 0.6rem; color: #aaa; text-decoration: line-through;}
+  .teams-name-tag { position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 4px; border-radius: 2px; font-size: 0.65rem; color: #fff; z-index: 10; font-weight: bold; max-width: 90%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
   
-  .card-footer { padding: 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 4px; border-top: 1px solid #333;}
-  .suspect-info { font-size: 0.6rem; color: #fca5a5; font-weight: bold; min-height: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+  .card-footer { padding: 4px 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #333;}
+  .suspect-info { font-size: 0.55rem; color: #fca5a5; font-weight: bold; min-height: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
   .gauge-wrapper { width: 100%; }
-  .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
-  .gauge-container { width: 100%; background: #000; height: 4px; border-radius: 2px; overflow: hidden; }
-  .boss-card .gauge-container { height: 6px; }
+  .gauge-label { font-size: 0.5rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 1px; font-family: monospace; }
+  .gauge-container { width: 100%; background: #000; height: 3px; border-radius: 1px; overflow: hidden; }
   .gauge-fill { height: 100%; transition: width 0.4s ease, background-color 0.4s ease; }
   
-  .death-stamp { display: none; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 4px 10px; font-weight: bold; font-size: 1rem; letter-spacing: 2px; text-shadow: 0 0 5px #000; background: rgba(10,0,0,0.9); z-index: 20; white-space: nowrap; }
+  .death-stamp { display: none; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 2px 6px; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; background: rgba(10,0,0,0.9); z-index: 20; white-space: nowrap; }
   .char-card.dead .death-stamp { display: block; }
   .char-card.dead .mosaic-layer { animation: none; background-color: rgba(200,0,0,0.5); } 
 
-  /* ★ログボックス：こいつだけが伸び縮みして余白を埋める（押し出しを防止） */
+  /* ログボックス：残りの高さをすべて埋めてスクロールする */
   .log-box { 
     flex: 1 1 0; 
     min-height: 0; 
     background: #1a1a1a; border: 1px solid #333; border-radius: 6px; 
-    overflow-y: auto; padding: 10px; margin-bottom: 10px; 
-    font-size: 0.85rem; line-height: 1.6; scroll-behavior: smooth; font-family: 'Noto Sans JP', sans-serif;
+    overflow-y: auto; padding: 8px; margin-bottom: 6px; 
+    font-size: 0.8rem; line-height: 1.5; scroll-behavior: smooth; font-family: 'Noto Sans JP', sans-serif;
   }
-  .novel-message { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #222; animation: fadeInText 0.2s ease-out; }
-  .novel-message.boss-msg { background: rgba(40, 0, 0, 0.4); padding: 8px; border-left: 3px solid #cc0000; border-radius: 0 4px 4px 0;}
+  .log-box::-webkit-scrollbar { width: 4px; }
+  .log-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+  .novel-message { margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #222; animation: fadeInText 0.2s ease-out; }
+  .novel-message.boss-msg { background: rgba(40, 0, 0, 0.4); padding: 6px; border-left: 3px solid #cc0000; border-radius: 0 4px 4px 0;}
   
-  .message-header { display: flex; align-items: baseline; margin-bottom: 4px; }
-  .timestamp { color: #6b7280; font-family: monospace; font-size: 0.7rem; margin-right: 8px; }
-  .speaker-name { font-weight: bold; font-size: 0.75rem; letter-spacing: 1px; }
+  .message-header { display: flex; align-items: baseline; margin-bottom: 2px; }
+  .timestamp { color: #6b7280; font-family: monospace; font-size: 0.65rem; margin-right: 6px; }
+  .speaker-name { font-weight: bold; font-size: 0.7rem; letter-spacing: 1px; }
   
   .speaker-sys { color: #ef4444; }
   .speaker-iwata { color: #ff0000; text-shadow: 0 0 5px red;}
@@ -216,23 +219,22 @@
   .speaker-kobayashi { color: #f472b6; }
   .speaker-player { color: #fff; }
 
-  .message-text { padding-left: 5px; color: #d1d5db; }
+  .message-text { padding-left: 4px; color: #d1d5db; }
   .novel-message.boss-msg .message-text { color: #fca5a5; font-weight: bold; font-family: "Sawarabi Mincho", serif;}
 
-  /* ★アクションパネル：縮まないように固定 */
+  /* アクションパネル：絶対に画面外に飛ばないようコンパクトに固定 */
   .action-panel { 
     flex-shrink: 0; 
-    background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 10px; font-family: 'Noto Sans JP', sans-serif;
+    background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 8px; font-family: 'Noto Sans JP', sans-serif;
   }
-  #actionPrompt { font-size: 0.8rem; margin-bottom: 8px; color: #ccc; font-weight: bold; }
-  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #actionPrompt { font-size: 0.75rem; margin-bottom: 6px; color: #ccc; font-weight: bold; }
+  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   
-  .action-panel button { background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 10px 8px !important; font-size: 0.85rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.3; text-align: left; display: flex; flex-direction: column; justify-content: center; transition: background 0.1s;}
+  .action-panel button { position: relative; z-index: 20; background: #292929 !important; color: #fff !important; border: 1px solid #444 !important; border-radius: 4px !important; padding: 8px 6px !important; font-size: 0.75rem !important; cursor: pointer !important; font-family: inherit !important; line-height: 1.2; text-align: left; display: flex; flex-direction: column; justify-content: center; }
   .action-panel button:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
-  .action-panel button:active:not(:disabled) { transform: translateY(1px); }
   .action-panel button:disabled { background: #111 !important; color: #555 !important; border-color: #222 !important; cursor: not-allowed !important;}
   
-  .btn-subtext { display: block; font-size: 0.6rem; color: #aaa; margin-top: 4px; font-weight: normal; }
+  .btn-subtext { display: block; font-size: 0.5rem; color: #aaa; margin-top: 2px; font-weight: normal; }
   .btn-doubt { border-left: 3px solid #ef4444 !important; }
   .btn-cover { border-left: 3px solid #10b981 !important; }
   .btn-assist { border-left: 3px solid #f59e0b !important; }
@@ -240,46 +242,24 @@
   .btn-pass { border-left: 3px solid #6b7280 !important; }
   .btn-investigate { border-left: 3px solid #3b82f6 !important; }
   .btn-hack { border-left: 3px solid #ef4444 !important; color: #fca5a5 !important; background: #2a0a0a !important;}
-  
   .btn-skip { grid-column: span 2; background: #111 !important; border: 1px dashed #555 !important; color: #ccc !important; text-align: center !important; font-weight: bold;}
   
-  /* 会議進行タップエリア */
   #dialogueClickArea { 
     flex-shrink: 0; 
-    display: none; text-align: center; padding: 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
+    display: none; text-align: center; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
+    position: relative; z-index: 20;
   }
-  .click-prompt { color: #fff; font-size: 0.95rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
+  .click-prompt { color: #fff; font-size: 0.85rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
 
   /* その他共通UI */
   .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
-  .start-btn { background: #292929 !important; color: #e5e7eb !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; cursor: pointer !important; width: 100% !important; display: block; flex: none; text-align: center; line-height: 1.3; font-family: inherit;}
+  .start-btn { position: relative; z-index: 20; background: #292929 !important; color: #e5e7eb !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; cursor: pointer !important; width: 100% !important; display: block; flex: none; text-align: center; line-height: 1.3; font-family: inherit;}
   .start-btn:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
-  
-  /* -------------------------------------
-     スローガン＆ぷちゅん演出
-     ------------------------------------- */
-  .pop-slogan { position: absolute; font-family: 'Noto Sans JP', sans-serif; font-weight: 900; opacity: 0; white-space: nowrap; animation: popIn 0.4s ease-out forwards; pointer-events: none; }
-  @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; } 60% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } }
-  
-  .blood-text-anim { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8b0000; font-family: "Sawarabi Mincho", "MS Mincho", serif; font-size: 3.5rem; font-weight: bold; letter-spacing: 12px; text-shadow: 2px 2px 8px rgba(255,0,0,0.6); white-space: nowrap; pointer-events: none; z-index: 5; }
-  @keyframes bloodFade { 
-    0% { opacity: 0; filter: blur(5px) drop-shadow(0 0 10px #ff0000); transform: translate(-50%, -50%) scale(0.9); } 
-    15% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1); } 
-    100% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1.05); } 
-  }
-  .blood-anim-active { animation: bloodFade 3s ease-out forwards; display: block !important; }
-
-  .bloody-hand { position: absolute; font-size: 8rem; line-height: 1; color: transparent; text-shadow: 0 0 0 rgba(150, 0, 0, 0.9), 0 0 10px rgba(255, 0, 0, 0.6); pointer-events: none; transform-origin: center center; z-index: 100; }
-  @keyframes handSlam { 0% { opacity: 0; transform: translate(-50%, -50%) scale(3) rotate(var(--rot)); filter: blur(10px); } 15% { opacity: 1; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(0); } 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(2px); } }
-  .slam-active { animation: handSlam 1.5s ease-out forwards; }
-
-  @keyframes crtOff { 0% { transform: scale(1, 1); opacity: 1; } 30% { transform: scale(1, 0.01); opacity: 1; background: #fff; } 60% { transform: scale(0, 0.01); opacity: 1; background: #fff; } 100% { transform: scale(0, 0); opacity: 0; background: #fff; } }
-  .crt-off-active { animation: crtOff 0.5s ease-out forwards; transform-origin: center center; background-color: #fff !important; }
 
   /* 役割表示の演出 */
   .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
-  .role-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
+  .role-text { font-size: 2rem; font-weight: bold; letter-spacing: 2px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
   .role-morrie { color: #ef4444; text-shadow: 0 0 20px rgba(239,68,68,0.8); font-family: "Sawarabi Mincho", serif; }
   .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 320px; line-height: 1.8; margin-left: auto; margin-right: auto; text-align: center; }
@@ -296,7 +276,7 @@
   .profile-item { background: #111; border-left: 3px solid #cc0000; border-radius: 4px; padding: 14px; margin-bottom: 12px; font-size: 0.85rem; line-height: 1.8; position: relative;}
   .profile-item::before { content: "極秘"; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: #cc0000; border: 1px solid #cc0000; padding: 2px 5px; transform: rotate(12deg); opacity: 0.6; }
   .profile-locked { color: #4b5563; font-style: italic; display: block; text-align: center; padding: 12px 0; background: #0a0a0a; border: 1px dashed #333; margin-bottom: 10px; border-radius: 4px;}
-  .reset-btn { background: transparent !important; color: #4b5563 !important; font-size: 0.75rem !important; padding: 6px !important; border: none !important; cursor: pointer !important; text-decoration: underline; margin-top: 10px; }
+  .reset-btn { background: transparent !important; color: #4b5563 !important; font-size: 0.75rem !important; padding: 6px !important; border: none !important; cursor: pointer !important; text-decoration: underline; margin-top: 10px; position: relative; z-index: 20;}
   
   @keyframes shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-3px, 1px); } 40% { transform: translate(3px, -2px); } 60% { transform: translate(-2px, -1px); } 80% { transform: translate(2px, 2px); } }
   .shake { animation: shake 0.4s; }
@@ -307,7 +287,7 @@
 
 <div class="crt-overlay"></div>
 
-<!-- タイトル画面 (サウンド確認を廃止し、最初から表示) -->
+<!-- タイトル画面 (最初から表示) -->
 <div id="titleScreen" class="screen-overlay">
   <div class="overlay-content">
     <h2 class="glitch-title">MORRIEを探して</h2>
@@ -427,7 +407,7 @@
 </div>
 
 <!-- オープニング -->
-<div id="introScreen" class="screen-overlay" style="display: none;">
+<div id="introScreen" class="screen-overlay" style="display: none; background-color: #000;">
   <div class="overlay-content" style="max-width: 90%; padding: 20px;">
     <p class="cinematic-text delay-1">── 3月28日、23時45分。<br>期末の検収締め切りまで残り3日。営業部には今日も重苦しい疲労が立ち込めていた。</p>
     <p class="cinematic-text delay-2">「……おい、SYS_TEAMSに新設されてた『次世代・働き方改革』のページ、見たかよ」<br>クレーム対応で疲弊しきった内藤さんが、吐き捨てるように呟いた。</p>
@@ -435,16 +415,15 @@
     <p class="cinematic-text red delay-4">過労の頭で「質の悪い人事の冗談だ」と笑い飛ばそうとした矢先──全端末に岩田本部長からの冷酷なチャットが届く。<br>『今期の絶望的な売上未達の責任として、当部署から1名を「特別退職対象者」に選出せよ。さもなくば全員一律で解雇とする』</p>
     <p class="cinematic-text delay-5">岩田の命を受けた北野部長の監視の下、互いを蹴落とす泥沼のWeb会議が始まろうとしている。<br>だが、画面越しの同僚のアラを探すうち、先ほどの『MORRIE』の不気味な記述が全員の脳裏にちらつき始める。<br><br>……昨日まで完璧だった顧客の顔を全く思い出せない同僚。異常に「数字」と「KPI」にだけ執着する同僚。<br>同僚の皮を被り、その笑顔を完璧に模写した怪物──『MORRIE』は今、誰の顔をしている？</p>
     
-    <div class="delay-btn" style="margin-top: 50px; z-index: 10; position: relative; display: flex; justify-content: center; width: 100%;" onclick="showNameScreen()">
-      <div style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 14px 20px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+    <div class="delay-btn" style="margin-top: 50px; z-index: 10; position: relative; display: flex; justify-content: center; width: 100%;">
+      <button onclick="showNameScreen()" style="background: rgba(20, 20, 30, 0.8); border: 1px solid #4a4e9e; border-left: 4px solid #5b5fc7; padding: 14px 20px; border-radius: 4px; color: #e0e7ff; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; text-align: left;">
         <div style="font-size: 0.7rem; color: #a5b4fc; margin-bottom: 2px; letter-spacing: 1px;">[SYSTEM_NOTIFICATION]</div>
         <div style="font-weight: bold; font-size: 1rem; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;">
           <span>📹</span> ウェブ会議アプリケーションを起動する
         </div>
-      </div>
+      </button>
     </div>
   </div>
-  <div class="delay-btn" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; z-index: 5;" onclick="showNameScreen()"></div>
 </div>
 
 <!-- Teams風 参加前画面 -->
@@ -633,7 +612,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars();
+  initChars(); // キャラ＆役職の初期化
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -707,7 +686,7 @@ function resetCareerData() {
   }
 }
 
-// --- キャラ・ダイアログ定義（エラー原因箇所修正済み） ---
+// --- キャラ・ダイアログ定義 ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
   2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
