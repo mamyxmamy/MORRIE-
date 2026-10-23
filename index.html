@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SYS_TEAMS - 営業部 定例会議</title>
+<!-- ホラー用明朝体とビジネス用ゴシック体 -->
 <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,8 +16,9 @@
     background-color: #111; 
     color: #e5e7eb; 
     font-family: "Sawarabi Mincho", "Yu Mincho", "MS Mincho", "Hiragino Mincho ProN", serif;
-    font-size: 13px;
+    font-size: 14px;
     user-select: none;
+    display: flex; justify-content: center;
   }
   
   .crt-overlay {
@@ -26,12 +28,11 @@
     pointer-events: none; z-index: 999; opacity: 0.2;
   }
 
-  /* メインゲーム画面：スマホで1画面に完全に収める設計 */
   .game-container { 
     width: 100%; max-width: 600px; height: 100%;
-    margin: 0 auto; padding: 8px; 
-    display: flex; flex-direction: column; 
-    overflow: hidden; position: relative; z-index: 2;
+    max-height: 100%;
+    padding: 8px; position: relative; z-index: 2; 
+    display: flex; flex-direction: column; overflow: hidden;
   }
 
   .screen-overlay {
@@ -73,7 +74,7 @@
   
   .teams-video-section { flex: 2; display: flex; flex-direction: column; align-items: center; width: 100%; }
   .teams-video-box { width: 100%; aspect-ratio: 16/9; max-height: 40vh; background-color: #000; border-radius: 8px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.5); overflow: hidden; display: flex; justify-content: center; align-items: center; border: 1px solid #333;}
-  .teams-avatar-large { width: 80px; height: 80px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: #888; }
+  .teams-avatar-large { width: 80px; height: 80px; background: #444; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; color: #888; }
   
   .teams-control-bar { position: absolute; bottom: 15px; background: rgba(36, 36, 36, 0.95); padding: 6px 12px; border-radius: 6px; display: flex; gap: 15px; align-items: center; border: 1px solid #444; }
   .teams-control-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #fff; pointer-events: none;}
@@ -96,13 +97,11 @@
   .teams-checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; font-size: 0.75rem; color: #ccc; line-height: 1.4; background: #292929; padding: 12px; border-radius: 6px; border-left: 3px solid #cc0000;}
   .teams-checkbox-group input { margin-top: 2px; transform: scale(1.1); accent-color: #5b5fc7; cursor: pointer;}
   
-  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: inherit;}
+  .teams-join-btn { width: 100%; background: #5b5fc7; color: #fff; border: none; border-radius: 4px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 15px; font-family: inherit; display: flex; justify-content: center; align-items: center;}
   .teams-join-btn:hover:not(:disabled) { background: #4a4e9e; }
   .teams-join-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-  /* -------------------------------------
-     Teams風 接続中ロード画面
-     ------------------------------------- */
+  /* Teams風 接続中ロード画面 */
   .teams-loading-screen {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1f1f1f; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -120,9 +119,7 @@
   .loading-text { font-size: 1.1rem; color: #e5e7eb; transition: color 0.3s; letter-spacing: 1px;}
   .loading-glitch { animation: glitch 0.2s infinite; color: #ef4444; font-family: monospace; font-weight: bold; font-size: 1.2rem;}
 
-  /* -------------------------------------
-     Teams風 会議画面（完璧なレイアウト崩れ防止）
-     ------------------------------------- */
+  /* Teams風 会議画面 */
   .teams-header { 
     flex-shrink: 0; 
     display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; 
@@ -134,10 +131,9 @@
   .teams-title-text { font-size: 0.85rem; font-weight: bold; color: #fff; }
   .teams-leave-btn { background: #dc2626; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.75rem;}
   
-  /* キャラグリッド（IDカード一覧）：高さをコンパクトにして絶対に見切れないようにする */
   .char-grid { 
     flex-shrink: 0; 
-    max-height: 28vh; /* 高さを画面の28%までに制限 */
+    max-height: 28vh; 
     min-height: 90px;
     overflow-y: auto; 
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px; 
@@ -171,7 +167,7 @@
   .card-footer { padding: 4px 6px; background: #1f1f1f; display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #333;}
   .suspect-info { font-size: 0.55rem; color: #fca5a5; font-weight: bold; min-height: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
   .gauge-wrapper { width: 100%; }
-  .gauge-label { font-size: 0.5rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 1px; font-family: monospace; }
+  .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
   .gauge-container { width: 100%; background: #000; height: 3px; border-radius: 1px; overflow: hidden; }
   .gauge-fill { height: 100%; transition: width 0.4s ease, background-color 0.4s ease; }
   
@@ -179,7 +175,6 @@
   .char-card.dead .death-stamp { display: block; }
   .char-card.dead .mosaic-layer { animation: none; background-color: rgba(200,0,0,0.5); } 
 
-  /* ログボックス：残りの高さをすべて埋めてスクロールする */
   .log-box { 
     flex: 1 1 0; 
     min-height: 0; 
@@ -208,7 +203,6 @@
   .message-text { padding-left: 4px; color: #d1d5db; }
   .novel-message.boss-msg .message-text { color: #fca5a5; font-weight: bold; font-family: "Sawarabi Mincho", serif;}
 
-  /* アクションパネル：絶対に画面外に飛ばないようコンパクトに固定 */
   .action-panel { 
     flex-shrink: 0; 
     background: #1f1f1f; border: 1px solid #333; border-radius: 6px; padding: 8px; font-family: 'Noto Sans JP', sans-serif;
@@ -220,7 +214,7 @@
   .action-panel button:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
   .action-panel button:disabled { background: #111 !important; color: #555 !important; border-color: #222 !important; cursor: not-allowed !important;}
   
-  .btn-subtext { display: block; font-size: 0.5rem; color: #aaa; margin-top: 2px; font-weight: normal; }
+  .btn-subtext { display: block; font-size: 0.55rem; color: #aaa; margin-top: 4px; font-weight: normal; }
   .btn-doubt { border-left: 3px solid #ef4444 !important; }
   .btn-cover { border-left: 3px solid #10b981 !important; }
   .btn-assist { border-left: 3px solid #f59e0b !important; }
@@ -232,16 +226,14 @@
   
   #dialogueClickArea { 
     flex-shrink: 0; 
-    display: none; text-align: center; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
+    display: none; text-align: center; padding: 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; cursor: pointer; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); 
   }
-  .click-prompt { color: #fff; font-size: 0.85rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
+  .click-prompt { color: #fff; font-size: 0.95rem; animation: pulseGlow 1.5s infinite; font-weight: bold; font-family: 'Noto Sans JP', sans-serif;}
 
-  /* その他共通UI */
   .btn-container { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin: 0 auto;}
   .start-btn { background: #292929 !important; color: #e5e7eb !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #444 !important; cursor: pointer !important; width: 100% !important; display: block; flex: none; text-align: center; line-height: 1.3; font-family: inherit;}
   .start-btn:hover:not(:disabled) { background: #333 !important; border-color: #666 !important; }
 
-  /* 役割表示の演出 */
   .role-reveal-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
   .role-text { font-size: 2rem; font-weight: bold; letter-spacing: 2px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
@@ -403,7 +395,7 @@
       <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; margin-top: 15px; padding-bottom: 2px; font-size:0.9rem;">◆ VITAL（総合評価指数）と安全管理</h3>
       <p style="margin-bottom: 10px; font-size: 0.75rem;">
         VITALは部署内における「生存価値」を示す指標である。この数値が赤色に達した者は、特別退職の最有力候補となる。あなた自身のVITALがゼロになった場合、発言権を失い強制的に解雇（ゲームオーバー）となる。<br><br>
-        また、特別退職者が決定した後、もし『MORRIE』がまだ部署内に残存していた場合、深夜の帰宅途中に無作為に選ばれた社員が物理的に排除される。
+        また、特別退職者が決定した後、もし『MORRIE』がまだ部署内に残存していた場合、深夜の帰宅途中に無数の選ばれた社員が物理的に排除される。
       </p>
     </div>
     <div class="btn-container">
@@ -513,13 +505,13 @@
     <button class="teams-leave-btn">退出</button>
   </header>
 
-  <!-- カード一覧（ここが消えていた原因のエリア） -->
+  <!-- キャラクターカードグリッド -->
   <div class="char-grid" id="charGrid"></div>
   
   <!-- チャットログ -->
   <div class="log-box" id="logBox"></div>
   
-  <!-- アクションコマンドエリア（ここが見切れていた原因のエリア） -->
+  <!-- アクションパネル -->
   <div class="action-panel" id="actionArea">
     <div id="actionPrompt">■ アクションを選択してください</div>
     <div class="btn-group" id="actionButtons"></div>
@@ -541,27 +533,38 @@ function initGameWithSound(enable) {
   document.getElementById("titleScreen").style.display = "flex";
   
   if (enable) {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-      audioCtx = new AudioContext();
-      playBootSound();
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        playBootSound();
+      }
+    } catch(e) {
+      console.warn("AudioContext init error:", e);
     }
   }
 }
 
 function playBootSound() {
   if (!audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(60, audioCtx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
-  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.1);
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  } catch(e) {
+    console.warn("Play boot sound error:", e);
+  }
 }
 
 // --- セーブデータ管理 ---
@@ -651,7 +654,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars(); // キャラ＆役職の初期化
+  initChars();
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -775,7 +778,7 @@ const dialogueBank = {
     cover: ["「まあまあ、◆TARGET◆も必死なんだからさ、そう責め立てるなって。」", "「◆TARGET◆は東日本の大事な戦力だ。俺はかばうぜ。」"],
     defend: ["「ちょっ、待てよ！なんで俺の直行先まで疑われるんだよ、ふざけんな！」", "「俺をリストラ枠に押し込もうったって、俺の担当ラボの教授は俺を指名してんだよ！」"],
     agree: ["「だな。◆TARGET◆は最初から怪しいと思ってたんだよ。型番の覚え方も変だったし。」"],
-    deflect: ["「ちょっと待てよ、俺より◆TARGET◆のヨミ表の方がよっぽど粉飾されてるぜ！？あっちを追及しろよ！」"],
+    deflect: [""「ちょっと待てよ、俺より◆TARGET◆のヨミ表の方がよっぽど粉飾されてるぜ！？あっちを追及しろよ！」"],
     observe: ["「……ん？◆TARGET◆の持ってるその資料、他社の機密データじゃないか？」"],
     meta: ["「昨日までピンピンしてた人が急に顧客の名前を忘れるか？……もしかして、会社のウォーターサーバーに何かヤバい薬でも入れられて、脳をハッキングされてるんじゃないか……？」"]
   },
@@ -994,6 +997,32 @@ let isTrueRoute = false;
 let bossHp = 1000;
 
 function getCurrentDateString() { return `3月${27 + day}日`; }
+
+function initChars() {
+  chars = [
+    { id: 0, name: gameData.playerName || "あなた", isPlayer: true, isAlive: true, jobTitle: "本社・営業", logic: gameData.logic, charisma: gameData.charisma, charm: 5, stealth: gameData.stealth, insight: gameData.insight, mental: gameData.mental },
+    { id: 1, name: "横山", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 8, charisma: 5, charm: 5, stealth: 6, insight: 4, mental: 7 },
+    { id: 2, name: "赤堀", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 6, charisma: 6, charm: 8, stealth: 8, insight: 7, mental: 5 },
+    { id: 3, name: "北野", isPlayer: false, isAlive: true, jobTitle: "営業部長", logic: 3, charisma: 2, charm: 5, stealth: 10, insight: 5, mental: 10 },
+    { id: 4, name: "毛利", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 2, charisma: 9, charm: 7, stealth: 4, insight: 3, mental: 3 },
+    { id: 5, name: "内藤", isPlayer: false, isAlive: true, jobTitle: "西日本支店", logic: 5, charisma: 3, charm: 1, stealth: 5, insight: 5, mental: 6 },
+    { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 },
+    { id: 7, name: "小林", isPlayer: false, isAlive: true, jobTitle: "内勤営業", logic: 8, charisma: 5, charm: 4, stealth: 7, insight: 9, mental: 8 }
+  ];
+  
+  isPlayerMorrie = false;
+  if (getUnlockRate() >= 50 && Math.random() < 0.15) {
+    isPlayerMorrie = true;
+  }
+  
+  const npcs = chars.filter(c => !c.isPlayer);
+  morrieId = isPlayerMorrie ? chars[0].id : npcs[Math.floor(Math.random() * npcs.length)].id;
+  
+  chars.forEach(c1 => {
+    trust[c1.id] = {}; 
+    chars.forEach(c2 => { trust[c1.id][c2.id] = (c1.id === c2.id) ? 100 : (50 + Math.floor(Math.random()*7)-3); });
+  });
+}
 
 function startMeetingFromRole() {
   if (chars.length === 0) {
