@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MORRIEを探して ─ 営業部・期末の惨劇 ─</title>
+<!-- ホラー用明朝体とポータル用ゴシック体 -->
 <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,6 +29,7 @@
 
   .game-container { padding-top: 5px; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
 
+  /* 画面中央寄せ ＆ スクロール対応の完全版レイアウト */
   .screen-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.95); 
     display: flex; flex-direction: column; align-items: center; 
@@ -180,10 +182,10 @@
   @keyframes bloodFade { 0% { opacity: 0; filter: blur(5px) drop-shadow(0 0 10px #ff0000); transform: translate(-50%, -50%) scale(0.9); } 10% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1); } 90% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1.05); } 100% { opacity: 0; filter: blur(10px); transform: translate(-50%, -50%) scale(1.1); } }
   .blood-anim-active { animation: bloodFade 1.8s ease-in-out forwards; display: block !important; }
 
-  /* 役割表示の演出 */
+  /* 役割表示の演出（文字中央寄せを追加） */
   .role-reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
-  .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; }
-  .role-text { font-size: 3rem; font-weight: bold; letter-spacing: 10px; animation: pulseGlow 2s infinite; }
+  .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
+  .role-text { font-size: 2.5rem; font-weight: bold; letter-spacing: 10px; animation: pulseGlow 2s infinite; text-align: center; line-height: 1.3; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
   .role-morrie { color: #ef4444; text-shadow: 0 0 20px rgba(239,68,68,0.8); font-family: "Sawarabi Mincho", serif; }
   .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 80%; line-height: 1.8; text-align: center; }
@@ -353,7 +355,7 @@
   <div id="bloodText" class="blood-text-anim">働きたくない</div>
 </div>
 
-<!-- 役職告知画面 -->
+<!-- 役職告知画面（文字中央寄せ修正） -->
 <div id="roleScreen" class="role-reveal-screen" onclick="startMeetingFromRole()">
   <div class="role-title">■ ROLE_ASSIGNMENT ■</div>
   <div id="roleText" class="role-text"></div>
@@ -842,7 +844,6 @@ function startGame() {
   document.getElementById("introScreen").style.display = "none";
   if(chars.length === 0) initChars();
   
-  // 役割の決定（解読率50%以上でMORRIEの可能性発生）
   isPlayerMorrie = false;
   if (getUnlockRate() >= 50 && Math.random() < 0.15) {
     isPlayerMorrie = true;
@@ -859,7 +860,6 @@ function startGame() {
   currentMinutes = 48;
   dialogueQueue = [];
   
-  // 役割宣告画面を表示
   const roleScreen = document.getElementById("roleScreen");
   const roleText = document.getElementById("roleText");
   const roleDesc = document.getElementById("roleDesc");
@@ -1195,6 +1195,9 @@ function generateNpcReactions(actionType, actor, target) {
   }
 }
 
+function triggerShake() { document.body.classList.add("shake"); setTimeout(() => { document.body.classList.remove("shake"); }, 500); }
+function triggerGlitch() { document.body.classList.add("glitch"); setTimeout(() => { document.body.classList.remove("glitch"); }, 400); }
+
 function showVotingUI() {
   updateUI();
   document.getElementById("actionArea").style.display = "block";
@@ -1227,7 +1230,6 @@ function processVote(playerVoteId) {
   dialogueQueue = [];
   enqueueDialogue("システム", `【投票集計完了】最多得票により、${expelled.name}さん が「特別退職対象者」に選ばれました。`, "sys");
   
-  // ★変更点：退職後のコメントはすべて岩田本部長へ統一
   if (expelled.isPlayer) {
     enqueueDialogue("システム", `同僚たちの冷たい視線が一斉にあなたに突き刺さる。言い訳をする間もなく、警備員が会議室に入ってきた。`, "boss");
   } else {
@@ -1242,7 +1244,7 @@ function processVote(playerVoteId) {
 
 function runNightPhase() {
   dialogueQueue = [];
-  enqueueDialogue("システム", `--- ${getCurrentDateString()} 深夜... 誰もいなくなったオフィス街でMORRIEが動き出す ---`, "sys");
+  enqueueDialogue("システム", `── ${getCurrentDateString()} 深夜... 誰もいなくなったオフィス街 ──`, "sys");
   
   const morrie = chars.find(c => c.id === morrieId);
   const player = chars.find(c => c.isPlayer);
@@ -1262,8 +1264,10 @@ function runNightPhase() {
       victim.isAlive = false;
       if (isPlayerMorrie) {
         enqueueDialogue("システム", `……自分の中の『捕食衝動』が抑えきれない。あなたは無意識のうちに、暗い夜道で ${victim.name}さん を処理してしまった。`, "sys");
+        enqueueDialogue("システム", `同時に、社内データベースから ${victim.name}さんの存在が完全に抹消されていく……。`, "sys");
       } else {
-        enqueueDialogue("システム", `暗い夜道に、骨が砕けるような鈍い音が響いた... 退職の恐怖に怯えていた ${victim.name}さん は、MORRIEの標的となり完全に消息を絶った。`, "sys");
+        enqueueDialogue("システム", `暗い夜道で、 ${victim.name}さん はMORRIEの標的となり処理された。`, "sys");
+        enqueueDialogue("システム", `同時に、社内データベースから ${victim.name}さんのアクセス権限、売上データ、入社記録までもが完全に消去されていく……。`, "sys");
       }
     }
   }
@@ -1285,12 +1289,32 @@ function runNightPhase() {
       if (checkVictory()) return;
       day++; discussionTurn = 0; hasInvestigatedToday = false;
       
-      // ★真ルートへの分岐チェック（解読率100% かつ 人間 かつ Day3）
       if (day === 3 && getUnlockRate() >= 100 && !isPlayerMorrie) {
          isTrueRoute = true;
          startTrueRoute();
       } else {
-         dialogueQueue.push({speaker: "システム", text: `--- ${getCurrentDateString()}の朝：行方不明になった社員の噂が流れる中、今日も地獄の営業活動が始まる ---`, msgType: "sys"});
+         dialogueQueue.push({speaker: "システム", text: `── ${getCurrentDateString()} 08:30。営業部フロア ──`, msgType: "sys"});
+         
+         const aliveNpcs = chars.filter(c => c.isAlive && !c.isPlayer);
+         if(aliveNpcs.length >= 2) {
+             const s1 = aliveNpcs[0];
+             const s2 = aliveNpcs[1];
+             dialogueQueue.push({speaker: s1.name, text: `「……なぁ、うちの部署って、最初からこの人数だったか？ なぜか空のデスクがある気がするんだが……」`, msgType: "passive"});
+             dialogueQueue.push({speaker: s2.name, text: `「疲れてるんですよ。今月のノルマと人員配置はずっとこのままです。余計なことを考える暇があったら手を動かしましょう」`, msgType: "defend"});
+         } else if (aliveNpcs.length === 1) {
+             dialogueQueue.push({speaker: aliveNpcs[0].name, text: `「……おかしい。俺以外に……誰かいた気がするのに……思い出せない……」`, msgType: "passive"});
+         }
+         
+         dialogueQueue.push({speaker: "システム", text: `誰かの顔が思い出せない。だが、強烈な疲労とKPIへのプレッシャーが、社員たちから深く追求する思考力を奪っていく……。`, msgType: "sys"});
+         dialogueQueue.push({speaker: "システム", text: `── 同日 23:50。営業部 会議室 ──`, msgType: "sys"});
+         
+         const kitano = chars.find(c => c.name === "北野");
+         if(kitano && kitano.isAlive) {
+             dialogueQueue.push({speaker: "北野", text: `「……よし、全員いるな。今夜も『特別退職対象者』を一人決めてもらおうか。」`, msgType: "boss"});
+         } else {
+             dialogueQueue.push({speaker: "岩田本部長", text: `『今夜もエラー分子を1名選出せよ。さもなくば全員解雇だ。』`, msgType: "boss"});
+         }
+         
          onDialogueQueueEmpty = () => { showActionMenu(); };
          startDialogueSequence();
       }
@@ -1300,7 +1324,7 @@ function runNightPhase() {
 }
 
 // ==========================================
-// ★ TRUE ROUTE (真ルート: 案1 全員MORRIE説)
+// ★ TRUE ROUTE (真ルート: 全員MORRIE説)
 // ==========================================
 function startTrueRoute() {
   document.body.classList.add("true-route-bg");
@@ -1400,7 +1424,7 @@ function execTrueAction(type) {
   }
 
   bossHp -= dmgToBoss;
-  trust[1][0] -= dmgToPlayer; // 強制的にプレイヤーのVITALを減らすためのダミー処理
+  trust[1][0] -= dmgToPlayer;
   
   enqueueDialogue("システム", `▶ 岩田の防壁に ${dmgToBoss} の致命的ダメージ！`, "sys");
   
@@ -1450,15 +1474,8 @@ function endTrueRouteTurn() {
 }
 
 // --- クリア判定 ---
-function unlockRandomProfile() {
-  if(!gameData.unlockedProfiles) gameData.unlockedProfiles = [];
-  const locked = [1,2,3,4,5,6,7,8].filter(id => !gameData.unlockedProfiles.includes(id));
-  if(locked.length > 0) { const unlockId = locked[Math.floor(Math.random() * locked.length)]; gameData.unlockedProfiles.push(unlockId); return unlockId === 8 ? "MORRIE開発計画書" : chars.find(c => c.id === unlockId).name; }
-  return null;
-}
-
 function checkVictory() {
-  if(isTrueRoute) return false; // 真ルート時は専用処理へ
+  if(isTrueRoute) return false;
   
   const isMorrieAlive = chars.find(c => c.id === morrieId).isAlive;
   const aliveHumans = chars.filter(c => c.isAlive && c.id !== morrieId).length;
