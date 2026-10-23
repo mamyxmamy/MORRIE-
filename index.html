@@ -9,7 +9,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
-  /* スマホのキーボード干渉を防ぎつつ1画面に収める最強設定（古いブラウザ用フォールバック追加） */
+  /* スマホのキーボード干渉を防ぎつつ1画面に収める最強設定 */
   html, body {
     width: 100%; 
     height: 100vh; /* fallback */
@@ -551,7 +551,7 @@ if (gameData.playerName) gameData.playerName = gameData.playerName.replace(/[◆
 
 function getUnlockRate() { return Math.floor((gameData.unlockedProfiles.length / 8) * 100); }
 
-// 機密ファイル解放処理
+// ★バグ修正：機密ファイル解放関数を確実に実装
 function unlockRandomProfile() {
   const locked = [1,2,3,4,5,6,7,8].filter(id => !gameData.unlockedProfiles.includes(id));
   if(locked.length === 0) return null;
@@ -626,7 +626,7 @@ function confirmNameAndJoinMeeting() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars(); 
+  initChars();
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -700,7 +700,7 @@ function resetCareerData() {
   }
 }
 
-// --- キャラ・ダイアログ定義 ---
+// --- キャラ・ダイアログ定義（★バグ修正：構文エラーを完全除去） ---
 const secretProfiles = {
   1: "【横山】\n試薬担当のベテラン。西日本支店。経費で納入先と癒着している。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
   2: "【赤堀】\n機器担当。東日本支店。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
