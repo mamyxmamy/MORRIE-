@@ -90,13 +90,35 @@
   .char-card.boss-card { border-color: #cc0000; box-shadow: 0 0 15px rgba(204,0,0,0.5); grid-column: span 3; padding: 12px; text-align: center; }
   .char-card.dead { opacity: 0.3; filter: grayscale(100%) contrast(1.2); border-left-color: #111; }
   
-  .card-header { display: flex; align-items: flex-start; margin-bottom: 6px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
+  /* ★ 追加：顔モザイクUIの実装 */
+  .card-header { display: flex; align-items: center; margin-bottom: 6px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
   .boss-card .card-header { justify-content: center; border-bottom: 1px solid #cc0000; padding-bottom: 8px; margin-bottom: 10px; }
-  .char-id-tag { font-size: 0.55rem; color: #000; background: #555; padding: 1px 3px; border-radius: 1px; margin-right: 5px; font-family: monospace; font-weight: bold; }
+  
+  .profile-pic { width: 34px; height: 38px; border: 1px solid #333; background-color: #1a1515; margin-right: 8px; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: inset 0 0 5px #000; }
+  .boss-card .profile-pic { display: none; } /* ボス用は顔非表示 */
+  .mosaic-layer {
+    position: absolute; top:0; left:0; width: 100%; height: 100%;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.75) 4px, rgba(0,0,0,0.75) 8px),
+      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.75) 4px, rgba(0,0,0,0.75) 8px);
+    background-size: 8px 8px;
+    animation: mosaicNoise 1s steps(4) infinite;
+  }
+  @keyframes mosaicNoise {
+    0% { transform: translate(0, 0) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+    25% { transform: translate(-2px, 2px) scale(1.05); background-color: rgba(139, 0, 0, 0.2); }
+    50% { transform: translate(2px, -2px) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+    75% { transform: translate(-2px, -2px) scale(1.05); background-color: rgba(200, 0, 0, 0.15); }
+    100% { transform: translate(0, 0) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+  }
+
+  .header-text-area { flex: 1; text-align: left; }
+  .char-id-tag { font-size: 0.55rem; color: #000; background: #555; padding: 1px 3px; border-radius: 1px; display: inline-block; margin-bottom: 2px; font-family: monospace; font-weight: bold; }
   .boss-card .char-id-tag { background: #cc0000; color: #fff; }
-  .char-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px; line-height: 1; margin-bottom: 2px; }
-  .boss-card .char-name { font-size: 1.2rem; color: #ff4444; text-shadow: 0 0 5px red; }
-  .char-sub { font-size: 0.6rem; color: #6b7280; }
+  .char-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px; line-height: 1.1; margin-bottom: 2px; }
+  .boss-card .char-name { font-size: 1.2rem; color: #ff4444; text-shadow: 0 0 5px red; margin-top: 4px; }
+  .char-sub { font-size: 0.6rem; color: #6b7280; line-height: 1; }
+  
   .suspect-info { font-size: 0.65rem; color: #cc0000; margin-bottom: 4px; font-weight: bold; min-height: 12px; }
   .gauge-wrapper { width: 100%; margin-top: 2px; }
   .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
@@ -111,6 +133,7 @@
 
   .death-stamp { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 4px 8px; font-weight: bold; font-size: 0.9rem; letter-spacing: 2px; text-shadow: 0 0 5px #000; background: rgba(10,0,0,0.8); z-index: 10; white-space: nowrap; pointer-events: none; box-shadow: 0 0 10px rgba(204,0,0,0.3); }
   .char-card.dead .death-stamp { display: block; }
+  .char-card.dead .mosaic-layer { animation: none; background-color: rgba(255,0,0,0.4); } /* 死ぬとモザイクが赤く固定される */
 
   .log-box { background: rgba(3, 3, 3, 0.95); border: 1px solid #330000; border-top: 3px solid #660000; border-radius: 2px; height: 260px; overflow-y: auto; padding: 12px; margin-bottom: 12px; font-size: 0.85rem; line-height: 1.7; box-shadow: inset 0 0 30px rgba(0,0,0,1); scroll-behavior: smooth; }
   .novel-message { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); animation: fadeInText 0.2s ease-out; }
@@ -182,13 +205,13 @@
   @keyframes bloodFade { 0% { opacity: 0; filter: blur(5px) drop-shadow(0 0 10px #ff0000); transform: translate(-50%, -50%) scale(0.9); } 10% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1); } 90% { opacity: 1; filter: blur(0) drop-shadow(0 0 5px #ff0000); transform: translate(-50%, -50%) scale(1.05); } 100% { opacity: 0; filter: blur(10px); transform: translate(-50%, -50%) scale(1.1); } }
   .blood-anim-active { animation: bloodFade 1.8s ease-in-out forwards; display: block !important; }
 
-  /* 役割表示の演出（文字中央寄せを追加） */
-  .role-reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
-  .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
-  .role-text { font-size: 2.5rem; font-weight: bold; letter-spacing: 10px; animation: pulseGlow 2s infinite; text-align: center; line-height: 1.3; }
+  /* 役割表示の演出（確実な中央寄せ・文字サイズ最適化） */
+  .role-reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
+  .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; }
+  .role-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
   .role-morrie { color: #ef4444; text-shadow: 0 0 20px rgba(239,68,68,0.8); font-family: "Sawarabi Mincho", serif; }
-  .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 80%; line-height: 1.8; text-align: center; }
+  .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 320px; line-height: 1.8; }
   
   /* 真ルート用クラス */
   .true-route-bg { background-image: radial-gradient(circle at center, #330000 0%, #000000 100%) !important; animation: glitch 3s infinite; }
@@ -355,7 +378,7 @@
   <div id="bloodText" class="blood-text-anim">働きたくない</div>
 </div>
 
-<!-- 役職告知画面（文字中央寄せ修正） -->
+<!-- 役職告知画面（文字中央寄せ・サイズ最適化） -->
 <div id="roleScreen" class="role-reveal-screen" onclick="startMeetingFromRole()">
   <div class="role-title">■ ROLE_ASSIGNMENT ■</div>
   <div id="roleText" class="role-text"></div>
@@ -922,10 +945,15 @@ function updateUI() {
 
     card.innerHTML = `
       <div class="death-stamp">❌ 整理対象</div>
-      <div>
-        <div class="card-header"><span class="char-id-tag">ID:0${c.id}</span><div><div class="char-name">${c.name}</div><div class="char-sub">${c.jobTitle}</div></div></div>
-        <div class="suspect-info">${suspectText}</div>
+      <div class="card-header">
+        <div class="profile-pic"><div class="mosaic-layer"></div></div>
+        <div class="header-text-area">
+          <span class="char-id-tag">ID:0${c.id}</span>
+          <div class="char-name">${c.name}</div>
+          <div class="char-sub">${c.jobTitle}</div>
+        </div>
       </div>
+      <div class="suspect-info">${suspectText}</div>
       <div class="gauge-wrapper">
         <div class="gauge-label"><span>VITAL</span><span>${statusText} (${vVal}%)</span></div>
         <div class="gauge-container"><div class="gauge-fill" style="width: ${vVal}%; background-color: ${gaugeColor};"></div></div>
@@ -1195,9 +1223,6 @@ function generateNpcReactions(actionType, actor, target) {
   }
 }
 
-function triggerShake() { document.body.classList.add("shake"); setTimeout(() => { document.body.classList.remove("shake"); }, 500); }
-function triggerGlitch() { document.body.classList.add("glitch"); setTimeout(() => { document.body.classList.remove("glitch"); }, 400); }
-
 function showVotingUI() {
   updateUI();
   document.getElementById("actionArea").style.display = "block";
@@ -1349,7 +1374,6 @@ function startTrueRoute() {
 function updateTrueRouteUI() {
   const grid = document.getElementById("charGrid"); grid.innerHTML = "";
   
-  // 岩田本部長カード
   const bossCard = document.createElement("div");
   bossCard.className = "char-card boss-card";
   let bossVitalColor = bossHp > 500 ? "#059669" : (bossHp > 200 ? "#d97706" : "#dc2626");
@@ -1363,7 +1387,6 @@ function updateTrueRouteUI() {
   `;
   grid.appendChild(bossCard);
   
-  // プレイヤーカード
   const pCard = document.createElement("div");
   pCard.className = "char-card player-card";
   pCard.style.gridColumn = "span 3";
@@ -1473,7 +1496,6 @@ function endTrueRouteTurn() {
   showTrueRouteActionMenu();
 }
 
-// --- クリア判定 ---
 function checkVictory() {
   if(isTrueRoute) return false;
   
