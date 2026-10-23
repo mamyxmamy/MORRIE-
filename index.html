@@ -90,13 +90,34 @@
   .char-card.boss-card { border-color: #cc0000; box-shadow: 0 0 15px rgba(204,0,0,0.5); grid-column: span 3; padding: 12px; text-align: center; }
   .char-card.dead { opacity: 0.3; filter: grayscale(100%) contrast(1.2); border-left-color: #111; }
   
-  .card-header { display: flex; align-items: flex-start; margin-bottom: 6px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
+  .card-header { display: flex; align-items: center; margin-bottom: 6px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
   .boss-card .card-header { justify-content: center; border-bottom: 1px solid #cc0000; padding-bottom: 8px; margin-bottom: 10px; }
-  .char-id-tag { font-size: 0.55rem; color: #000; background: #555; padding: 1px 3px; border-radius: 1px; margin-right: 5px; font-family: monospace; font-weight: bold; }
+  
+  .profile-pic { width: 34px; height: 38px; border: 1px solid #333; background-color: #1a1515; margin-right: 8px; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: inset 0 0 5px #000; }
+  .boss-card .profile-pic { display: none; }
+  .mosaic-layer {
+    position: absolute; top:0; left:0; width: 100%; height: 100%;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.75) 4px, rgba(0,0,0,0.75) 8px),
+      repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.75) 4px, rgba(0,0,0,0.75) 8px);
+    background-size: 8px 8px;
+    animation: mosaicNoise 1s steps(4) infinite;
+  }
+  @keyframes mosaicNoise {
+    0% { transform: translate(0, 0) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+    25% { transform: translate(-2px, 2px) scale(1.05); background-color: rgba(139, 0, 0, 0.2); }
+    50% { transform: translate(2px, -2px) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+    75% { transform: translate(-2px, -2px) scale(1.05); background-color: rgba(200, 0, 0, 0.15); }
+    100% { transform: translate(0, 0) scale(1); background-color: rgba(139, 0, 0, 0.1); }
+  }
+
+  .header-text-area { flex: 1; text-align: left; }
+  .char-id-tag { font-size: 0.55rem; color: #000; background: #555; padding: 1px 3px; border-radius: 1px; display: inline-block; margin-bottom: 2px; font-family: monospace; font-weight: bold; }
   .boss-card .char-id-tag { background: #cc0000; color: #fff; }
-  .char-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px; line-height: 1; margin-bottom: 2px; }
-  .boss-card .char-name { font-size: 1.2rem; color: #ff4444; text-shadow: 0 0 5px red; }
-  .char-sub { font-size: 0.6rem; color: #6b7280; }
+  .char-name { font-weight: bold; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px; line-height: 1.1; margin-bottom: 2px; }
+  .boss-card .char-name { font-size: 1.2rem; color: #ff4444; text-shadow: 0 0 5px red; margin-top: 4px; }
+  .char-sub { font-size: 0.6rem; color: #6b7280; line-height: 1; }
+  
   .suspect-info { font-size: 0.65rem; color: #cc0000; margin-bottom: 4px; font-weight: bold; min-height: 12px; }
   .gauge-wrapper { width: 100%; margin-top: 2px; }
   .gauge-label { font-size: 0.6rem; color: #9ca3af; display: flex; justify-content: space-between; margin-bottom: 2px; font-family: monospace; }
@@ -111,6 +132,7 @@
 
   .death-stamp { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #cc0000; border: 2px solid #cc0000; padding: 4px 8px; font-weight: bold; font-size: 0.9rem; letter-spacing: 2px; text-shadow: 0 0 5px #000; background: rgba(10,0,0,0.8); z-index: 10; white-space: nowrap; pointer-events: none; box-shadow: 0 0 10px rgba(204,0,0,0.3); }
   .char-card.dead .death-stamp { display: block; }
+  .char-card.dead .mosaic-layer { animation: none; background-color: rgba(255,0,0,0.4); } 
 
   .log-box { background: rgba(3, 3, 3, 0.95); border: 1px solid #330000; border-top: 3px solid #660000; border-radius: 2px; height: 260px; overflow-y: auto; padding: 12px; margin-bottom: 12px; font-size: 0.85rem; line-height: 1.7; box-shadow: inset 0 0 30px rgba(0,0,0,1); scroll-behavior: smooth; }
   .novel-message { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); animation: fadeInText 0.2s ease-out; }
@@ -179,7 +201,6 @@
   .pop-slogan { position: absolute; font-family: 'Noto Sans JP', sans-serif; font-weight: 900; opacity: 0; white-space: nowrap; animation: popIn 0.4s ease-out forwards; pointer-events: none; }
   @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; } 60% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } }
   
-  /* 修正：「働きたくない」がずっと残るように（opacity: 1維持） */
   .blood-text-anim { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8b0000; font-family: "Sawarabi Mincho", "MS Mincho", serif; font-size: 3.5rem; font-weight: bold; letter-spacing: 12px; text-shadow: 2px 2px 8px rgba(255,0,0,0.6); white-space: nowrap; pointer-events: none; z-index: 5; }
   @keyframes bloodFade { 
     0% { opacity: 0; filter: blur(5px) drop-shadow(0 0 10px #ff0000); transform: translate(-50%, -50%) scale(0.9); } 
@@ -188,40 +209,20 @@
   }
   .blood-anim-active { animation: bloodFade 3s ease-out forwards; display: block !important; }
 
-  /* -------------------------------------
-     手形バンバン！＆ ぷちゅん演出
-     ------------------------------------- */
-  .bloody-hand {
-    position: absolute;
-    font-size: 8rem;
-    color: transparent; 
-    text-shadow: 0 0 0 rgba(150, 0, 0, 0.9), 0 0 10px rgba(255, 0, 0, 0.6);
-    pointer-events: none;
-    transform-origin: center center;
-    z-index: 100;
-  }
-  @keyframes handSlam {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(3) rotate(var(--rot)); filter: blur(10px); }
-    15% { opacity: 1; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(0); }
-    100% { opacity: 0.8; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(2px); }
-  }
+  .bloody-hand { position: absolute; font-size: 8rem; line-height: 1; color: transparent; text-shadow: 0 0 0 rgba(150, 0, 0, 0.9), 0 0 10px rgba(255, 0, 0, 0.6); pointer-events: none; transform-origin: center center; z-index: 100; }
+  @keyframes handSlam { 0% { opacity: 0; transform: translate(-50%, -50%) scale(3) rotate(var(--rot)); filter: blur(10px); } 15% { opacity: 1; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(0); } 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(var(--scale)) rotate(var(--rot)); filter: blur(2px); } }
   .slam-active { animation: handSlam 1.5s ease-out forwards; }
 
-  @keyframes crtOff {
-    0% { transform: scale(1, 1); opacity: 1; }
-    30% { transform: scale(1, 0.01); opacity: 1; background: #fff; }
-    60% { transform: scale(0, 0.01); opacity: 1; background: #fff; }
-    100% { transform: scale(0, 0); opacity: 0; background: #fff; }
-  }
+  @keyframes crtOff { 0% { transform: scale(1, 1); opacity: 1; } 30% { transform: scale(1, 0.01); opacity: 1; background: #fff; } 60% { transform: scale(0, 0.01); opacity: 1; background: #fff; } 100% { transform: scale(0, 0); opacity: 0; background: #fff; } }
   .crt-off-active { animation: crtOff 0.5s ease-out forwards; transform-origin: center center; background-color: #fff !important; }
 
-  /* 役割表示の演出 */
+  /* 役割表示の演出（確実な中央寄せ・文字サイズ最適化） */
   .role-reveal-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; padding: 20px; text-align: center; }
   .role-title { color: #6b7280; font-family: monospace; font-size: 1rem; margin-bottom: 20px; letter-spacing: 4px; text-align: center; }
-  .role-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; }
+  .role-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; animation: pulseGlow 2s infinite; line-height: 1.3; width: 100%; text-align: center; margin: 0; padding: 0; }
   .role-human { color: #60a5fa; text-shadow: 0 0 15px rgba(96,165,250,0.5); }
   .role-morrie { color: #ef4444; text-shadow: 0 0 20px rgba(239,68,68,0.8); font-family: "Sawarabi Mincho", serif; }
-  .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 320px; line-height: 1.8; margin-left: auto; margin-right: auto; }
+  .role-desc { color: #d1d5db; font-size: 0.9rem; margin-top: 30px; max-width: 320px; line-height: 1.8; margin-left: auto; margin-right: auto; text-align: center; }
   
   /* 真ルート用クラス */
   .true-route-bg { background-image: radial-gradient(circle at center, #330000 0%, #000000 100%) !important; animation: glitch 3s infinite; }
@@ -336,7 +337,7 @@
         <li><span style="color:#6ee7b7; font-weight:bold;">かばう：</span> 対象の有益性を主張し、VITALを回復する。</li>
         <li><span style="color:#d97706; font-weight:bold;">便乗する：</span> 他者の指摘に同調し、追撃を行う。</li>
         <li><span style="color:#7c3aed; font-weight:bold;">話を逸らす：</span> 自身のVITALが40以下の危機的状況下のみ許可。責任を他者に転嫁する。</li>
-        <li><span style="color:#93c5fd; font-weight:bold;">観察・調査：</span> 挙ক্তিの異常値を検出、またはPCのアクセスログから確証を得る。</li>
+        <li><span style="color:#93c5fd; font-weight:bold;">観察・調査：</span> 挙動の異常値を検出、またはPCのアクセスログから確証を得る。</li>
       </ul>
       
       <h3 style="color:#f87171; border-bottom: 1px solid #5a0000; margin-bottom: 6px; padding-bottom: 2px; font-size:0.9rem;">◆ VITAL（総合評価指数）と安全管理</h3>
@@ -528,7 +529,7 @@ function confirmNameAndShowIntro() {
   let inputName = document.getElementById("playerNameInput").value.trim().replace(/[◆\[\]<>&]/g, "").substring(0, 8);
   gameData.playerName = inputName !== "" ? inputName : "あなた";
   localStorage.setItem("morrie_career", JSON.stringify(gameData));
-  initChars();
+  initChars(); // ゲーム初期化（ここで役割決定などの内部処理を完了）
   
   document.getElementById("nameScreen").style.display = "none";
   
@@ -552,8 +553,8 @@ function confirmNameAndShowIntro() {
     const word = buzzwords[Math.floor(Math.random() * buzzwords.length)];
     const wrapper = document.createElement("div");
     wrapper.style.position = "absolute";
-    wrapper.style.left = (Math.random() * 80 + 10) + "%";
-    wrapper.style.top = (Math.random() * 80 + 10) + "%";
+    wrapper.style.left = (Math.random() * 60 + 20) + "%";
+    wrapper.style.top = (Math.random() * 60 + 20) + "%";
     wrapper.style.transform = `translate(-50%, -50%) rotate(${(Math.random() * 40) - 20}deg)`;
 
     const el = document.createElement("div");
@@ -576,19 +577,19 @@ function confirmNameAndShowIntro() {
     sloganScreen.style.backgroundColor = "#000";
   }, 2600);
 
-  // 3.2秒で「働きたくない」が浮かび上がる（表示され続ける）
+  // 3.2秒で「働きたくない」が浮かび上がる
   setTimeout(() => {
     bloodText.classList.add("blood-anim-active");
   }, 3200);
 
-  // 4.0秒から手形が次々に叩きつけられる（文字の上から）
+  // 4.0秒から手形が次々に叩きつけられる
   setTimeout(() => {
     const handPositions = [
-       {x: 20, y: 25, r: -25, scale: 0.9},
-       {x: 80, y: 35, r: 15, scale: 0.8},
-       {x: 25, y: 75, r: -10, scale: 1.1},
-       {x: 75, y: 80, r: 35, scale: 1.0},
-       {x: 50, y: 50, r: 5, scale: 2.0} // 最後は画面中央に特大
+       {x: 20, y: 35, r: -25, scale: 0.9},
+       {x: 80, y: 40, r: 15, scale: 0.8},
+       {x: 25, y: 65, r: -10, scale: 1.1},
+       {x: 75, y: 65, r: 35, scale: 1.0},
+       {x: 50, y: 55, r: 5, scale: 2.0} // 最後は画面中央
     ];
     let hCount = 0;
     let hInt = setInterval(() => {
@@ -602,7 +603,6 @@ function confirmNameAndShowIntro() {
        hand.style.setProperty('--scale', pos.scale);
        handsContainer.appendChild(hand);
        
-       // ドン！という衝撃で画面を揺らす
        document.body.classList.remove("shake");
        void document.body.offsetWidth; // reflow
        document.body.classList.add("shake");
@@ -611,20 +611,20 @@ function confirmNameAndShowIntro() {
        if(hCount >= handPositions.length) {
            clearInterval(hInt);
            
-           // 最後のドンの直後に「ぷちゅん」とブラウン管が消える演出
+           // 最後のドンの直後に「ぷちゅん」
            setTimeout(() => {
              sloganScreen.classList.add("crt-off-active");
            }, 800);
            
-           // 完全に消えた後に役割画面へ遷移
+           // ★修正ポイント：完全に消えた後はイントロ画面へ遷移する！
            setTimeout(() => {
              sloganScreen.style.display = "none";
              sloganScreen.classList.remove("crt-off-active");
              handsContainer.innerHTML = "";
-             document.getElementById("roleScreen").style.display = "flex";
+             document.getElementById("introScreen").style.display = "flex";
            }, 1400);
        }
-    }, 300); // 300ms間隔で手形が付く
+    }, 300);
   }, 4000);
 }
 
@@ -911,19 +911,6 @@ function initChars() {
     { id: 6, name: "山口", isPlayer: false, isAlive: true, jobTitle: "東日本支店", logic: 9, charisma: 8, charm: 3, stealth: 2, insight: 9, mental: 8 },
     { id: 7, name: "小林", isPlayer: false, isAlive: true, jobTitle: "内勤営業", logic: 8, charisma: 5, charm: 4, stealth: 7, insight: 9, mental: 8 }
   ];
-}
-
-function getVital(charId) {
-  const aliveOthers = chars.filter(c => c.isAlive && c.id !== charId);
-  if(aliveOthers.length === 0) return 100;
-  let sum = 0;
-  aliveOthers.forEach(o => { sum += trust[o.id][charId]; });
-  return Math.floor(sum / aliveOthers.length);
-}
-
-function startGame() {
-  document.getElementById("introScreen").style.display = "none";
-  if(chars.length === 0) initChars();
   
   isPlayerMorrie = false;
   if (getUnlockRate() >= 50 && Math.random() < 0.15) {
@@ -938,13 +925,9 @@ function startGame() {
     chars.forEach(c2 => { trust[c1.id][c2.id] = (c1.id === c2.id) ? 100 : (50 + Math.floor(Math.random()*7)-3); });
   });
 
-  currentMinutes = 48;
-  dialogueQueue = [];
-  
-  const roleScreen = document.getElementById("roleScreen");
+  // ロール画面のテキスト事前準備
   const roleText = document.getElementById("roleText");
   const roleDesc = document.getElementById("roleDesc");
-  
   if (isPlayerMorrie) {
     roleText.innerText = "【ROLE : MORRIE】";
     roleText.className = "role-text role-morrie";
@@ -954,12 +937,27 @@ function startGame() {
     roleText.className = "role-text role-human";
     roleDesc.innerHTML = "あなたの役職は『人間』です。<br>同僚に擬態した怪物『MORRIE』を見つけ出し、今夜中に特別退職へ追い込んでください。";
   }
-  roleScreen.style.display = "flex";
+}
+
+function getVital(charId) {
+  const aliveOthers = chars.filter(c => c.isAlive && c.id !== charId);
+  if(aliveOthers.length === 0) return 100;
+  let sum = 0;
+  aliveOthers.forEach(o => { sum += trust[o.id][charId]; });
+  return Math.floor(sum / aliveOthers.length);
+}
+
+function startGame() {
+  document.getElementById("introScreen").style.display = "none";
+  document.getElementById("roleScreen").style.display = "flex";
 }
 
 function startMeetingFromRole() {
   document.getElementById("roleScreen").style.display = "none";
   document.getElementById("gameArea").style.display = "block";
+  
+  currentMinutes = 48;
+  dialogueQueue = [];
   
   const selectedIntro = introBossLines[Math.floor(Math.random() * introBossLines.length)];
   enqueueDialogue("システム", `── ${getCurrentDateString()} 23:50。営業部 会議室 ──`, "sys");
