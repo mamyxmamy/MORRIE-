@@ -569,6 +569,17 @@ function resetCareerData() {
 }
 
 // --- キャラ・ダイアログ ---
+const secretProfiles = {
+  1: "【横山】\n試薬担当のベテラン。コピー体はRNA分解による記憶の欠落が激しく、存在しない製品名をつぶやく。",
+  2: "【赤堀】\n機器担当。一見愛想がいいが裏で同僚のミスを記録しリストラの対象者にしようとする。",
+  3: "【北野（営業部長）】\n岩田本部長の指示を忠実に実行する。自らの保身のためなら部下が何人消えようと冷笑する。",
+  4: "【毛利】\n若手新人。プレッシャーで焦り、先輩の案件を横取りしたことで疑心暗鬼の的になっている。",
+  5: "【内藤】\n大型機器担当。クレーム対応に疲弊しきっており、クローンに入れ替わっても「今の労働環境よりマシ」と冷笑する。",
+  6: "【山口】\n東日本支店・論理派。データとKPIを重んじる。同僚の行動ログから「ノイズ」を嗅ぎ取る。",
+  7: "【小林】\n内勤営業。現場を知らない若手の事務ミスに容赦ない。コピー体は感情が抜け落ちている。",
+  8: "【機密アクセス：MORRIE開発計画書】\n……第3ロット運用テスト報告。社内の恐怖統治効果は絶大であり、岩田本部長の承認のもと、実地テストを継続する。なお、本物の社員はすでに全員──"
+};
+
 const dialogueBank = {
   "横山": {
     doubt: ["「◆TARGET◆、見積書の金額が変だぞ。ごまかしただろ！」", "「おい◆TARGET◆、俺が育てた代理店ルートを勝手に引っこ抜いたんだろ！」"],
@@ -1086,7 +1097,7 @@ function runNightPhase() {
          } else if (aliveNpcs.length === 1) {
              dialogueQueue.push({speaker: aliveNpcs[0].name, text: `「……おかしい。俺以外に……誰かいた気がするのに……」`, msgType: "passive"});
          }
-         dialogueQueue.push({speaker: "システム", text: `── 同日 23:50。SYS_TEAMS 会議室 ──`, "sys"});
+         dialogueQueue.push({speaker: "システム", text: `── 同日 23:50。SYS_TEAMS 会議室 ──`, msgType: "sys"});
          if(chars.find(c => c.name === "北野" && c.isAlive)) dialogueQueue.push({speaker: "北野", text: `「……今夜も『特別退職対象者』を一人決めてもらおうか。」`, msgType: "boss"});
          else dialogueQueue.push({speaker: "岩田本部長", text: `『今夜もエラー分子を1名選出せよ。』`, msgType: "boss"});
          onDialogueQueueEmpty = () => { showActionMenu(); }; startDialogueSequence();
